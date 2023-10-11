@@ -1,0 +1,38 @@
+{
+  "name": "appointment_client",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc && vite build",
+    "lint": "eslint . --ext ts,tsx --report-unused-disable-directives --max-warnings 0",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.1",
+    "@emotion/styled": "^11.11.0",
+    "@mui/joy": "^5.0.0-beta.9",
+    "react": "^18.2.0",
+    "react-datetime-picker": "^5.5.2",
+    "react-dom": "^18.2.0",
+    "react-duration-picker": "^1.1.1",
+    "react-icons": "^4.11.0",
+    "react-router-dom": "^6.16.0",
+    "react-scroll-wheel-handler": "^2.2.0",
+    "react-time-picker": "^6.5.1",
+    "styled-components": "^6.0.8"
+  },
+  "devDependencies": {
+    "@types/react": "^18.2.15",
+    "@types/react-dom": "^18.2.7",
+    "@typescript-eslint/eslint-plugin": "^6.0.0",
+    "@typescript-eslint/parser": "^6.0.0",
+    "@vitejs/plugin-react": "^4.0.3",
+    "eslint": "^8.45.0",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "eslint-plugin-react-refresh": "^0.4.3",
+    "typescript": "^5.0.2",
+    "vite": "^4.4.5"
+  }
+}

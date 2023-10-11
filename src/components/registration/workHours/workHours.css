@@ -1,0 +1,82 @@
+.workhours-main-container {
+  display: flex;
+  /* flex-direction: column; */
+  justify-content: center;
+  /* align-items: center; */
+}
+.days-checkboxes {
+  display: flex;
+  justify-content: space-evenly;
+}
+.workdays-checkbox-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 0;
+}
+
+/* --------------------- */
+
+/* Hide the default checkbox input */
+
+/* Create a custom checkbox style using ::before pseudo-element */
+.workdays-checkbox {
+  width: 20px; /* Adjust the size of the checkbox */
+  height: 20px; /* Adjust the size of the checkbox */
+  border: 1px solid #ccc; /* Border color for the checkbox */
+  border-radius: 3px; /* Rounded corners for the checkbox */
+}
+.workhours-button-container {
+  display: flex;
+  flex-direction: column;
+  gap: calc(100vh - 38em);
+}
+
+.workhours-time-input {
+  height: 40px;
+  /* margin: 1vh; */
+  /* justify-content: center; */
+  /* align-items: center; */
+  width: 8em;
+
+  border-radius: 4px;
+  border: none;
+  background: var(--neutrals-50, #f2f4f7);
+
+  text-indent: 2px;
+}
+.hours-card {
+  margin-block: 2em;
+  margin-bottom: 1em;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1em 2em;
+
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background-image: linear-gradient(white, white),
+    linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+
+.advanced-hours-card {
+  /* margin-block: 2em; */
+  margin-bottom: 0.5em;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 1em 2em;
+
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background-image: linear-gradient(white, white),
+    linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  display: flex;
+  justify-content: space-between; /* To separate the two elements */
+
+}

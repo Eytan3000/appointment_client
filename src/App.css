@@ -1,0 +1,53 @@
+/* :root {
+  --primary-color: red;
+} */
+
+/* body { */
+  /* border-radius: 40px; */
+
+  /* background: var(
+    --Primary,
+    linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%)
+  ); */
+  /* box-shadow: 0px 1px 40px 0px rgba(0, 0, 0, 0.03); */
+  /* display: flex; */
+  /* justify-content: center; */
+/* } */
+/* 
+.mainBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  height: 90vh;
+}
+
+.secondaryBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 54px;
+}
+
+p {
+  color: #fff;
+  text-align: center;
+
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+}
+
+.highlighted-text {
+  color: #fff;
+  font-family: 'Poppins', sans-serif;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: 16px;
+  letter-spacing: 0.048px;
+  text-decoration-line: underline;
+} */
