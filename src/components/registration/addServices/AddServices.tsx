@@ -6,7 +6,15 @@ import {
 } from '../../../StyledComponents';
 import './addServices.css';
 import { useNavigate } from 'react-router-dom';
-import { theme } from '../../../theme/theme';
+//-------------------------------------------
+const price = '180';
+const serviceTitle = 'Manicure';
+const time = '01:30';
+const description = `לק ג'ל בשיטה הרוסית`;
+const image = (
+  <AiOutlineCamera style={{}} className="service-card-camera-icon" />
+);
+//-------------------------------------------
 
 export default function AddServices() {
   const navigate = useNavigate();
@@ -21,6 +29,12 @@ export default function AddServices() {
   }
   return (
     <>
+      {/* <div
+        style={{
+          // display: 'flex',
+          // justifyContent: 'column',
+          // alignItems: 'center',
+        }}> */}
       <div className="add-services-container">
         <h3 className="what-services-title">What services do you offer?</h3>
         <p className="what-services-paragraph">
@@ -33,55 +47,63 @@ export default function AddServices() {
           onClick={handleAddService}
           type="submit"
           className="styled-button"
-          variant="full">
-          Add Service
+          variant="secondary">
+          <small>Add Service</small>
         </StyledButton>
-      </div>
-      <hr />
 
-      {/* Service Card */}
-      <div
-        className="service-card"
-        style={{
-          background: theme.colors.primary,
-        }}>
-        <AiOutlineCamera style={{}} className="service-card-camera-icon" />
+        {/* <hr /> */}
 
+        {/* Card */}
         <div
           onClick={handleEditService}
           style={{
-            marginLeft: '3vh',
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'center',
+            textAlign: 'start',
+            padding: '1em 2em',
+            border: '1px solid transparent',
+            borderRadius: '20px',
+            backgroundImage:
+              'linear-gradient(white, white), linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%)',
+            backgroundOrigin: 'border-box',
+            backgroundClip: 'padding-box, border-box',
+            width: '70%',
           }}>
-          <StyledH3
-            style={{ color: '#fff', margin: 0, textDecoration: 'underline' }}>
-            Manicure
-          </StyledH3>
-          <StyledSmallP style={{ color: '#fff', margin: 0 }}>
-            לק ג'ל בשיטה הרוסית
-          </StyledSmallP>
-          <div
-            style={{
-              display: 'flex',
-              gap: '2em',
-            }}>
-            <StyledSmallP style={{ color: '#fff', margin: 0 }}>
-              <small>180₪</small>
-            </StyledSmallP>
-            <StyledSmallP style={{ color: '#fff', margin: 0 }}>
-              <small>01:30</small>
-            </StyledSmallP>
+          {image}
+
+          <div>
+            <StyledH3 style={{ margin: 0, textDecoration: 'underline' }}>
+              {serviceTitle}
+            </StyledH3>
+            <StyledSmallP style={{ margin: 0 }}>{description}</StyledSmallP>
+            <div
+              style={{
+                display: 'flex',
+                gap: '2em',
+              }}>
+              <StyledSmallP style={{ margin: 0 }}>
+                <small>{price + ' ₪'}</small>
+              </StyledSmallP>
+              <StyledSmallP style={{ margin: 0 }}>
+                <small>{time}</small>
+              </StyledSmallP>
+            </div>
           </div>
         </div>
-      </div>
 
-      <div className="floating-stripe">
-        <StyledButton
-          onClick={handleNext}
-          variant="full-secondary"
-          style={{ paddingInline: 50 }}>
-          Next
-        </StyledButton>
+        {/* ------------ */}
+
+        <div className="floating-stripe">
+          <StyledButton
+            onClick={handleNext}
+            variant="full"
+            style={{ paddingInline: 50 }}>
+            Next
+          </StyledButton>
+        </div>
       </div>
+      {/* </div> */}
     </>
   );
 }

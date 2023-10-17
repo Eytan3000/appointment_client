@@ -1,7 +1,7 @@
 import { Checkbox } from '@mui/joy';
 import { StyledH3, StyledSmallP } from '../../../StyledComponents';
 
-export default function AdvancedWorkHours({
+export default function AdvancedWorkHoursCard({
   day,
   checked,
 }: {

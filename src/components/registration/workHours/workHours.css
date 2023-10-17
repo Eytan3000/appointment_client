@@ -29,7 +29,7 @@
 .workhours-button-container {
   display: flex;
   flex-direction: column;
-  gap: calc(100vh - 38em);
+  gap: calc(100vh - 35em);
 }
 
 .workhours-time-input {

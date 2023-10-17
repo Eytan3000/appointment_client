@@ -43,7 +43,7 @@ export default function WorkHours() {
         <div className="days-checkboxes">
           {weekDays.map(({ day, checked }) => {
             return (
-              <div>
+              <div className='workdays-checkbox-container'>
                 <StyledSmallP style={{ marginBottom: '4px' }}>
                   {day[0].toUpperCase()}
                 </StyledSmallP>
