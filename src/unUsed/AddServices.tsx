@@ -3,8 +3,8 @@ import {
   StyledButton,
   StyledH3,
   StyledSmallP,
-} from '../../../StyledComponents';
-import './addServices.css';
+} from '../StyledComponents';
+// import './addServices.css';
 import { useNavigate } from 'react-router-dom';
 //-------------------------------------------
 const price = '180';
@@ -35,7 +35,7 @@ export default function AddServices() {
           // justifyContent: 'column',
           // alignItems: 'center',
         }}> */}
-      <div className="add-services-container">
+      <div className="services-container">
         <h3 className="what-services-title">What services do you offer?</h3>
         <p className="what-services-paragraph">
           <small>

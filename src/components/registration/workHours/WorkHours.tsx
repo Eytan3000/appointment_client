@@ -29,11 +29,11 @@ export default function WorkHours() {
   }
   return (
     <>
+      {/* Back Arrow Icon */}
       <div className="flex-container">
-        <Link to="/add-services">
-          <img src={backArrow} alt="back-arrow" />
-        </Link>
+        <img onClick={() => navigate(-1)} src={backArrow} alt="back-arrow" />
       </div>
+
       <div className="workhours-main-container">
         <StyledH3>Workweek</StyledH3>
       </div>
@@ -43,7 +43,7 @@ export default function WorkHours() {
         <div className="days-checkboxes">
           {weekDays.map(({ day, checked }) => {
             return (
-              <div className='workdays-checkbox-container'>
+              <div className="workdays-checkbox-container">
                 <StyledSmallP style={{ marginBottom: '4px' }}>
                   {day[0].toUpperCase()}
                 </StyledSmallP>

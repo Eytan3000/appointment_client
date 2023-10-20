@@ -7,7 +7,7 @@ import './creatAccount.css';
 export default function SignIn() {
   const navigate = useNavigate();
   function handleSubmit() {
-    navigate('/add-services');
+    navigate('/services');
   }
 
   return (

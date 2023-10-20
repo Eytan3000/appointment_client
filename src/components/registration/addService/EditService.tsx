@@ -11,12 +11,12 @@ import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 export default function EditService() {
   const navigate = useNavigate();
   function handleSubmit() {
-    navigate('/add-services');
+    navigate('/services');
   }
   return (
     <>
       <div className="flex-container">
-        <Link to="/add-services">
+        <Link to="/services">
           <img src={backArrow} alt="back-arrow" />
         </Link>
       </div>
