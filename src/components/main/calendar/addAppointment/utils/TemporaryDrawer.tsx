@@ -14,7 +14,7 @@ const drawerOptions = [
   {
     text: 'New Appointment',
     icon: <AddCircleOutlineIcon />,
-    // action
+    action: function(){navigate()}
   },
   {
     text: 'Share Booking Page',

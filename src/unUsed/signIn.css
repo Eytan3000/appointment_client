@@ -1,5 +1,5 @@
-:root {
-  --primary-color: #007bff; /* Define a theme variable */
+/* :root {
+  --primary-color: #007bff;
 }
 
 .flex-container {
@@ -8,11 +8,10 @@
   padding: 14px;
   align-items: center;
 }
-.signin-text-styling {
+.text-styling {
   text-align: right;
   font-family: 'Poppins';
   font-size: 14px;
-  padding-bottom: 4px;
   font-style: normal;
   font-weight: 600;
   line-height: 12px;
@@ -26,11 +25,21 @@
   -webkit-text-fill-color: transparent;
   text-decoration: none;
 }
-.create-account-input {
+.signIn-h1 {
+  margin: 16px 16px 64px 16px;
+  font-family: Poppins;
+  font-size: 34px;
+
+  font-weight: 600;
+  line-height: 48px;
+  letter-spacing: 0.25px;
+}
+.signIn-input {
   height: 56px;
-  margin: 1vh;
+  margin: 16px;
   justify-content: center;
   align-items: center;
+  gap: 16px;
 
   border-radius: 15px;
   border: none;
@@ -46,17 +55,34 @@ input::placeholder {
 .styled-button {
   margin: 16px;
 }
+.forgot-password {
+  text-align: center;
 
+  font-family: Poppins;
+  font-style: normal;
+  font-weight: 600;
+  padding-bottom: 3px;
+  font-size: 14px;
+  line-height: 12px;
+  letter-spacing: 0.112px;
+
+  background: var(
+    --Secondary,
+    linear-gradient(274deg, #c58bf2 0%, #eea4ce 124.45%)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 text {
   color: var(--neutrals-500, #778293);
   text-align: center;
 
-  /* Body-medium/regular */
   font-family: Poppins;
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
-  line-height: 24px; /* 171.429% */
+  line-height: 24px; 
   letter-spacing: 0.112px;
 }
 div.continue {
@@ -81,13 +107,4 @@ form {
   display: flex;
   flex-direction: column;
   justify-content: center;
-}
-.create-account-h1 {
-  margin: 16px;
-  font-family: Poppins;
-  font-size: 34px;
-
-  font-weight: 600;
-  line-height: 48px;
-  letter-spacing: 0.25px;
-}
+} */

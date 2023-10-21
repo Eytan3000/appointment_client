@@ -1,54 +1,107 @@
-import { AiOutlineCamera } from 'react-icons/ai';
-import './addSevice.css';
-import {
-  StyledButton,
-  StyledInput,
-  StyledSmallP,
-} from '../../../StyledComponents';
 import { Link, useNavigate } from 'react-router-dom';
-import backArrow from '../../../assets/icons/Arrow - Down 2.png';
+// import backArrow from '../../../assets/icons/Arrow - Down 2.png';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { AiOutlineCamera } from 'react-icons/ai';
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  CardCover,
+  Input,
+  Typography,
+} from '@mui/joy';
 
-export default function EditService() {
+export default function AddService() {
   const navigate = useNavigate();
   function handleSubmit() {
     navigate('/services');
   }
+  function HandleDelete() {
+    navigate('/services');
+  }
   return (
     <>
-      <div className="flex-container">
-        <Link to="/services">
-          <img src={backArrow} alt="back-arrow" />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          padding: '14px',
+          alignItems: 'center',
+        }}>
+        <Link to={-1}>
+          <ArrowBackIcon />
         </Link>
       </div>
 
-      <StyledSmallP style={{ textAlign: 'center', marginTop: '0px', marginBottom:'-9px' }}>
+      <Typography style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
         Descrive your service
-      </StyledSmallP>
-      <form className="add-service-container" onSubmit={handleSubmit}>
-        <AiOutlineCamera className="add-service-image-edit" />
+      </Typography>
+      <form
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+          marginTop: '3em',
+        }}
+        onSubmit={handleSubmit}>
+        <Card
+          component="li"
+          sx={{ flexGrow: 1, height: '6rem', width: '8rem' }}>
+          <CardActions>
+            <CardCover>
+              <img
+                src="https://www.rockabillyhairstyle.com/wp-content/uploads/images/4-white-nail-art-with-leaves.jpg"
+                loading="lazy"
+                alt="Service Image"
+              />
+              {/* <div style={{ fontSize: '4rem' }}>
+                <AiOutlineCamera />
+              </div> */}
+            </CardCover>
+          </CardActions>
+          {/* <CardContent>
+            <Typography
+              level="body-lg"
+              fontWeight="lg"
+              // textColor="#fff"
+              mt={{ xs: 12, sm: 18 }}>
+              Image
+            </Typography>
+          </CardContent> */}
+        </Card>
 
         <div
           style={{
-            marginTop: '2em',
+            marginTop: '3em',
             display: 'flex',
             justifyContent: 'center',
             flexDirection: 'column',
             width: '46vh',
+            gap: '1rem',
           }}>
-          <StyledInput placeholder="Service Name" />
-          <StyledInput placeholder="Service Description" />
+          <Input placeholder="Service Name" />
+          <Input placeholder="Service Description" />
+          <Input type="time" defaultValue={'01:00'} />
+          <Input type="text" placeholder="Price" />
 
-          <StyledInput type="time" placeholder="Duration" />
-          <StyledInput type="text" placeholder="Price" />
-
-          <StyledButton onClick={handleSubmit} type="submit" variant="full">
+          <Button
+            onClick={handleSubmit}
+            type="submit"
+            // style={{ marginTop: '2rem' }}
+          >
             {' '}
             Save
-          </StyledButton>
-          <StyledButton style={{color:'#ee3f4d', width:'100%', marginTop:'4px'}} onClick={handleSubmit} type="submit" variant="primary">
+          </Button>
+          <Button
+            onClick={HandleDelete}
+            style={{ marginTop: '2rem' }}
+            variant="outlined"
+            color="danger">
             {' '}
             Delete
-          </StyledButton>
+          </Button>
         </div>
       </form>
     </>

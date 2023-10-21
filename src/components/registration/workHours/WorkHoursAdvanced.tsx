@@ -2,7 +2,8 @@ import { StyledButton } from '../../../StyledComponents';
 import './workHours.css';
 import AdvancedWorkHoursCard from './AdvancedWorkHoursCard';
 import { useNavigate } from 'react-router-dom';
-
+import { Button } from '@mui/joy';
+import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 export default function WorkHoursAdvanced() {
   const navigate = useNavigate();
   function handleOk() {
@@ -23,7 +24,7 @@ export default function WorkHoursAdvanced() {
       <div
         style={{
           display: 'flex',
-          justifyContent: 'center',
+          justifyContent: 'space-between',
           backgroundColor: '#fff',
           border: '1px solid #c4c4c4',
           height: '5rem',
@@ -32,12 +33,21 @@ export default function WorkHoursAdvanced() {
           left: 0,
           width: '100%',
         }}>
-        <StyledButton
+        {/* Back Arrow Icon */}
+        <div
+          style={{
+            display: 'flex',
+            padding: '14px',
+            alignItems: 'center',
+          }}>
+          <img onClick={() => navigate(-1)} src={backArrow} alt="back-arrow" />
+        </div>
+        <Button
           onClick={handleOk}
-          variant="full"
-          style={{ paddingInline: 50 }}>
+          style={{ paddingInline: 50, marginBlock: 15 }}>
           Ok
-        </StyledButton>
+        </Button>
+        <div style={{paddingLeft:'1.5rem'}}></div>
       </div>
     </>
   );

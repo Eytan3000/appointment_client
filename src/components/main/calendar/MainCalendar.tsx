@@ -9,6 +9,7 @@ import './MainCalendar.css';
 import AddAppointment from './addAppointment/AddAppointment';
 import TemporaryDrawer from './addAppointment/utils/TemporaryDrawer';
 import BottomAppBar from '../BottomAppBar';
+import BasicSpeedDial from './BasicSpeedDial';
 
 //--------------------------------------------------
 
@@ -91,12 +92,12 @@ export default function MainCalendar() {
           );
         }}
       />
-      {/* <BasicSpeedDial setIsDrawerOpen={setIsDrawerOpen}/> */}
-      <TemporaryDrawer
+      {/* <BasicSpeedDial setIsDrawerOpen={setIsDrawerOpen} /> */}
+      {/* <TemporaryDrawer
         isDrawerOpen={isDrawerOpen}
         setIsDrawerOpen={setIsDrawerOpen}
-      />
-      <BottomAppBar setIsDrawerOpen={setIsDrawerOpen}/>
+      /> */}
+      <BottomAppBar />
     </>
   );
 }

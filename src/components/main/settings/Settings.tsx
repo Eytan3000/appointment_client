@@ -7,6 +7,8 @@ import ConstructionIcon from '@mui/icons-material/Construction';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import ShutterSpeedIcon from '@mui/icons-material/ShutterSpeed';
 import { useNavigate } from 'react-router-dom';
+import LogoutIcon from '@mui/icons-material/Logout';
+import BottomAppBar from '../BottomAppBar';
 
 const settings = [
   {
@@ -23,7 +25,7 @@ const settings = [
   {
     title: 'Edit Services',
     icon: <ConstructionIcon />,
-    path: 'edit-services',
+    path: 'services',
   },
   {
     title: 'Edit Workhours',
@@ -99,7 +101,22 @@ export default function Settings() {
             <Divider />
           </>
         ))}
+        <div style={{ height: '1rem' }}></div>
+        <div
+          style={{
+            backgroundColor: '#fff',
+            height: '4rem',
+            display: 'flex',
+            alignItems: 'center',
+            padding: '1rem',
+            gap: '1rem',
+          }}>
+          <LogoutIcon />
+          <Typography level="body-lg">Sign Out</Typography>
+        </div>
+        <div style={{ height: '4rem' }}></div>
       </div>
+      <BottomAppBar />
     </>
   );
 }

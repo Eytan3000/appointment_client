@@ -2,7 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { StyledButton } from '../../../StyledComponents';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import google from '../../../assets/icons/google.png';
-// import './creatAccount.css';
+import './creatAccount.css';
 //-----------------------------------------
 export default function SignIn() {
   const navigate = useNavigate();

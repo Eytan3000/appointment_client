@@ -32,7 +32,7 @@ export default function Services() {
         alignItems={'center'}
         flexDirection={'column'}
         textAlign={'center'}>
-        <Stack spacing={2} mb={2}>
+        <Stack spacing={2} mb={2} mt={2}>
           <Typography level="h4">What services do you offer?</Typography>
           <Typography>
             List your services to help your clients book exactly what they need

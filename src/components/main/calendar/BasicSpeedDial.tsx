@@ -1,4 +1,3 @@
-import * as React from 'react';
 import SpeedDial from '@mui/material/SpeedDial';
 import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 
@@ -11,7 +10,7 @@ import SpeedDialIcon from '@mui/material/SpeedDialIcon';
 // ];
 
 export default function BasicSpeedDial({setIsDrawerOpen}) {
-  const [openDrawer, setOpenDrawer] = React.useState(false);
+  // const [openDrawer, setOpenDrawer] = React.useState(false);
   function handleClick(){
     setIsDrawerOpen(true);
   }
@@ -19,7 +18,7 @@ export default function BasicSpeedDial({setIsDrawerOpen}) {
     <>
       <SpeedDial
         ariaLabel="SpeedDial basic example"
-        sx={{ position: 'absolute', bottom: 30, right: 30 }}
+        sx={{ position: 'absolute', bottom: 80, right: 30 }}
         icon={<SpeedDialIcon />}
         onClick={handleClick}
         >

@@ -33,7 +33,7 @@ export default function BusinessSettings() {
                 style={{ marginLeft: '-2rem', marginBlock: 'auto' }}
               />
             </Link>
-            <Typography level="h3">Business Settings</Typography>
+            <Typography level="h4">Business Settings</Typography>
           </div>
 
           <form
@@ -42,6 +42,7 @@ export default function BusinessSettings() {
               marginBlock: '2rem',
               marginLeft: '0.4rem',
               // width: '80%'
+              height:'80vh'
             }}>
             <Typography level="title-md">Business Name</Typography>
             <Input sx={{ my: '1rem' }} type="text" placeholder={businessName} />
@@ -52,7 +53,7 @@ export default function BusinessSettings() {
             <Typography level="title-md">Business Phone</Typography>
             <Input sx={{ my: '1rem' }} type="text" placeholder={businessPhone} />
 
-            <Button type="submit">Save Changes</Button>
+            <Button style={{marginTop:'auto'}} type="submit">Save Changes</Button>
           </form>
 
         </div>

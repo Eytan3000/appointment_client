@@ -1,6 +1,4 @@
-.bodyBox {
-  /* height: 100vh;
-  width: 100vh; */
+/* .bodyBox {
   background: var(
     --Primary,
     linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%)
@@ -8,10 +6,6 @@
 }
 
 .mainBox {
-  /* background: var(
-    --Primary,
-    linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%)
-  ); */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -47,4 +41,4 @@
   line-height: 16px;
   letter-spacing: 0.048px;
   text-decoration-line: underline;
-}
+} */

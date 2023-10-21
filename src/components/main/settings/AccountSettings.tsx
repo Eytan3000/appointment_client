@@ -1,4 +1,5 @@
 import {
+  Avatar,
   Button,
   Container,
   DialogActions,
@@ -14,6 +15,8 @@ import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+
+const email = 'eytankrief@gmail.com';
 
 export default function AccountSettings() {
   const navigate = useNavigate();
@@ -45,21 +48,35 @@ export default function AccountSettings() {
             margin: '2rem',
           }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
-            <Link to="/settings" style={{ margin: -3, paddingTop:'0.4rem' }}>
-              <ArrowBackIcon style={{ marginLeft: '-2rem', marginBlock:'auto' }} />
+            <Link to="/settings" style={{ margin: -3, paddingTop: '0.4rem' }}>
+              <ArrowBackIcon
+                style={{ marginLeft: '-2rem', marginBlock: 'auto' }}
+              />
             </Link>
             <Typography level="h3">Account Settings</Typography>
-
           </div>
-          <div style={{
+          <div
+            style={{
               marginBlock: '2rem 2rem',
               marginLeft: '0.4rem',
               // width: '80%'
               // display:'flex'
             }}>
             <Typography level="title-md">Email</Typography>
-            <Typography  sx={{mt:'0.5rem'}} level='body-md'>eytankrief@gmail.com</Typography>
-            </div>
+            <Typography sx={{ mt: '0.5rem' }} level="body-md">
+              {email}
+            </Typography>
+          </div>
+
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: '2rem',
+            }}>
+            <Avatar size="lg" sx={{ height: '5rem', width: '5rem' }} />
+          </div>
+
           <form
             onSubmit={handleChangePassSubmit}
             style={{
@@ -80,8 +97,8 @@ export default function AccountSettings() {
             />
             <Button type="submit">Change Password</Button>
           </form>
-          <Divider />
 
+          <Divider />
           <Button
             variant="outlined"
             color="danger"

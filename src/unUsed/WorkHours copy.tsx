@@ -1,7 +1,12 @@
+import {
+  StyledButton,
+  StyledH3,
+  StyledSmallP,
+} from '../../../StyledComponents';
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
-import { Button, Stack, Typography } from '@mui/joy';
-import { useNavigate } from 'react-router-dom';
+import { Button } from '@mui/joy';
+import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 
 const weekDays = [
@@ -30,19 +35,18 @@ export default function WorkHours() {
       </div>
 
       <div className="workhours-main-container">
-        <Typography level="h3">Workweek</Typography>
+        <StyledH3>Workweek</StyledH3>
       </div>
 
-      <form style={{ height: '75vh' }} onSubmit={handleSubmit}>
-
+      <form onSubmit={handleSubmit}>
         {/* Checkboxes */}
         <div className="days-checkboxes">
           {weekDays.map(({ day, checked }) => {
             return (
               <div className="workdays-checkbox-container">
-                <Typography level="body-md" style={{ marginBottom: '4px' }}>
+                <StyledSmallP style={{ marginBottom: '4px' }}>
                   {day[0].toUpperCase()}
-                </Typography>
+                </StyledSmallP>
                 <Checkbox
                   color="neutral"
                   variant="soft"
@@ -64,9 +68,9 @@ export default function WorkHours() {
               marginTop: '-18px',
             }}>
             <div>
-              <Typography style={{ marginLeft: '0.5em' }}>
+              <StyledSmallP style={{ marginLeft: '0.5em' }}>
                 <small>Strat</small>
-              </Typography>
+              </StyledSmallP>
               <input
                 className="workhours-time-input"
                 type="time"
@@ -74,9 +78,9 @@ export default function WorkHours() {
               />
             </div>
             <div>
-              <Typography style={{ marginLeft: '0.5em' }}>
+              <StyledSmallP style={{ marginLeft: '0.5em' }}>
                 <small>End</small>
-              </Typography>
+              </StyledSmallP>
               <input
                 className="workhours-time-input"
                 type="time"
@@ -86,23 +90,20 @@ export default function WorkHours() {
           </div>
         </div>
 
-        <Stack spacing={2} mt={3}>
-          <div style={{ display: 'flex', justifyContent: 'center' }}>
-            <Typography level="title-md">Advanced Options</Typography>
-          </div>
-          <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
-            Different daily work hours{' '}
+        {/* Buttons */}
+        <div className="workhours-button-container">
+          <Button
+            style={{ fontFamily: 'Poppins' }}
+            color="neutral"
+            onClick={handleAdvancedOptions}
+            size="sm"
+            variant="plain">
+            Advanced Options{' '}
           </Button>
-
-          {/* <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
-            Fixed Booking slots{' '}
-          </Button> */}
-          
-        </Stack>
-
-        <Button style={{ marginTop: 'auto' }} type="submit">
-          Next
-        </Button>
+          <StyledButton type="submit" variant="full">
+            Next
+          </StyledButton>
+        </div>
       </form>
     </>
   );
