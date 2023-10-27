@@ -76,7 +76,7 @@ export default function AddAppointment({
   scheduler,
 }: // setEvents,
 CustomEditorProps) {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [note, setNote] = useState('');
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
@@ -164,12 +164,17 @@ CustomEditorProps) {
       <div style={{ margin: '1rem 2rem', fontFamily: 'Poppins' }}>
         <form onSubmit={handleSubmit} style={{ overflow: 'scroll' }}>
           <DialogTitle>Client</DialogTitle>
+          
           <div
             style={{
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
               marginBlock: '1rem',
+              border: '1px solid #cdd7e1',
+              borderRadius:'10px',
+              padding:'1rem',
+              background:'#fbfcfe'
             }}>
             <div style={{ display: 'flex', gap: 20 }}>
               <div>
@@ -187,7 +192,7 @@ CustomEditorProps) {
               </Button>
             </div>
           </div>
-          <Divider />
+
 
           <Stack spacing={2} sx={{ marginTop: '0.5rem' }}>
             <FormControl>
@@ -221,16 +226,19 @@ CustomEditorProps) {
                 />
               </FormControl>
             </div>
-            <Divider />
 
             {/* service */}
-
             <DialogTitle>Service</DialogTitle>
             <div
               style={{
                 display: 'flex',
                 justifyContent: 'space-between',
                 alignItems: 'center',
+
+                border: '1px solid #cdd7e1',
+                borderRadius:'10px',
+                padding:'1rem',
+                background:'#fbfcfe'
               }}>
               <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
                 <div>
@@ -244,7 +252,7 @@ CustomEditorProps) {
                 </Button>
               </div>
             </div>
-            <Divider />
+            {/* <Divider /> */}
             {/* Note */}
             <DialogTitle>Note</DialogTitle>
             <Input
@@ -258,15 +266,6 @@ CustomEditorProps) {
             <Button onClick={scheduler.close} variant="plain">
               Cancel
             </Button>
-            {/* <StyledButton type="submit" variant="full">
-              Submit
-            </StyledButton> */}
-            {/* <StyledButton
-              onClick={scheduler.close}
-              style={{ width: '100%' }}
-              variant="secondary">
-              cancel
-            </StyledButton> */}
 
             {alert && (
               <Alert

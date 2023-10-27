@@ -3,7 +3,6 @@ import './App.css';
 import MainAuth from './components/auth/mainAuth/MainAuth';
 import SignIn from './components/auth/signIn/SignIn';
 import CreateAccount from './components/auth/creactAccount/CreactAccount.tsx';
-import AddServices from './components/registration/addServices/addServices.css';
 import AddService from './components/registration/addService/AddService.tsx';
 import EditService from './components/registration/addService/EditService.tsx';
 import WorkHours from './components/registration/workHours/WorkHours.tsx';
@@ -12,12 +11,16 @@ import ClientsList from './components/main/calendar/addAppointment/utils/Clients
 import Settings from './components/main/settings/Settings.tsx';
 import WorkHoursAdvanced from './components/registration/workHours/WorkHoursAdvanced.tsx';
 import AccountSettings from './components/main/settings/AccountSettings.tsx';
-import SettingsLayout from './components/main/settings/SettingsLayout.tsx';
 import BusinessSettings from './components/main/settings/BusinessSettings.tsx';
 import Services from './components/registration/addServices/Services.tsx';
-import SpeedDialAddAppointment from './components/main/calendar/addAppointment/SpeedDialAddAppointment.tsx';
 import Tools from './components/main/tools/Tools.tsx';
 import Inbox from './components/main/inbox/Inbox.tsx';
+import ForgotPassword from './components/auth/forgotPassword/ForgotPassword.tsx';
+import ClientsTable from './components/main/tools/Clients/ClientsTable.tsx';
+import AddClient from './components/main/tools/Clients/AddClient.tsx';
+import ToolsServices from './components/main/tools/services/ToolsServices.tsx';
+import { AuthProvider } from './context/AuthContext.tsx';
+
 
 function App() {
   const element = useRoutes([
@@ -98,15 +101,35 @@ function App() {
     // },
     {
       path: '/tools',
-      element:<Tools />
+      element: <Tools />,
     },
     {
       path: '/inbox',
-      element:<Inbox />
+      element: <Inbox />,
+    },
+    {
+      path: '/forgot-password',
+      element: <ForgotPassword />,
+    },
+    {
+      path: '/add-client',
+      element: <AddClient />,
+    },
+    {
+      path: '/clients-table',
+      element: <ClientsTable />,
+    },
+    {
+      path: '/tools-services',
+      element: <ToolsServices />,
     },
   ]);
 
-  return <>{element}</>;
+  return (
+    <>
+      <AuthProvider>{element}</AuthProvider>
+    </>
+  );
 }
 
 export default App;

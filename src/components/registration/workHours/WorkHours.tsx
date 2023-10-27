@@ -1,7 +1,7 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
 import { Button, Stack, Typography } from '@mui/joy';
-import { useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 
 const weekDays = [
@@ -24,17 +24,25 @@ export default function WorkHours() {
   }
   return (
     <>
-      {/* Back Arrow Icon */}
-      <div className="flex-container">
-        <img onClick={() => navigate(-1)} src={backArrow} alt="back-arrow" />
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'space-between',
+          marginInline: '1rem',
+          marginBlock: '2rem 1rem',
+        }}>
+        <Link to={-1}>
+          <img src={backArrow} alt="back-arrow" />
+        </Link>
       </div>
 
-      <div className="workhours-main-container">
+      <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Typography level="h3">Workweek</Typography>
       </div>
 
-      <form style={{ height: '75vh' }} onSubmit={handleSubmit}>
-
+      <form
+        style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}
+        onSubmit={handleSubmit}>
         {/* Checkboxes */}
         <div className="days-checkboxes">
           {weekDays.map(({ day, checked }) => {
@@ -93,11 +101,6 @@ export default function WorkHours() {
           <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
             Different daily work hours{' '}
           </Button>
-
-          {/* <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
-            Fixed Booking slots{' '}
-          </Button> */}
-          
         </Stack>
 
         <Button style={{ marginTop: 'auto' }} type="submit">
