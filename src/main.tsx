@@ -6,15 +6,18 @@ import { theme } from './theme/theme';
 import { ThemeProvider } from 'styled-components';
 import { BrowserRouter } from 'react-router-dom';
 import { IconContext } from "react-icons";
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
       <IconContext.Provider value={{ color: "blue", className: "global-class-name" }}>
+        <QueryClientProvider client={queryClient}>
         <App />
-
+        </QueryClientProvider>
         </IconContext.Provider>
       </ThemeProvider>
     </BrowserRouter>

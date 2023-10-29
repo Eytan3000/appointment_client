@@ -192,8 +192,8 @@ export default function ClientsTable() {
           </tr>
         </thead>
         <tbody>
-          {clients.map((client) => (
-            <tr>
+          {clients.map((client, index) => (
+            <tr key={index}>
               <td>{client.name}</td>
               <td>{client.phone}</td>
               <td>{client.email}</td>

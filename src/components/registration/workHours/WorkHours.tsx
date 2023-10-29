@@ -31,7 +31,10 @@ export default function WorkHours() {
           marginInline: '1rem',
           marginBlock: '2rem 1rem',
         }}>
-        <Link to={-1}>
+        <Link
+          // to={-1}
+          to="#"
+          onClick={() => window.history.back()}>
           <img src={backArrow} alt="back-arrow" />
         </Link>
       </div>
@@ -45,9 +48,9 @@ export default function WorkHours() {
         onSubmit={handleSubmit}>
         {/* Checkboxes */}
         <div className="days-checkboxes">
-          {weekDays.map(({ day, checked }) => {
+          {weekDays.map(({ day, checked }, index) => {
             return (
-              <div className="workdays-checkbox-container">
+              <div className="workdays-checkbox-container" key={index}>
                 <Typography level="body-md" style={{ marginBottom: '4px' }}>
                   {day[0].toUpperCase()}
                 </Typography>

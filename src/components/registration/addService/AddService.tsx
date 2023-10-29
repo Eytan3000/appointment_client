@@ -3,19 +3,72 @@ import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { AiOutlineCamera } from 'react-icons/ai';
 import {
+  Alert,
   Button,
   Card,
   CardActions,
-  CardContent,
   CardCover,
   Input,
   Typography,
 } from '@mui/joy';
+import { SyntheticEvent, useRef, useState } from 'react';
+import { createService } from '../../../utils/http';
+import { useAuth } from '../../../context/AuthContext';
+import { isWholeNumber } from '../../../utils/helperFunctions';
 
 export default function AddService() {
   const navigate = useNavigate();
-  function handleSubmit() {
-    navigate('/services');
+  const { currentUser } = useAuth();
+
+  const [alert, setAlert] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+
+  const nameRef = useRef<HTMLInputElement | null>(null);
+  const descriptionRef = useRef<HTMLInputElement | null>(null);
+  const durationRef = useRef<HTMLInputElement | null>(null);
+  const priceRef = useRef<HTMLInputElement | null>(null);
+
+  async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
+    e.preventDefault();
+
+    const name = nameRef?.current?.value || '';
+    const description = descriptionRef?.current?.value || '';
+    const duration = durationRef?.current?.value || '';
+    const price = priceRef?.current?.value || '';
+
+    // Data validation
+    if (!name) {
+      return setAlert('Please fill in service name and price.');
+    }
+    if (!isWholeNumber(price)) {
+      setAlert('price must be a whole number (e.g. 120).');
+      return;
+    }
+
+    try {
+      setLoading(true);
+      const result = await createService(
+        name,
+        description,
+        duration,
+        price,
+        currentUser.uid
+      );
+      if (result.status !== 201) {
+        console.log(result.response.data.error[0].msg);
+        throw new Error('Something went wrong');
+      }
+
+      setLoading(false);
+      navigate('/services');
+    } catch (error: unknown) {
+      if (error instanceof Error) setAlert(error.message);
+      else setAlert('An unknown error occurred.');
+      setLoading(false);
+    }
+  }
+  function changeHandler() {
+    setAlert(null);
   }
   return (
     <>
@@ -26,7 +79,10 @@ export default function AddService() {
           padding: '14px',
           alignItems: 'center',
         }}>
-        <Link to={-1}>
+        <Link
+          // to={-1}
+          to="#"
+          onClick={() => window.history.back()}>
           <ArrowBackIcon />
         </Link>
       </div>
@@ -78,18 +134,39 @@ export default function AddService() {
             width: '46vh',
             gap: '1rem',
           }}>
-          <Input placeholder="Service Name" />
-          <Input placeholder="Service Description" />
-          <Input type="time" defaultValue={'01:00'} />
-          <Input type="text" placeholder="Price" />
+          <Input
+            onChange={changeHandler}
+            slotProps={{ input: { ref: nameRef } }}
+            placeholder="Service Name"
+            required
+          />
+          <Input
+            onChange={changeHandler}
+            slotProps={{ input: { ref: descriptionRef } }}
+            placeholder="Service Description"
+          />
+          <Input
+            onChange={changeHandler}
+            slotProps={{ input: { ref: durationRef } }}
+            type="time"
+            defaultValue={'01:00'}
+          />
+          <Input
+            onChange={changeHandler}
+            slotProps={{ input: { ref: priceRef } }}
+            type="text"
+            placeholder="Price"
+          />
 
-          <Button
-            onClick={handleSubmit}
-            type="submit"
-            style={{ marginTop: '2rem' }}>
+          <Button loading={loading} type="submit" style={{ marginTop: '2rem' }}>
             {' '}
             Add
           </Button>
+          {alert && (
+            <Alert variant="soft" color="danger">
+              {alert}
+            </Alert>
+          )}
         </div>
       </form>
     </>

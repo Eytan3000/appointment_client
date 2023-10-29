@@ -5,62 +5,93 @@ import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import { useAuth } from '../../../context/AuthContext';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { FirebaseError } from '@firebase/util';
-import { insertNewUserInDb } from '../../../utils/http';
+import {
+  insertNewUserInDb,
+  updateNewUser_temp_to_uid,
+} from '../../../utils/http';
+//-----------------------------------------
 
-//-----------------------------------------
-//-----------------------------------------
 export default function SignIn() {
   const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore: Unreachable code error
   const { signup } = useAuth();
 
   const [alert, setAlert] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
+  const [googleLoading, setGoogleLoading] = useState(false);
 
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
   const fullNameRef = useRef<HTMLInputElement | null>(null);
+  const passwordConfirmRef = useRef<HTMLInputElement | null>(null);
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
 
-    if (e.nativeEvent.submitter.name === 'email-submitter') {
-      try {
-        const email = emailRef?.current?.value;
-        const password = passwordRef?.current?.value;
-        const fullName = fullNameRef?.current?.value;
+    const fullName = fullNameRef?.current?.value;
+    const email = emailRef?.current?.value;
+    const password = passwordRef?.current?.value;
+    const passwordConfirm = passwordConfirmRef?.current?.value;
 
-        //signin with email and password refs
-        const { user } = await signup(email, password);
-
-        const uid = user.uid;
-        const accessToken = user.accessToken;
-
-        console.log('uid: ' + uid); //remove later
-        console.log('access Token: ' + accessToken); //remove later
-        console.log('email: ' + email); //remove later
-        console.log('password: ' + password); //remove later
-        console.log('fullName: ' + fullName); //remove later
-
-        //Creating new user row in db
-        // insertNewUserInDb(uid, fullName, email);
-
-        navigate('/services');
-      } catch (error: unknown) {
-        if (error instanceof FirebaseError) {
-          const errorCode = error.code;
-          const errorMessage = error.message;
-
-          if (errorCode === 'auth/email-already-in-use')
-            setAlert('Email already exists');
-          else if (errorCode === 'auth/weak-password')
-            setAlert('Password should be at least 6 characters');
-          else setAlert(errorMessage);
-        }
-      }
-
-      console.log('email signUp'); //remove later
-    } else if (e.nativeEvent.submitter.name === 'google-submitter') {
-      console.log('google signUp'); //remove later
+    // Data validation
+    if (!fullName || !email || !password || !passwordConfirm) {
+      return setAlert('Please fill in all fields.');
     }
+    if (password !== passwordConfirm) return setAlert('Passwords do not match');
+
+    // Check which submitter - email or google:
+    if (e.nativeEvent.submitter) { //check if exist(typwscript)
+
+      const submitterName = e.nativeEvent.submitter.getAttribute('name');
+
+      if (submitterName === 'email-submitter') {
+        try {
+          setLoading(true);
+          let response = await insertNewUserInDb('temp', fullName, email);
+
+          if (response.status !== 201) {
+            if (response.response.data.startsWith('Duplicate entry'))
+              throw new Error('Email already exists');
+          }
+
+          const { user } = await signup(email, password);
+
+          const uid = user.uid;
+          const accessToken = user.accessToken;
+
+          response = await updateNewUser_temp_to_uid(uid);
+
+          if (response.status !== 201) {
+            if (response.response.status === 400) {
+              setAlert(response.response.data.error[0].msg);
+              setLoading(false);
+              return;
+            }
+            throw new Error();
+          }
+          navigate('/services');
+        } catch (error: unknown) {
+          if (error instanceof FirebaseError) {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+
+            if (errorCode === 'auth/email-already-in-use')
+              setAlert('Email already exists');
+            else if (errorCode === 'auth/weak-password')
+              setAlert('Password should be at least 6 characters');
+            else setAlert(errorMessage);
+          }
+          else if(error) setAlert(error.message);
+          else setAlert(`Oops! Something went wrong while trying to create your account.`)
+        }
+      } else if (submitterName === 'google-submitter') {
+        setLoading(true);
+        console.log('google signUp'); //remove later
+      }
+    }
+    setLoading(false);
   }
 
   function changeHandler() {
@@ -76,7 +107,10 @@ export default function SignIn() {
             marginInline: '1rem',
             marginBlock: '2rem',
           }}>
-          <Link to={-1}>
+          <Link
+            // to={-1}
+            to="#"
+            onClick={() => window.history.back()}>
             <img src={backArrow} alt="back-arrow" />
           </Link>
 
@@ -99,28 +133,34 @@ export default function SignIn() {
               slotProps={{ input: { ref: fullNameRef } }}
               type="text"
               placeholder="Full Name"
+              required
             />
             <Input
               onChange={changeHandler}
               slotProps={{ input: { ref: emailRef } }}
               type="email"
               placeholder="Email"
+              required
             />
             <Input
               onChange={changeHandler}
               slotProps={{ input: { ref: passwordRef } }}
               type="password"
               placeholder="Password"
+              required
             />
             <Input
               onChange={changeHandler}
+              slotProps={{ input: { ref: passwordConfirmRef } }}
               type="password"
               placeholder="Confirm Password"
+              required
             />
-            <Button type="submit" name="email-submitter">
+            <Button type="submit" name="email-submitter" loading={loading}>
               Create Account
             </Button>
             <Button
+            loading={googleLoading}
               variant="outlined"
               type="submit"
               name="google-submitter"
@@ -129,7 +169,6 @@ export default function SignIn() {
             </Button>
             {alert && (
               <Alert
-                // startDecorator={<WarningIcon />}
                 variant="soft"
                 color="danger">
                 {alert}

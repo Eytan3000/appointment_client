@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-import backArrow from '../../assets/icons/Arrow - Down 2.png'
+import backArrow from '../../assets/icons/Arrow - Down 2.png';
 export default function BackArrow() {
   return (
     <div
@@ -9,7 +9,10 @@ export default function BackArrow() {
         marginInline: '1rem',
         marginBlock: '2rem',
       }}>
-      <Link to={-1}>
+      <Link
+        // to={-1}
+        to="#"
+        onClick={() => window.history.back()}>
         <img src={backArrow} alt="back-arrow" />
       </Link>
     </div>

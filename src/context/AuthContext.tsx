@@ -9,7 +9,9 @@ import { auth } from '../firebase';
 import {
   User,
   createUserWithEmailAndPassword,
-  onAuthStateChanged
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
 } from 'firebase/auth';
 //------------------------------------------------
 const AuthContext = createContext({});
@@ -33,8 +35,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return createUserWithEmailAndPassword(auth, email, password);
   }
 
+  function login(email: string, password: string) {
+    return signInWithEmailAndPassword(auth, email, password);
+  }
 
-  const value = { currentUser, signup };
+  function resetPassword(email: string) {
+    return sendPasswordResetEmail(auth, email);
+  }
+
+  const value = { currentUser, signup, login, resetPassword };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

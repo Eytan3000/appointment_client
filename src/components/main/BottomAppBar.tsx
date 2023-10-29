@@ -55,8 +55,9 @@ export default function BottomAppBar() {
             justifyContent: 'space-between',
             marginBottom: '0.4rem',
           }}>
-          {actionItems.map((item) => (
+          {actionItems.map((item, index) => (
             <div
+            key={index}
               style={{
                 display: 'flex',
                 justifyContent: 'center',

@@ -1,6 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
-import google from '../../../assets/icons/google.png';
 import {
   Typography,
   Button,
@@ -9,24 +8,50 @@ import {
   Box,
   ModalDialog,
   Modal,
+  Alert,
 } from '@mui/joy';
-import { ReactElement, useState } from 'react';
+import { useRef, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
 
 export default function ForgotPassword() {
+  const { resetPassword } = useAuth();
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [alert, setAlert] = useState<string | null>(null);
+  const [loading, setLoading] = useState(false);
 
-  function handleSubmit(e: React.SyntheticEvent) {
+  const emailRef = useRef<HTMLInputElement | null>(null);
+
+  async function handleSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    setOpen(true);
+    const email = emailRef?.current?.value;
+
+    if (!email) {
+      return setAlert('Please fill in your email');
+    }
+
+    try {
+      setLoading(true);
+      await resetPassword(email);
+
+      setOpen(true);
+      setLoading(false);
+    } catch (error) {
+      setAlert(error.message);
+      setLoading(false);
+    }
+    setLoading(false);
   }
 
   function handleModalOk() {
     setOpen(false);
     navigate('/signIn');
   }
-
+  function changeHandler() {
+    setAlert(null);
+  }
   return (
     <>
       <div
@@ -36,7 +61,10 @@ export default function ForgotPassword() {
           marginInline: '1rem',
           marginBlock: '2rem',
         }}>
-        <Link to={-1}>
+        <Link
+          //  to={-1}
+          to="#"
+          onClick={() => window.history.back()}>
           <img src={backArrow} alt="back-arrow" />
         </Link>
       </div>
@@ -54,12 +82,22 @@ export default function ForgotPassword() {
             height: '50vh',
           }}>
           <Stack spacing={2} mx={2}>
-            <Input type="email" placeholder="Email" />
-            {/* <Input type="password" placeholder="Password" /> */}
+            <Input
+              type="email"
+              placeholder="Email"
+              onChange={changeHandler}
+              slotProps={{ input: { ref: emailRef } }}
+            />
           </Stack>
 
           <Stack spacing={2} mx={2}>
-            <Button type="submit">OK</Button>
+            <Button loading={loading} type="submit">OK</Button>
+
+            {alert && (
+              <Alert variant="soft" color="danger">
+                {alert}
+              </Alert>
+            )}
           </Stack>
         </div>
       </form>
@@ -80,9 +118,6 @@ export default function ForgotPassword() {
               maxWidth: 'unset',
             },
           })}>
-          {/* <Typography id="nested-modal-title" level="h2">
-            Are you absolutely sure?
-          </Typography> */}
           <Typography id="nested-modal-description" textColor="text.tertiary">
             A password reset email has been sent to your inbox
           </Typography>
@@ -102,5 +137,3 @@ export default function ForgotPassword() {
     </>
   );
 }
-
-//--------------------------------------------------------------

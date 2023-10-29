@@ -18,8 +18,8 @@ export default function AddServiceModal({ open, setOpen }) {
         <div style={{marginBlock:'1rem'}}>
           <ModalClose />
         </div>
-        {services.map((service) => (
-          <ServiceCard />
+        {services.map((service, index) => (
+          <ServiceCard key={index}/>
         ))}
       </ModalDialog>
     </Modal>

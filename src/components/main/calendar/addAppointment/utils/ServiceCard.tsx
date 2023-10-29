@@ -3,13 +3,30 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import CardOverflow from '@mui/joy/CardOverflow';
 import Typography from '@mui/joy/Typography';
+import { minutesToTimeDuration } from '../../../../../utils/helperFunctions';
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
-export default function ServiceCard() {
+interface Props {
+  keyNum: number;
+  serviceTitle: string;
+  description: string;
+  time: string;
+  price: string;
+}
+
+export default function ServiceCard({
+  keyNum,
+  serviceTitle,
+  description,
+  time,
+  price,
+}: Props) {
   return (
     <Card
+      key={keyNum}
       orientation="horizontal"
       variant="outlined"
-      sx={{ width: 260, marginInline: 'auto', mt:2 }}>
+      sx={{ width: 260, marginInline: 'auto', mt: 2 }}>
       <CardOverflow>
         <AspectRatio ratio="1" sx={{ width: 90 }}>
           <img
@@ -22,27 +39,27 @@ export default function ServiceCard() {
       </CardOverflow>
       <CardContent>
         <Typography fontWeight="md" textColor="success.plainColor">
-          Yosemite Park
+          {serviceTitle}{' '}
         </Typography>
-        <Typography level="body-sm">California, USA</Typography>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-around',
+          }}>
+          <Typography level="body-sm">{price} ₪</Typography>
+          <Typography level="body-sm">
+            {' '}
+            <div
+              style={{
+                display: 'flex',
+                gap: '6px',
+              }}>
+              <AccessTimeIcon sx={{ fontSize: '1rem', marginTop: '2px' }} />
+              {minutesToTimeDuration(time)}
+            </div>
+          </Typography>
+        </div>
       </CardContent>
-      <CardOverflow
-        variant="soft"
-        color="primary"
-        sx={{
-          px: 0.2,
-          writingMode: 'vertical-rl',
-          textAlign: 'center',
-          fontSize: 'xs',
-          fontWeight: 'xl',
-          letterSpacing: '1px',
-          textTransform: 'uppercase',
-          borderLeft: '1px solid',
-          borderColor: 'divider',
-          py: 3,
-        }}>
-        01:30
-      </CardOverflow>
     </Card>
   );
 }
