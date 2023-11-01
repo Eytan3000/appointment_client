@@ -15,7 +15,6 @@ import { useEffect, useState } from 'react';
 import { getAuth } from 'firebase/auth';
 import { getAllServices } from '../../../utils/http';
 import { useQuery } from '@tanstack/react-query';
-import ServicesStack from './ServicesStack';
 //-------------------------------------------
 // const price = '180';
 // const serviceTitle = 'Manicure';
@@ -35,17 +34,34 @@ interface Service {
 
 export default function Services() {
   const navigate = useNavigate();
-  // const { currentUser } = getAuth();
+  const { currentUser } = getAuth();
 
-  // const [services, setServices] = useState<Service[]>();
-  // const [loading, setLoading] = useState(false);
+  const [services, setServices] = useState<Service[]>();
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    getAllServices(currentUser.uid)
+      .then((services) => {
+        setLoading(false);
+        setServices(services);
+      })
+      .catch((err) => console.log(err));
+  }, []);
+
+// // Tanstack Query:
+//   const servicesQuery = useQuery({
+//     queryKey: ["services"],
+//     queryFn: ()=>getAllServices(currentUser.uid).then((services)=>[...services]),
+//   })
+
+  // if(servicesQuery.isLoading) setLoading(true);
 
   function handleAddService() {
     navigate('/add-service');
   }
-  // function handleEditService() {
-  //   navigate('/edit-service');
-  // }
+  function handleEditService() {
+    navigate('/edit-service');
+  }
   function handleNext() {
     navigate('/work-hours');
   }
@@ -70,7 +86,26 @@ export default function Services() {
 
       {/* Card */}
       <Stack marginBottom={12}>
-        <ServicesStack />
+        {loading && (
+          <div
+            style={{
+              display: 'flex',
+              justifyContent: 'center',
+              alignItems: 'center',
+              height: '50vh',
+            }}>
+            <CircularProgress size="lg" variant="soft" />
+          </div>
+        )}
+        {services?.map((service, index) => (
+          <ServiceCard
+            keyNum={index}
+            serviceTitle={service.name}
+            description={service.description}
+            time={service.duration}
+            price={service.price}
+          />
+        ))}
       </Stack>
 
       {/* Floating bar */}

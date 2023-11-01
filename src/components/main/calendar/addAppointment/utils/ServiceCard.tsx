@@ -7,7 +7,6 @@ import { minutesToTimeDuration } from '../../../../../utils/helperFunctions';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 interface Props {
-  keyNum: number;
   serviceTitle: string;
   description: string;
   time: string;
@@ -15,7 +14,6 @@ interface Props {
 }
 
 export default function ServiceCard({
-  keyNum,
   serviceTitle,
   description,
   time,
@@ -23,7 +21,6 @@ export default function ServiceCard({
 }: Props) {
   return (
     <Card
-      key={keyNum}
       orientation="horizontal"
       variant="outlined"
       sx={{ width: 260, marginInline: 'auto', mt: 2 }}>
@@ -46,18 +43,17 @@ export default function ServiceCard({
             display: 'flex',
             justifyContent: 'space-around',
           }}>
-          <Typography level="body-sm">{price} ₪</Typography>
-          <Typography level="body-sm">
-            {' '}
-            <div
-              style={{
-                display: 'flex',
-                gap: '6px',
-              }}>
-              <AccessTimeIcon sx={{ fontSize: '1rem', marginTop: '2px' }} />
+          <Typography level="body-sm">{price} ₪</Typography>{' '}
+          <div
+            style={{
+              display: 'flex',
+              gap: '6px',
+            }}>
+            <AccessTimeIcon sx={{ fontSize: '1rem', marginTop: '2px' }} />
+            <Typography level="body-sm">
               {minutesToTimeDuration(time)}
-            </div>
-          </Typography>
+            </Typography>
+          </div>
         </div>
       </CardContent>
     </Card>

@@ -15,10 +15,17 @@ import { SyntheticEvent, useRef, useState } from 'react';
 import { createService } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 import { isWholeNumber } from '../../../utils/helperFunctions';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AddService() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  // const { currentUser } = useAuth();
+    
+  //get ui from storage in json
+    const userData = localStorage.getItem('user');
+    const { uid } = JSON.parse(userData!);
+  
+  const queryClient = useQueryClient();
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -27,6 +34,15 @@ export default function AddService() {
   const descriptionRef = useRef<HTMLInputElement | null>(null);
   const durationRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
+
+  const addServiceMutation = useMutation({
+    mutationFn: createService,
+    onSuccess: (allOwnerServicesResponse) => {
+      queryClient.setQueryData(['services'], allOwnerServicesResponse.data);
+      queryClient.invalidateQueries(['services'], { exact: true });
+      navigate('/services');
+    },
+  });
 
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
@@ -44,28 +60,29 @@ export default function AddService() {
       setAlert('price must be a whole number (e.g. 120).');
       return;
     }
+    // console.log(duration)
+    addServiceMutation.mutate({name, description, duration, price, uid});
+    // try {
+    //   setLoading(true);
+    //   const result = await createService(
+    //     name,
+    //     description,
+    //     duration,
+    //     price,
+    //     currentUser.uid
+    //   );
+    //   if (result.status !== 201) {
+    //     console.log(result.response.data.error[0].msg);
+    //     throw new Error('Something went wrong');
+    //   }
 
-    try {
-      setLoading(true);
-      const result = await createService(
-        name,
-        description,
-        duration,
-        price,
-        currentUser.uid
-      );
-      if (result.status !== 201) {
-        console.log(result.response.data.error[0].msg);
-        throw new Error('Something went wrong');
-      }
-
-      setLoading(false);
-      navigate('/services');
-    } catch (error: unknown) {
-      if (error instanceof Error) setAlert(error.message);
-      else setAlert('An unknown error occurred.');
-      setLoading(false);
-    }
+    //   setLoading(false);
+    //   navigate('/services');
+    // } catch (error: unknown) {
+    //   if (error instanceof Error) setAlert(error.message);
+    //   else setAlert('An unknown error occurred.');
+    //   setLoading(false);
+    // }
   }
   function changeHandler() {
     setAlert(null);

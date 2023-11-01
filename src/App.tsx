@@ -49,7 +49,7 @@ function App() {
       element: <AddService />,
     },
     {
-      path: '/edit-service',
+      path: '/edit-service/:id',
       element: <EditService />,
     },
     {
@@ -124,6 +124,7 @@ function App() {
       element: <ToolsServices />,
     },
   ]);
+    
 
   return (
     <>

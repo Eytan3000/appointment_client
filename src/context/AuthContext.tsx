@@ -13,8 +13,21 @@ import {
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
 } from 'firebase/auth';
+
 //------------------------------------------------
-const AuthContext = createContext({});
+
+interface AuthContextValue {
+  currentUser: User | null | undefined;
+  signup: (email: string, password: string) => Promise<UserCredential>;
+  login: (email: string, password: string) => Promise<UserCredential>;
+  // logOut: () => Promise<void>;
+  // changePassword: (password: string) => Promise<void>;
+  // reAuthenticate: (password: string) => Promise<UserCredential>;
+  resetPassword: (email: string) => Promise<void>;
+}
+
+//------------------------------------------------
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 export function useAuth() {
   return useContext(AuthContext);
@@ -23,10 +36,26 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
+  // Load user data from local storage when the app initializes
+  useEffect(() => {
+    const userData = localStorage.getItem('user');
+    if (userData) {
+      setCurrentUser(JSON.parse(userData));
+    }
+  }, []);
+
   //sets user to state when auth state changes (when a user logs in or logs out)
   useEffect(() => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
+
+      if (user) {
+        // Save user data to local storage when logged in
+        localStorage.setItem('user', JSON.stringify(user));
+      } else {
+        // Remove user data from local storage when logged out
+        localStorage.removeItem('user');
+      }
     });
     return unsubscribed;
   }, []);
@@ -42,8 +71,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function resetPassword(email: string) {
     return sendPasswordResetEmail(auth, email);
   }
-
-  const value = { currentUser, signup, login, resetPassword };
+  function logOut() {
+    localStorage.removeItem('user');
+    // return sendPasswordResetEmail(auth, email);
+  }
+  // localStorage.removeItem('user');
+  const value: AuthContextValue = { currentUser, signup, login, resetPassword };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
