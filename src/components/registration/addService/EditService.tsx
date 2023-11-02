@@ -20,9 +20,11 @@ import {
 } from '../../../utils/helperFunctions';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
-import { storage } from './../../../firebase';
-import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
-import { v4 } from 'uuid';
+import ImageUploader from './ImageUploader';
+// import { storage } from './../../../firebase';
+// import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
+// import { v4 } from 'uuid';
+// import cameraIcon from '../../../assets/icons/camera.png'
 
 interface ServiceObject {
   description: string | null;
@@ -51,10 +53,10 @@ export default function AddService() {
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
 
-  const [imageUpload, setImageUpload] = useState();
-  // const [imageList, setImageList] = useState([]);
-  // const imageListRef = ref(storage, 'images/');
-  const [imageUrl, setImageUrl] = useState('');
+  // const [imageUpload, setImageUpload] = useState();
+  // // const [imageList, setImageList] = useState([]);
+  // // const imageListRef = ref(storage, 'images/');
+  // const [imageUrl, setImageUrl] = useState(cameraIcon);
 
   let button = (
     <Button style={{ marginTop: '2rem' }} type="submit">
@@ -129,24 +131,24 @@ export default function AddService() {
   }
 
   //image uploader
-  async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
-    e.preventDefault();
-    setImageUpload(e.target.files[0]);
+  // async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
+  //   e.preventDefault();
+  //   setImageUpload(e.target.files[0]);
 
-    console.log('clicked');
-    if (imageUpload === null) return;
+  //   console.log('clicked');
+  //   if (imageUpload === null) return;
 
-    const imageRef = ref(storage, `images/${uid}_${v4()}}`);
+  //   const imageRef = ref(storage, `images/${uid}_${v4()}}`);
 
-    const imageObj = await uploadBytes(imageRef, imageUpload);
-    const imagePathInStorage = imageObj.ref._location.path_;
-    console.log(imagePathInStorage);
-    
-    const imageListRef1 = ref(storage, imagePathInStorage);
-    const imageUrl = await getDownloadURL(imageListRef1);
-    
-    setImageUrl(imageUrl);
-  }
+  //   const imageObj = await uploadBytes(imageRef, imageUpload);
+  //   const imagePathInStorage = imageObj.ref._location.path_;
+  //   console.log(imagePathInStorage);
+
+  //   const imageListRef1 = ref(storage, imagePathInStorage);
+  //   const imageUrl = await getDownloadURL(imageListRef1);
+
+  //   setImageUrl(imageUrl);
+  // }
 
   // Tanstack query fetch service by serviceId
   const { data, isPending, isError } = useQuery({
@@ -182,16 +184,29 @@ export default function AddService() {
         </Typography>
 
         {/* Image */}
-        <input style={{display:'none'}} type="file" id='file' onChange={handleImageInput} />
-        <label style={{
-          // height:'150px',
-          // width:'100px',
-          // borderRadius:'6px',
-          // border:'1px solid #999'
-        }} for='file'><Card>eta</Card></label>
+        <ImageUploader uid={uid} />
+        {/* <input
+          style={{ display: 'none' }}
+          type="file"
+          id="file"
+          onChange={handleImageInput}
+        />
+        <label for="file">
+          <Card
+            component="li"
+            sx={{ height: '6rem', width: '8rem', marginInline: 'auto' }}>
+            <CardActions>
+              <CardCover>
+                <img
+                  src={imageUrl}
+                  loading="lazy"
+                  alt="Service Image"
+                />
+              </CardCover>
+            </CardActions>
+          </Card>
+        </label> */}
 
-
-{/* <label for='file'> */}
         {/* Form */}
         <form
           style={{
@@ -199,38 +214,9 @@ export default function AddService() {
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'center',
-            marginTop: '3em',
+            // marginTop: '3em',
           }}
-          onSubmit={(e) => handleSubmit(e, data[0])}
-          >
-
-          <Card
-            component="li"
-            sx={{ flexGrow: 1, height: '6rem', width: '8rem' }}>
-            <CardActions>
-              <CardCover>
-                <img
-                  // src="https://www.rockabillyhairstyle.com/wp-content/uploads/images/4-white-nail-art-with-leaves.jpg"
-                  src={imageUrl}
-                  loading="lazy"
-                  alt="Service Image"
-                />
-                {/* <div style={{ fontSize: '4rem' }}>
-                  <AiOutlineCamera />
-                </div> */}
-              </CardCover>
-            </CardActions>
-            {/* <CardContent>
-              <Typography
-                level="body-lg"
-                fontWeight="lg"
-                // textColor="#fff"
-                mt={{ xs: 12, sm: 18 }}>
-                Image
-              </Typography>
-            </CardContent> */}
-          </Card>
-
+          onSubmit={(e) => handleSubmit(e, data[0])}>
           <div
             style={{
               marginTop: '3em',
