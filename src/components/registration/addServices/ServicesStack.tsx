@@ -2,9 +2,12 @@ import { Alert, CircularProgress, Typography } from '@mui/joy';
 import ServiceCard from '../../main/calendar/addAppointment/utils/ServiceCard';
 import { useQuery } from '@tanstack/react-query';
 import { getAllServices } from '../../../utils/http';
-import { User } from 'firebase/auth';
-import { useNavigate } from 'react-router-dom';
+import { User, getAuth } from 'firebase/auth';
+import { useNavigate, useParams } from 'react-router-dom';
 import AddService from '../addService/AddService';
+import { useAuth } from '../../../context/AuthContext';
+import { useEffect, useState } from 'react';
+import { auth } from '../../../firebase';
 
 interface Service {
   id: number;
@@ -14,11 +17,11 @@ interface Service {
   price: string;
 }
 
-export default function ServicesStack() {
-  //   const { currentUser } = useAuth();
+export default function ServicesStack({setAreThereAnyServices}) {
   const navigate = useNavigate();
-  const userData = localStorage.getItem('user'); // Retrieve the user data from local storage (json)
-  const { uid } = JSON.parse(userData!);
+  
+  const { currentUser } =  useAuth();
+  const uid = currentUser.uid;
 
   //function
   function handleClick(id: number) {
@@ -61,10 +64,11 @@ export default function ServicesStack() {
     //     Please add services
     //   </Typography>
     // );
-    return null
+    return null;
   }
 
   if (data.length > 0) {
+    setAreThereAnyServices(true);
     return data.map((service: Service) => (
       <div key={service.id} onClick={() => handleClick(service.id)}>
         <ServiceCard
@@ -78,3 +82,8 @@ export default function ServicesStack() {
     ));
   }
 }
+
+
+  // // Retrieve the user data from local storage (json)
+  // const userData = localStorage.getItem('user'); 
+  // const { uid } = JSON.parse(userData!);

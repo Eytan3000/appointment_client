@@ -18,7 +18,11 @@ import {
   minutesToTimeDuration,
   timeStringToMinutes,
 } from '../../../utils/helperFunctions';
-import { SyntheticEvent, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { useAuth } from '../../../context/AuthContext';
+import { storage } from './../../../firebase';
+import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
+import { v4 } from 'uuid';
 
 interface ServiceObject {
   description: string | null;
@@ -34,8 +38,11 @@ export default function AddService() {
   const { id: serviceId } = useParams();
 
   //get ui from storage in json
-  const userData = localStorage.getItem('user');
-  const { uid } = JSON.parse(userData!);
+  // const userData = localStorage.getItem('user');
+  // const { uid } = JSON.parse(userData!);
+
+  const { currentUser } = useAuth();
+  const uid = currentUser.uid;
 
   const queryClient = useQueryClient();
 
@@ -43,6 +50,11 @@ export default function AddService() {
   const durationRef = useRef<HTMLInputElement | null>(null);
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
+
+  const [imageUpload, setImageUpload] = useState();
+  // const [imageList, setImageList] = useState([]);
+  // const imageListRef = ref(storage, 'images/');
+  const [imageUrl, setImageUrl] = useState('');
 
   let button = (
     <Button style={{ marginTop: '2rem' }} type="submit">
@@ -58,7 +70,7 @@ export default function AddService() {
     onSuccess: (allOwnerServicesResponse) => {
       queryClient.setQueryData(['services'], allOwnerServicesResponse);
       queryClient.invalidateQueries(['services'], { exact: true });
-      navigate('/services');
+      navigate(-1);
     },
   });
 
@@ -116,6 +128,26 @@ export default function AddService() {
     deleteServiceMutation.mutate(serviceId);
   }
 
+  //image uploader
+  async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
+    e.preventDefault();
+    setImageUpload(e.target.files[0]);
+
+    console.log('clicked');
+    if (imageUpload === null) return;
+
+    const imageRef = ref(storage, `images/${uid}_${v4()}}`);
+
+    const imageObj = await uploadBytes(imageRef, imageUpload);
+    const imagePathInStorage = imageObj.ref._location.path_;
+    console.log(imagePathInStorage);
+    
+    const imageListRef1 = ref(storage, imagePathInStorage);
+    const imageUrl = await getDownloadURL(imageListRef1);
+    
+    setImageUrl(imageUrl);
+  }
+
   // Tanstack query fetch service by serviceId
   const { data, isPending, isError } = useQuery({
     queryKey: ['services', serviceId],
@@ -148,6 +180,19 @@ export default function AddService() {
           style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
           Descrive your service
         </Typography>
+
+        {/* Image */}
+        <input style={{display:'none'}} type="file" id='file' onChange={handleImageInput} />
+        <label style={{
+          // height:'150px',
+          // width:'100px',
+          // borderRadius:'6px',
+          // border:'1px solid #999'
+        }} for='file'><Card>eta</Card></label>
+
+
+{/* <label for='file'> */}
+        {/* Form */}
         <form
           style={{
             display: 'flex',
@@ -156,14 +201,17 @@ export default function AddService() {
             alignItems: 'center',
             marginTop: '3em',
           }}
-          onSubmit={(e) => handleSubmit(e, data[0])}>
+          onSubmit={(e) => handleSubmit(e, data[0])}
+          >
+
           <Card
             component="li"
             sx={{ flexGrow: 1, height: '6rem', width: '8rem' }}>
             <CardActions>
               <CardCover>
                 <img
-                  src="https://www.rockabillyhairstyle.com/wp-content/uploads/images/4-white-nail-art-with-leaves.jpg"
+                  // src="https://www.rockabillyhairstyle.com/wp-content/uploads/images/4-white-nail-art-with-leaves.jpg"
+                  src={imageUrl}
                   loading="lazy"
                   alt="Service Image"
                 />
@@ -222,5 +270,4 @@ export default function AddService() {
       </>
     );
   }
-
 }

@@ -5,7 +5,6 @@ import { useNavigate } from 'react-router-dom';
 import {
   Box,
   Button,
-  CircularProgress,
   Divider,
   Stack,
   Typography,
@@ -16,6 +15,7 @@ import { getAuth } from 'firebase/auth';
 import { getAllServices } from '../../../utils/http';
 import { useQuery } from '@tanstack/react-query';
 import ServicesStack from './ServicesStack';
+import BackArrow from '../../utilsComponents/BackArrow';
 //-------------------------------------------
 // const price = '180';
 // const serviceTitle = 'Manicure';
@@ -35,10 +35,13 @@ interface Service {
 
 export default function Services() {
   const navigate = useNavigate();
+
+  const [areThereAnyServices, setAreThereAnyServices] = useState(false);
+
   // const { currentUser } = getAuth();
 
-  // const [services, setServices] = useState<Service[]>();
-  // const [loading, setLoading] = useState(false);
+  // check if user comes from settings or signup
+  const isInSettings = window.location.href.includes('settings');
 
   function handleAddService() {
     navigate('/add-service');
@@ -51,12 +54,24 @@ export default function Services() {
   }
   return (
     <>
+      {isInSettings && (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '6.5rem',
+            marginTop: '-10px',
+          }}>
+          <BackArrow />
+          {/* <Typography>services</Typography> */}
+        </div>
+      )}
       <Box
         display={'flex'}
         alignItems={'center'}
         flexDirection={'column'}
         textAlign={'center'}>
-        <Stack spacing={2} mb={2} mt={2}>
+        <Stack spacing={2} mb={2} mt={isInSettings ? 0 : 2}>
           <Typography level="h4">What services do you offer?</Typography>
           <Typography>
             List your services to help your clients book exactly what they need
@@ -68,23 +83,26 @@ export default function Services() {
       </Box>
       <Divider />
 
-      {/* Card */}
+      {/* Services Stack */}
       <Stack marginBottom={12}>
-        <ServicesStack />
+        <ServicesStack setAreThereAnyServices={setAreThereAnyServices} />
       </Stack>
 
       {/* Floating bar */}
-      <div className="floating-stripe">
-        <Button
-          onClick={handleNext}
-          // variant="full"
-          style={{
-            paddingInline: 50,
-            margin: '1rem',
-          }}>
-          Next
-        </Button>
-      </div>
+      {!isInSettings && (
+        <div className="floating-stripe">
+          <Button
+          disabled={!areThereAnyServices}
+            onClick={handleNext}
+            // variant="full"
+            style={{
+              paddingInline: 50,
+              margin: '1rem',
+            }}>
+            Next
+          </Button>
+        </div>
+      )}
     </>
   );
 }

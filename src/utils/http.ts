@@ -17,19 +17,21 @@ const baseURL = 'http://192.168.1.180:8090';
 export async function insertNewUserInDb(
     uid: string,
     fullname: string,
-    email: string
+    email: string,
+    password: string
 ) {
+    console.log(password);
+    
     const response = await axios.post(baseURL + '/users/create-user', {
         id: uid,
         fullname,
         email,
+        password
     })
         .then((response) => {
-            // console.log(response);
             return response;
         })
         .catch((error) => {
-            // console.log(error);
             return error;
         });
     return response;
@@ -56,16 +58,18 @@ export async function createService(
     // durationStr: string,
     // price: string,
     // owner_id: string,
-    {name,
-    description,
-    duration,
-    price,
-    uid,} :
-    {  name: string,
-    description: string,
-    duration: string,
-    price: string,
-    uid: string}
+    { name,
+        description,
+        duration,
+        price,
+        uid, }:
+        {
+            name: string,
+            description: string,
+            duration: string,
+            price: string,
+            uid: string
+        }
 ) {
 
     const durationInMinutes = timeStringToMinutes(duration);
@@ -76,7 +80,7 @@ export async function createService(
         description,
         duration: durationInMinutes,
         price,
-        owner_id:uid,
+        owner_id: uid,
     })
         .then((response) => {
             // console.log(response);
@@ -93,7 +97,7 @@ export async function getAllServices(owner_id: string) {
     try {
         const response = await axios.get(baseURL + '/services/read-all-services/' + owner_id);
         return response.data;
-        
+
     } catch (error) {
         console.error(error);
         throw error; // Rethrow the error for the caller to handle
@@ -122,9 +126,9 @@ export async function udpateService(serviceObject: ServiceObject) {
     }
 }
 
-export async function deleteService(service_id:string) {
+export async function deleteService(service_id: string) {
     try {
-        const response = await axios.delete(baseURL + '/services/'+service_id);
+        const response = await axios.delete(baseURL + '/services/' + service_id);
         return response.data;
     } catch (error) {
         console.error(error);

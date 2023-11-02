@@ -19,12 +19,15 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AddService() {
   const navigate = useNavigate();
-  // const { currentUser } = useAuth();
-    
-  //get ui from storage in json
-    const userData = localStorage.getItem('user');
-    const { uid } = JSON.parse(userData!);
-  
+  const { currentUser } = useAuth();
+  const uid = currentUser.uid;
+
+
+
+  // // get uid from storage in json
+  // const userData = localStorage.getItem('user');
+  // const { uid } = JSON.parse(userData!);
+
   const queryClient = useQueryClient();
 
   const [alert, setAlert] = useState<string | null>(null);
@@ -61,7 +64,7 @@ export default function AddService() {
       return;
     }
     // console.log(duration)
-    addServiceMutation.mutate({name, description, duration, price, uid});
+    addServiceMutation.mutate({ name, description, duration, price, uid });
     // try {
     //   setLoading(true);
     //   const result = await createService(

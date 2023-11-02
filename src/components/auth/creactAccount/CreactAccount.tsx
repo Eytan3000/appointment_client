@@ -49,9 +49,10 @@ export default function SignIn() {
       if (submitterName === 'email-submitter') {
         try {
           setLoading(true);
-          let response = await insertNewUserInDb('temp', fullName, email);
+          let response = await insertNewUserInDb('temp', fullName, email, password);
 
           if (response.status !== 201) {
+            if(response.response.status===400) throw new Error(response.response.data);
             if (response.response.data.startsWith('Duplicate entry'))
               throw new Error('Email already exists');
           }
