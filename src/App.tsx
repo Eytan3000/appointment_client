@@ -22,7 +22,6 @@ import ToolsServices from './components/main/tools/services/ToolsServices.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx';
 
-
 function App() {
   const element = useRoutes([
     // {
@@ -129,11 +128,12 @@ function App() {
       element: <ToolsServices />,
     },
   ]);
-    
 
   return (
     <>
-      <AuthProvider>{element}</AuthProvider>
+      <AuthProvider>
+        {element}
+      </AuthProvider>
     </>
   );
 }

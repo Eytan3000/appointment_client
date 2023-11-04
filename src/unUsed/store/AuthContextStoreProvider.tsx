@@ -1,22 +1,7 @@
-import React, {
-  ReactNode,
-  createContext,
-  useContext,
-  useEffect,
-  useState,
-} from 'react';
+import { ReactNode, useEffect, useState } from 'react';
+import { AuthContext } from './AuthContextStore';
+import { User, createUserWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, signInWithEmailAndPassword, signOut } from 'firebase/auth';
 import { auth } from '../firebase';
-import {
-  User,
-  UserCredential,
-  createUserWithEmailAndPassword,
-  onAuthStateChanged,
-  sendPasswordResetEmail,
-  signInWithEmailAndPassword,
-  // signOut,
-} from 'firebase/auth';
-
-//------------------------------------------------
 
 interface AuthContextValue {
   currentUser: User | null | undefined;
@@ -26,13 +11,6 @@ interface AuthContextValue {
   // changePassword: (password: string) => Promise<void>;
   // reAuthenticate: (password: string) => Promise<UserCredential>;
   resetPassword: (email: string) => Promise<void>;
-}
-
-//------------------------------------------------
-const AuthContext = createContext<AuthContextValue | undefined>(undefined);
-
-export function useAuth() {
-  return useContext(AuthContext);
 }
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -53,7 +31,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
       // if (user) {
       //   // Save user data to local storage when logged in
-      //   localStorage.setItem('user', JSON.stringify(user.uid));
+      //   localStorage.setItem('user', JSON.stringify(user));
       // } else {
       //   // Remove user data from local storage when logged out
       //   localStorage.removeItem('user');
@@ -77,15 +55,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   //   localStorage.removeItem('user');
   //   // return sendPasswordResetEmail(auth, email);
   // }
-  // function logout(email, password) {
-  //   // localStorage.removeItem('user');
-  //   return signOut(auth, email, password);
-  // }
+  function logout(email, password) {
+    // localStorage.removeItem('user');
+    return signOut(auth, email, password);
+  }
 
   // logout('user4@gmail.com', '111111');
 
   // localStorage.removeItem('user');
   const value: AuthContextValue = { currentUser, signup, login, resetPassword };
 
-  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={value}>
+      {children}
+    </AuthContext.Provider>
+  );
 }

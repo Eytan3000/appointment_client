@@ -4,7 +4,7 @@ import { Button, CircularProgress, Input, Stack, Typography } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { SyntheticEvent, useState } from 'react';
-import { createWeeklySchedule, createWorkweek } from '../../../utils/http';
+import { createWeeklySchedule, createWorkweek, getWorkWeek } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 import { useQuery } from '@tanstack/react-query';
 
@@ -28,24 +28,10 @@ interface Workweek {
 
 export default function EditWorkHours() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
 
-  // // fetch daily schedule id based on uid
-  // const { data, isPending, isError, error } = useQuery({
-  //   queryKey: ['workweek'],
-  //   queryFn: getWorkWeek,
-  // });
-
-  // fetch all days based on daily schedule id
-  // set start and end based on results
-  // set start and end based on results
-  // set all defaultChecked in weekDays object based on results
-
-  // change button to "save"
-  // change on submit to update the dailyschedul only.
-  // navigate back to settings.
 
   const [sunday, setSunday] = useState(true);
   const [monday, setMonday] = useState(true);
@@ -74,7 +60,7 @@ export default function EditWorkHours() {
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     setLoading(true);
-    let response = await createWorkweek(uid);
+    let response = await createWorkweek(uid!);
     const workweekId = response.workweekId;
 
     const weekDays: Workweek = {
@@ -130,7 +116,7 @@ export default function EditWorkHours() {
       workweek_id: workweekId,
     };
 
-    response = await createWeeklySchedule(weekDays);
+    // response = await createWeeklySchedule(weekDays);
 
     // console.log(response.data);
     setLoading(false);
@@ -139,6 +125,36 @@ export default function EditWorkHours() {
   function handleAdvancedOptions() {
     navigate('/workhours-advanced-options');
   }
+
+  // -- Tanstack Query --
+  
+    // fetch daily schedule id based on uid
+    const { data, isPending, isError, error } = useQuery({
+      queryKey: ['workweek'],
+      queryFn: ()=>getWorkWeek(uid!),
+      enabled: !!currentUser,
+    });
+  
+    let returningData;
+  
+    if(isPending) {
+      returningData = <CircularProgress />
+    }
+    if(isError) {
+      returningData = <h3>{error.message}</h3>
+    }
+    if(data){
+      returningData = <h3>Ok</h3>
+    }
+  
+    // set start and end based on results
+    // set start and end based on results
+    // set all defaultChecked in weekDays object based on results
+  
+    // change button to "save"
+    // change on submit to update the dailyschedul only.
+    // navigate back to settings.
+
   return (
     <>
       <div
@@ -310,6 +326,7 @@ export default function EditWorkHours() {
           loading={loading}>
           Next
         </Button>
+        {returningData}
       </form>
     </>
   );

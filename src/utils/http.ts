@@ -29,8 +29,8 @@ interface Workweek {
 
 // axios.defaults.baseURL = 'http://192.168.1.180:8090';
 
-// const baseURL = 'http://localhost:8090';
-const baseURL = 'http://192.168.1.180:8090';
+const baseURL = 'http://localhost:8090';
+// const baseURL = 'http://192.168.1.180:8090';
 
 export async function insertNewUserInDb(
     uid: string,
@@ -170,8 +170,7 @@ export async function createWeeklySchedule(weekScheduleObj: Workweek) { //receiv
         const response = await axios.post(baseURL + '/dailySchedule/create-7-daily-schedules', {
             weekScheduleObj,
         });
-        // console.log(response);
-        
+
         return response;
     } catch (error) {
         console.error(error);
@@ -179,12 +178,16 @@ export async function createWeeklySchedule(weekScheduleObj: Workweek) { //receiv
     }
 }
 
-export async function getWorkWeek(owner_id:string) { //receive owner_id and returns 7 daily schedules
+export async function getWorkWeek(owner_id: string) { //receive owner_id and returns array of 7 daily schedules
     try {
-        const response = await axios.get(baseURL + '/workweek/read-workweek-id/');
-        console.log(response);
-        
-        // return response;
+        const { data: workWeekId } = await axios.get(baseURL + '/workweek/read-workweek-id/' + owner_id);
+
+        const response = await axios.get(baseURL + '/dailySchedule/read-weekly-schedule/' + workWeekId);
+
+        const weeklyScheduleArray = response.data;
+
+        return weeklyScheduleArray;
+
     } catch (error) {
         console.error(error);
         throw error;
