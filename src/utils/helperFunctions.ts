@@ -1,3 +1,6 @@
+import { deleteObject, ref } from "firebase/storage";
+import { storage } from "../firebase";
+
 export function timeStringToMinutes(timeString: string) {
     // Split the time string into hours and minutes
     const [hours, minutes] = timeString.split(':').map(Number);
@@ -31,3 +34,16 @@ export function minutesToTimeDuration(minutes: string) {
     return `${hoursString}:${minutesString}`;
 }
 
+// -- firebase --
+export function deleteImageFromFirebase(url: string) {
+    const imageRef = ref(storage, url);
+  
+    // Delete the file
+    return deleteObject(imageRef)
+      .then(() => {
+        return 'Image deleted';
+      })
+      .catch((error) => {
+        return error.code;
+      });
+  }

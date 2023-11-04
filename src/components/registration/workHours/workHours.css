@@ -8,6 +8,7 @@
   display: flex;
   justify-content: space-evenly;
   margin-top: 1.5rem;
+  margin-bottom: 1rem;
 }
 .workdays-checkbox-container {
   display: flex;
@@ -26,6 +27,7 @@
   height: 20px; /* Adjust the size of the checkbox */
   border: 1px solid #ccc; /* Border color for the checkbox */
   border-radius: 3px; /* Rounded corners for the checkbox */
+
 }
 .workhours-button-container {
   display: flex;
@@ -47,12 +49,28 @@
   text-indent: 2px;
 }
 .hours-card {
-  margin-block: 3em;
-  margin-bottom: 1em;
+  margin-top: 1em;
   height: auto;
   display: flex;
   flex-direction: column;
   padding: 2em 2em;
+
+  border: 1px solid transparent;
+  border-radius: 8px;
+  background-image: linear-gradient(white, white),
+    /* linear-gradient(274deg, #92a3fd 0%, #9dceff 124.45%); */
+      linear-gradient(274deg, #a4b0e6 0%, #2153e9 124.45%);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+}
+.hours-card2 {
+  margin-top: 1em;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  /* padding: 2em 2em; */
+  padding-bottom: 2rem;
+
 
   border: 1px solid transparent;
   border-radius: 8px;

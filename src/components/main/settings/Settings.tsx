@@ -30,7 +30,7 @@ const settings = [
   {
     title: 'Edit Workhours',
     icon: <WorkHistoryIcon />,
-    path: 'work-hours',
+    path: 'edit-work-hours',
   },
   {
     title: 'Booking Intervals',

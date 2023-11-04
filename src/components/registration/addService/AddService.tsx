@@ -1,7 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-// import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { AiOutlineCamera } from 'react-icons/ai';
 import {
   Alert,
   Button,
@@ -14,15 +12,29 @@ import {
 import { SyntheticEvent, useRef, useState } from 'react';
 import { createService } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
-import { isWholeNumber } from '../../../utils/helperFunctions';
+import { deleteImageFromFirebase, isWholeNumber } from '../../../utils/helperFunctions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import ImageUploader from './ImageUploader';
+import { deleteObject, ref } from 'firebase/storage';
+import { storage } from '../../../firebase';
+
+// function deleteImageFromFirebase(url: string) {
+//   const imageRef = ref(storage, url);
+
+//   // Delete the file
+//   return deleteObject(imageRef)
+//     .then(() => {
+//       return 'Image deleted';
+//     })
+//     .catch((error) => {
+//       return error.code;
+//     });
+// }
 
 export default function AddService() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
   const uid = currentUser.uid;
-
-
 
   // // get uid from storage in json
   // const userData = localStorage.getItem('user');
@@ -32,6 +44,7 @@ export default function AddService() {
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const descriptionRef = useRef<HTMLInputElement | null>(null);
@@ -64,7 +77,14 @@ export default function AddService() {
       return;
     }
     // console.log(duration)
-    addServiceMutation.mutate({ name, description, duration, price, uid });
+    addServiceMutation.mutate({
+      name,
+      description,
+      duration,
+      price,
+      uid,
+      img_url: imageUrl,
+    });
     // try {
     //   setLoading(true);
     //   const result = await createService(
@@ -90,6 +110,14 @@ export default function AddService() {
   function changeHandler() {
     setAlert(null);
   }
+  async function handleBackArrowClick(){
+    if(imageUrl==='') navigate(-1);
+    else {
+      await deleteImageFromFirebase(imageUrl);
+      navigate(-1);
+    }
+  }
+
   return (
     <>
       <div
@@ -99,12 +127,13 @@ export default function AddService() {
           padding: '14px',
           alignItems: 'center',
         }}>
-        <Link
+        {/* <Link
           // to={-1}
           to="#"
-          onClick={() => window.history.back()}>
+          onClick={() => window.history.back()}> */}
+        <div onClick={handleBackArrowClick}>
           <ArrowBackIcon />
-        </Link>
+        </div>
       </div>
 
       <Typography style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
@@ -119,7 +148,8 @@ export default function AddService() {
           marginTop: '3em',
         }}
         onSubmit={handleSubmit}>
-        <Card
+        <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} />
+        {/* <Card
           component="li"
           sx={{ flexGrow: 1, height: '6rem', width: '8rem' }}>
           <CardActions>
@@ -129,21 +159,9 @@ export default function AddService() {
                 loading="lazy"
                 alt="Service Image"
               />
-              {/* <div style={{ fontSize: '4rem' }}>
-                <AiOutlineCamera />
-              </div> */}
             </CardCover>
           </CardActions>
-          {/* <CardContent>
-            <Typography
-              level="body-lg"
-              fontWeight="lg"
-              // textColor="#fff"
-              mt={{ xs: 12, sm: 18 }}>
-              Image
-            </Typography>
-          </CardContent> */}
-        </Card>
+        </Card> */}
 
         <div
           style={{

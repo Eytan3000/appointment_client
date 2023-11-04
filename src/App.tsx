@@ -20,6 +20,7 @@ import ClientsTable from './components/main/tools/Clients/ClientsTable.tsx';
 import AddClient from './components/main/tools/Clients/AddClient.tsx';
 import ToolsServices from './components/main/tools/services/ToolsServices.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
+import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx';
 
 
 function App() {
@@ -92,6 +93,10 @@ function App() {
         {
           path: 'services',
           element: <Services />,
+        },
+        {
+          path: 'edit-work-hours',
+          element: <EditWorkHours />,
         },
       ],
     },

@@ -6,7 +6,7 @@ import { User, getAuth } from 'firebase/auth';
 import { useNavigate, useParams } from 'react-router-dom';
 import AddService from '../addService/AddService';
 import { useAuth } from '../../../context/AuthContext';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { auth } from '../../../firebase';
 
 interface Service {
@@ -15,24 +15,30 @@ interface Service {
   description: string;
   duration: string;
   price: string;
+  img_url: string;
 }
 
-export default function ServicesStack({setAreThereAnyServices}) {
+export default function ServicesStack({ setAreThereAnyServices }) {
   const navigate = useNavigate();
-  
-  const { currentUser } =  useAuth();
-  const uid = currentUser.uid;
-
-  //function
-  function handleClick(id: number) {
-    navigate('/edit-service/' + id);
-  }
+  const { currentUser } = useAuth();
+  const uid = currentUser?.uid;
+  // const uid = currentUser;
 
   // Tanstack Query:
   const { data, isPending, isError, error } = useQuery({
     queryKey: ['services'],
     queryFn: () => getAllServices(uid),
   });
+
+  // if (uid===null) {
+  //   // Render something else or a loading indicator when currentUser is null
+  //   return <div>Loading...</div>;
+  // }
+
+  //function
+  function handleClick(id: number) {
+    navigate('/edit-service/' + id);
+  }
 
   if (isPending) {
     return (
@@ -77,13 +83,13 @@ export default function ServicesStack({setAreThereAnyServices}) {
           description={service.description}
           time={service.duration}
           price={service.price}
+          imgUrl={service.img_url}
         />
       </div>
     ));
   }
 }
 
-
-  // // Retrieve the user data from local storage (json)
-  // const userData = localStorage.getItem('user'); 
-  // const { uid } = JSON.parse(userData!);
+// // Retrieve the user data from local storage (json)
+// const userData = localStorage.getItem('user');
+// const { uid } = JSON.parse(userData!);

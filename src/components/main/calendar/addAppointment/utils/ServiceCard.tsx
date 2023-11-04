@@ -11,6 +11,7 @@ interface Props {
   description: string;
   time: string;
   price: string;
+  imgUrl:string;
 }
 
 export default function ServiceCard({
@@ -18,6 +19,7 @@ export default function ServiceCard({
   description,
   time,
   price,
+  imgUrl
 }: Props) {
   return (
     <Card
@@ -27,8 +29,9 @@ export default function ServiceCard({
       <CardOverflow>
         <AspectRatio ratio="1" sx={{ width: 90 }}>
           <img
-            src="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90"
-            srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
+            src={imgUrl}
+            // src="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90"
+            // srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
             loading="lazy"
             alt=""
           />

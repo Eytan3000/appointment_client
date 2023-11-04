@@ -1,11 +1,12 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
-import { Button, Input, Stack, Typography } from '@mui/joy';
+import { Button, CircularProgress, Input, Stack, Typography } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { SyntheticEvent, useState } from 'react';
 import { createWeeklySchedule, createWorkweek } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
+import { useQuery } from '@tanstack/react-query';
 
 interface DaylySchedule {
   name: string;
@@ -25,10 +26,26 @@ interface Workweek {
   workweek_id: number;
 }
 
-export default function WorkHours() {
+export default function EditWorkHours() {
   const navigate = useNavigate();
   const { currentUser } = useAuth();
-  const uid = currentUser.uid;
+  const uid = currentUser?.uid;
+
+
+  // // fetch daily schedule id based on uid
+  // const { data, isPending, isError, error } = useQuery({
+  //   queryKey: ['workweek'],
+  //   queryFn: getWorkWeek,
+  // });
+
+  // fetch all days based on daily schedule id
+  // set start and end based on results
+  // set start and end based on results
+  // set all defaultChecked in weekDays object based on results
+
+  // change button to "save"
+  // change on submit to update the dailyschedul only.
+  // navigate back to settings.
 
   const [sunday, setSunday] = useState(true);
   const [monday, setMonday] = useState(true);
@@ -140,7 +157,7 @@ export default function WorkHours() {
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
-        <Typography level="h3">Workweek</Typography>
+        <Typography level="h3">Edit Workweek</Typography>
       </div>
 
       <form

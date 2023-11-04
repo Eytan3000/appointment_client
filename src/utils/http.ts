@@ -8,6 +8,24 @@ interface ServiceObject {
     price: string | null;
     service_id: string | null;
 }
+interface DaylySchedule {
+
+    isWorkDay: boolean;
+    startTime: string;
+    endTime: string;
+
+}
+interface Workweek {
+    sunday: DaylySchedule;
+    monday: DaylySchedule;
+    tuesday: DaylySchedule;
+    wednesday: DaylySchedule;
+    thursday: DaylySchedule;
+    friday: DaylySchedule;
+    saturday: DaylySchedule;
+    workweek_id: number;
+}
+
 
 // axios.defaults.baseURL = 'http://192.168.1.180:8090';
 
@@ -21,7 +39,7 @@ export async function insertNewUserInDb(
     password: string
 ) {
     console.log(password);
-    
+
     const response = await axios.post(baseURL + '/users/create-user', {
         id: uid,
         fullname,
@@ -53,22 +71,19 @@ export async function updateNewUser_temp_to_uid(
 }
 
 export async function createService(
-    // name: string,
-    // description: string,
-    // durationStr: string,
-    // price: string,
-    // owner_id: string,
     { name,
         description,
         duration,
         price,
-        uid, }:
+        uid,
+        img_url }:
         {
             name: string,
             description: string,
             duration: string,
             price: string,
-            uid: string
+            uid: string,
+            img_url: string
         }
 ) {
 
@@ -81,13 +96,14 @@ export async function createService(
         duration: durationInMinutes,
         price,
         owner_id: uid,
+        img_url: img_url
     })
         .then((response) => {
-            // console.log(response);
+            console.log(response);
             return response;
         })
         .catch((error) => {
-            // console.log(error);
+            console.log(error);
             return error;
         });
     return response;
@@ -134,4 +150,45 @@ export async function deleteService(service_id: string) {
         console.error(error);
         throw error;
     }
+}
+
+// workWeek
+export async function createWorkweek(owner_id: string) {
+    try {
+        const response = await axios.post(baseURL + '/workweek/create-workweek', {
+            owner_id,
+        });
+        return response.data;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function createWeeklySchedule(weekScheduleObj: Workweek) { //receive an object for the week and writes a new row for each day.
+    try {
+        const response = await axios.post(baseURL + '/dailySchedule/create-7-daily-schedules', {
+            weekScheduleObj,
+        });
+        // console.log(response);
+        
+        return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+export async function getWorkWeek(owner_id:string) { //receive owner_id and returns 7 daily schedules
+    try {
+        const response = await axios.get(baseURL + '/workweek/read-workweek-id/');
+        console.log(response);
+        
+        // return response;
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+
+
 }

@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { AiOutlineCamera } from 'react-icons/ai';
 import {
+  Alert,
   Button,
   Card,
   CardActions,
@@ -15,12 +16,15 @@ import { deleteService, getService, udpateService } from '../../../utils/http';
 import Loader from '../../utilsComponents/Loader';
 import ErrorAlert from '../../utilsComponents/ErrorAlert';
 import {
+  deleteImageFromFirebase,
   minutesToTimeDuration,
   timeStringToMinutes,
 } from '../../../utils/helperFunctions';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import ImageUploader from './ImageUploader';
+import { storage } from '../../../firebase';
+import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
 // import { storage } from './../../../firebase';
 // import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
 // import { v4 } from 'uuid';
@@ -33,6 +37,7 @@ interface ServiceObject {
   price: string | null;
   service_id: string | null;
   owner_id: string | null;
+  img_url: string;
 }
 
 export default function AddService() {
@@ -53,13 +58,12 @@ export default function AddService() {
   const nameRef = useRef<HTMLInputElement | null>(null);
   const priceRef = useRef<HTMLInputElement | null>(null);
 
-  // const [imageUpload, setImageUpload] = useState();
-  // // const [imageList, setImageList] = useState([]);
-  // // const imageListRef = ref(storage, 'images/');
-  // const [imageUrl, setImageUrl] = useState(cameraIcon);
+  const [imageUrl, setImageUrl] = useState('');
+  const [alert, setAlert] = useState(false);
 
+  
   let button = (
-    <Button style={{ marginTop: '2rem' }} type="submit">
+    <Button style={{ marginTop: alert ? 0 : '2rem' }} type="submit">
       {' '}
       Save
     </Button>
@@ -99,7 +103,6 @@ export default function AddService() {
       navigate('/services');
     },
   });
-
   // Functions
   function handleSubmit(e: SyntheticEvent, data) {
     e.preventDefault();
@@ -121,34 +124,26 @@ export default function AddService() {
       newObjectToUpdateDb.duration = timeStringToMinutes(durationNewValue);
     if (nameNewValue !== data.name) newObjectToUpdateDb.name = nameNewValue;
     if (priceNewValue !== data.price) newObjectToUpdateDb.price = priceNewValue;
+    if (imageUrl !== '') newObjectToUpdateDb.img_url = imageUrl;
 
     //update with new object.
     updateServiceMutation.mutate(newObjectToUpdateDb);
   }
 
-  function HandleDelete() {
-    deleteServiceMutation.mutate(serviceId);
+  async function HandleDelete(img_url: string) {
+    if (img_url) {
+      const response = await deleteImageFromFirebase(img_url);
+      if (response === 'Image deleted') deleteServiceMutation.mutate(serviceId);
+      else setAlert(true);
+    } else deleteServiceMutation.mutate(serviceId);
   }
-
-  //image uploader
-  // async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
-  //   e.preventDefault();
-  //   setImageUpload(e.target.files[0]);
-
-  //   console.log('clicked');
-  //   if (imageUpload === null) return;
-
-  //   const imageRef = ref(storage, `images/${uid}_${v4()}}`);
-
-  //   const imageObj = await uploadBytes(imageRef, imageUpload);
-  //   const imagePathInStorage = imageObj.ref._location.path_;
-  //   console.log(imagePathInStorage);
-
-  //   const imageListRef1 = ref(storage, imagePathInStorage);
-  //   const imageUrl = await getDownloadURL(imageListRef1);
-
-  //   setImageUrl(imageUrl);
-  // }
+  async function handleBackArrowClick(){
+    if(imageUrl==='') navigate(-1);
+    else {
+      await deleteImageFromFirebase(imageUrl);
+      navigate(-1);
+    }
+  }
 
   // Tanstack query fetch service by serviceId
   const { data, isPending, isError } = useQuery({
@@ -163,7 +158,7 @@ export default function AddService() {
     return <ErrorAlert />;
   }
   if (data) {
-    const { description, duration, name, price } = data[0];
+    const { description, duration, name, price, img_url } = data[0];
     return (
       <>
         <div
@@ -173,42 +168,29 @@ export default function AddService() {
             padding: '14px',
             alignItems: 'center',
           }}>
-          <Link to={-1}>
+          <div 
+          // to={-1}
+          onClick={handleBackArrowClick}
+          >
             <ArrowBackIcon />
-          </Link>
+          </div>
         </div>
 
         <Typography
           style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
-          Descrive your service
+          Edit {name} service
         </Typography>
 
         {/* Image */}
-        <ImageUploader uid={uid} />
-        {/* <input
-          style={{ display: 'none' }}
-          type="file"
-          id="file"
-          onChange={handleImageInput}
+        <ImageUploader
+          dbImgageUrl={img_url}
+          uid={uid}
+          setImageUrlForDb={setImageUrl}
         />
-        <label for="file">
-          <Card
-            component="li"
-            sx={{ height: '6rem', width: '8rem', marginInline: 'auto' }}>
-            <CardActions>
-              <CardCover>
-                <img
-                  src={imageUrl}
-                  loading="lazy"
-                  alt="Service Image"
-                />
-              </CardCover>
-            </CardActions>
-          </Card>
-        </label> */}
 
         {/* Form */}
         <form
+          onChange={() => setAlert(false)}
           style={{
             display: 'flex',
             flexDirection: 'column',
@@ -244,11 +226,14 @@ export default function AddService() {
               type="text"
               defaultValue={price}
             />
-
+            {alert && <Alert color="danger">Somthing went wrong</Alert>}
             {/* button loading conditionally */}
             {button}
 
-            <Button onClick={HandleDelete} variant="outlined" color="danger">
+            <Button
+              onClick={() => HandleDelete(img_url)}
+              variant="outlined"
+              color="danger">
               Delete
             </Button>
           </div>

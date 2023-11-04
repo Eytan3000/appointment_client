@@ -1,36 +1,45 @@
-import { Card, CardActions, CardCover } from '@mui/joy';
+import { Card, CardActions, CardCover, CircularProgress } from '@mui/joy';
 import React, { useState } from 'react';
 
 import { storage } from './../../../firebase';
 import { getDownloadURL, ref, uploadBytes } from 'firebase/storage';
 import { v4 } from 'uuid';
-import cameraIcon from '../../../assets/icons/camera.png'
+import cameraIcon from '../../../assets/icons/camera.png';
+import { deleteImageFromFirebase } from '../../../utils/helperFunctions';
 
-
-export default function ImageUploader({uid}) {
-//   const [imageUpload, setImageUpload] = useState();
-  const [imageUrl, setImageUrl] = useState(cameraIcon);
+export default function ImageUploader({
+  dbImgageUrl='',
+  uid,
+  setImageUrlForDb,
+}) {
+  //   const [imageUpload, setImageUpload] = useState();
+  const [imageUrl, setImageUrl] = useState(
+    dbImgageUrl ? dbImgageUrl : cameraIcon
+  );
+  const [loading, setLoading] = useState(false);
+console.log(dbImgageUrl)
   //image uploader
   async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
-    // setImageUpload(e.target.files[0]);
+
+    if(imageUrl!==cameraIcon) deleteImageFromFirebase(imageUrl); // if there's an actual image url from firebase, delete the image before uploading a new one.
+
     const imageUpload = e.target.files[0];
 
-    console.log('clicked');
     if (imageUpload === null) return;
 
     const imageRef = ref(storage, `images/${uid}_${v4()}}`);
-
+    setLoading(true);
     const imageObj = await uploadBytes(imageRef, imageUpload);
     const imagePathInStorage = imageObj.ref._location.path_;
-    console.log(imagePathInStorage);
 
-    const imageListRef1 = ref(storage, imagePathInStorage);
-    const imageUrl = await getDownloadURL(imageListRef1);
+    const imageListRef = ref(storage, imagePathInStorage);
+    const imageUrlStr = await getDownloadURL(imageListRef);
 
-    setImageUrl(imageUrl);
+    setImageUrl(imageUrlStr);
+    setImageUrlForDb(imageUrlStr);
+    setLoading(false);
   }
-
   return (
     <>
       <input
@@ -45,7 +54,11 @@ export default function ImageUploader({uid}) {
           sx={{ height: '6rem', width: '8rem', marginInline: 'auto' }}>
           <CardActions>
             <CardCover>
-              <img src={imageUrl} loading="lazy" alt="Service Image" />
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                <img src={imageUrl} loading="lazy" alt="Service Image" />
+              )}
             </CardCover>
           </CardActions>
         </Card>
