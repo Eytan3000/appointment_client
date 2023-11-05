@@ -14,6 +14,14 @@ interface DaylySchedule {
     startTime: string;
     endTime: string;
 
+
+}
+interface DailySchedule {
+    day_of_week: string;
+    start_time: string;
+    end_time: string;
+    isWorDay: boolean;
+    workWeek_id: number;
 }
 interface Workweek {
     sunday: DaylySchedule;
@@ -29,8 +37,8 @@ interface Workweek {
 
 // axios.defaults.baseURL = 'http://192.168.1.180:8090';
 
-const baseURL = 'http://localhost:8090';
-// const baseURL = 'http://192.168.1.180:8090';
+// const baseURL = 'http://localhost:8090';
+const baseURL = 'http://192.168.1.180:8090';
 
 export async function insertNewUserInDb(
     uid: string,
@@ -192,6 +200,26 @@ export async function getWorkWeek(owner_id: string) { //receive owner_id and ret
         console.error(error);
         throw error;
     }
+}
 
+export function workWeekScheduleUpdater(){
 
+}
+
+export async function updateDailySchedule(dailySchedule: DailySchedule) { //receive owner_id and returns array of 7 daily schedules
+    try {
+        const { data: workWeekId } = await axios.post(baseURL + '/dailySchedule/update-daily-schedule', {
+            dailySchedule
+        });
+
+        const response = await axios.get(baseURL + '/dailySchedule/read-weekly-schedule/' + workWeekId);
+
+        const weeklyScheduleArray = response.data;
+
+        return weeklyScheduleArray;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
 }
