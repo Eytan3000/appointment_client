@@ -33,6 +33,15 @@ interface Workweek {
     saturday: DaylySchedule;
     workweek_id: number;
 }
+interface DailySchedule {
+    id: number;
+    dayName: string;
+    start_time: string;
+    endTime: string;
+    timeSlotDuration: string;
+    isWorkDay: boolean;
+    hasChanged: boolean;
+}
 
 
 // axios.defaults.baseURL = 'http://192.168.1.180:8090';
@@ -202,21 +211,19 @@ export async function getWorkWeek(owner_id: string) { //receive owner_id and ret
     }
 }
 
-export function workWeekScheduleUpdater(){
-
+export function filterChangedObjects(isWorkDaysArr: DailySchedule[]) {
+    return isWorkDaysArr.filter(day => day.hasChanged === true);
 }
 
-export async function updateDailySchedule(dailySchedule: DailySchedule) { //receive owner_id and returns array of 7 daily schedules
+export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //receive owner_id and returns array of 7 daily schedules
+    const changedArr = filterChangedObjects(isWorkDaysArr); //return only days that changed
+    
     try {
-        const { data: workWeekId } = await axios.post(baseURL + '/dailySchedule/update-daily-schedule', {
-            dailySchedule
+        const response = await axios.post(baseURL + '/dailySchedule/update-changed-daily-schedules', {
+            changedArr
         });
-
-        const response = await axios.get(baseURL + '/dailySchedule/read-weekly-schedule/' + workWeekId);
-
-        const weeklyScheduleArray = response.data;
-
-        return weeklyScheduleArray;
+        
+        return response.data;
 
     } catch (error) {
         console.error(error);

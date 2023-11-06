@@ -3,10 +3,11 @@ import Checkbox from '@mui/joy/Checkbox';
 import { Button, CircularProgress, Input, Stack, Typography } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
-import { SyntheticEvent, useState } from 'react';
+import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import {
   createWorkweek,
   getWorkWeek,
+  updateDailySchedule,
   workWeekScheduleUpdater,
 } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
@@ -32,6 +33,16 @@ interface Workweek {
   workweek_id: number;
 }
 
+// interface DailySchedule{
+//   id: number;
+//   dayName: string;
+//   start_time:string;
+//   endTime:string;
+//   timeSlotDuration:string;
+//   isWorkDay: boolean;
+//   hasChanged: boolean;
+// }
+
 export default function EditWorkHours() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -39,14 +50,73 @@ export default function EditWorkHours() {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
+  const [loading, setLoading] = useState(false);
+  const [disabled,setDisabled] = useState(false);
+
   const isWorkDaysArr = signal([
-    { dayName: 'sunday', isWorkDay: false, hasChanged:false },
-    { dayName: 'monday', isWorkDay: false, hasChanged:false },
-    { dayName: 'tuesday', isWorkDay: false, hasChanged:false },
-    { dayName: 'wednesday', isWorkDay: false, hasChanged:false },
-    { dayName: 'thursday', isWorkDay: false, hasChanged:false },
-    { dayName: 'friday', isWorkDay: false, hasChanged:false },
-    { dayName: 'saturday', isWorkDay: false, hasChanged:false },
+    {
+      id: 0,
+      dayName: 'sunday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'monday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'tuesday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'wednesday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'thursday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'friday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
+    {
+      id: 0,
+      dayName: 'saturday',
+      start_time: '',
+      endTime: '',
+      timeSlotDuration: '',
+      isWorkDay: false,
+      hasChanged: false,
+    },
   ]);
 
   // const [sunday, setSunday] = useState<boolean | null>(null);
@@ -57,86 +127,32 @@ export default function EditWorkHours() {
   // const [friday, setFriday] = useState<boolean | null>(null);
   // const [saturday, setSaturday] = useState<boolean | null>(null);
 
-  const [startTime, setStartTime] = useState('08:00');
-  const [endTime, setEndTime] = useState('16:00');
-  const [timeSlotDuration, setTimeSlotDuration] = useState('01:30');
+  // const [startTime, setStartTime] = useState('08:00');
+  // const [endTime, setEndTime] = useState('16:00');
+  // const [timeSlotDuration, setTimeSlotDuration] = useState('01:30');
 
-  const [loading, setLoading] = useState(false);
 
+
+  // Tanstack Mutate
   const editWorkhoursMutation = useMutation({
-    mutationFn: workWeekScheduleUpdater,
+    mutationFn: updateDailySchedule,
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['events'],
-        refetchType: 'none',
+        queryKey: ['workweek'],
+        // refetchType: 'none',
       });
-      navigate('/settings');
+       setLoading(false);
+      //  setDisabled(true);
+      // navigate('/settings');
     },
   });
 
-  async function handleSubmit(e: SyntheticEvent, data) {
+  async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    const {} = data;
-    // setLoading(true);
+    setLoading(true);
+    
+    editWorkhoursMutation.mutate(isWorkDaysArr.value);
 
-    // const weekDays: Workweek = {
-    //   sunday: {
-    //     name: 'sunday',
-    //     isWorkDay: sunday || ,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   monday: {
-    //     name: 'monday',
-    //     isWorkDay: monday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   tuesday: {
-    //     name: 'tuesday',
-    //     isWorkDay: tuesday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   wednesday: {
-    //     name: 'wednesday',
-    //     isWorkDay: wednesday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   thursday: {
-    //     name: 'thursday',
-    //     isWorkDay: thursday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   friday: {
-    //     name: 'friday',
-    //     isWorkDay: friday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   saturday: {
-    //     name: 'saturday',
-    //     isWorkDay: saturday,
-    //     startTime,
-    //     endTime,
-    //     timeSlotDuration,
-    //   },
-    //   workweek_id: workweekId,
-    // };
-
-    // // response = await createWeeklySchedule(weekDays);
-
-    // // console.log(response.data);
-    // setLoading(false);
-    // navigate('/main-calendar');
   }
   function handleAdvancedOptions() {
     navigate('/workhours-advanced-options');
@@ -156,17 +172,43 @@ export default function EditWorkHours() {
   //     if (day === day_of_week) setFunction(!is_workDay);
   //   });
   // }
-  function handleCheckboxChange2(day_of_week: string, is_workDay: boolean) {
-
-    isWorkDaysArr.value.forEach(({ dayName },index) => {
+  function handleCheckboxChange2(day_of_week: string) {
+    isWorkDaysArr.value.forEach(({ dayName }, index) => {
       if (dayName === day_of_week) {
-        isWorkDaysArr.value[index].isWorkDay = Boolean(!is_workDay);
+        isWorkDaysArr.value[index].isWorkDay = !isWorkDaysArr.value[index].isWorkDay;
         isWorkDaysArr.value[index].hasChanged = true;
       }
     });
-    console.log(isWorkDaysArr.value);
+    // console.log(isWorkDaysArr.value)
   }
-  
+  function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
+    const newStartTime = e.target.value;
+
+    isWorkDaysArr.value.forEach((_, index) => {
+      isWorkDaysArr.value[index].start_time = newStartTime;
+      isWorkDaysArr.value[index].hasChanged = true;
+    });
+
+  }
+  function handleEndTimeChange(e: ChangeEvent<HTMLInputElement>) {
+    const newEndTime = e.target.value;
+
+    isWorkDaysArr.value.forEach((_, index) => {
+      isWorkDaysArr.value[index].endTime = newEndTime;
+      isWorkDaysArr.value[index].hasChanged = true;
+    });
+
+  }
+  function handleTimeSlotDurationChange(e: ChangeEvent<HTMLInputElement>) {
+    const newTimeSlotDuration = e.target.value;
+
+    isWorkDaysArr.value.forEach((_, index) => {
+      isWorkDaysArr.value[index].timeSlotDuration = newTimeSlotDuration;
+      isWorkDaysArr.value[index].hasChanged = true;
+    });
+    console.log(isWorkDaysArr)
+  }
+
   // -- Tanstack Query --
 
   // fetch daily schedule id based on uid
@@ -197,22 +239,23 @@ export default function EditWorkHours() {
 
   if (data) {
     const weeklyScheduleArr = rearrangeByDayOfWeek(data); // days don't come arranged by order so rearrange needed.
-    console.log(weeklyScheduleArr);
     const startTime = weeklyScheduleArr[0].start_time;
     const endTime = weeklyScheduleArr[0].end_time;
     const timeSlotDuration = weeklyScheduleArr[0].time_slot_duration;
 
     // sync isWorkDaysArr signal with data from db
-    weeklyScheduleArr.forEach((day) => {
-      isWorkDaysArr.value.map(({ dayName },index) => {
-        if (dayName === day.day_of_week) {
-
-          // isWorkDay = Boolean(day.is_workDay);
-          isWorkDaysArr.value[index].isWorkDay = Boolean(day.is_workDay);
+    weeklyScheduleArr.forEach((dbDay) => {
+      isWorkDaysArr.value.map((signalDay, index) => {
+        if (signalDay.dayName === dbDay.day_of_week) {
+          isWorkDaysArr.value[index].endTime = dbDay.end_time;
+          isWorkDaysArr.value[index].id = dbDay.id;
+          isWorkDaysArr.value[index].isWorkDay = Boolean(dbDay.is_workDay);
+          isWorkDaysArr.value[index].start_time = dbDay.start_time;
+          isWorkDaysArr.value[index].timeSlotDuration =
+            dbDay.time_slot_duration;
         }
       });
     });
-
 
     returningData = (
       <>
@@ -230,7 +273,7 @@ export default function EditWorkHours() {
                   size="lg"
                   defaultChecked={is_workDay === 1}
                   // onChange={() => setFunction((prev) => !prev)}
-                  onChange={() => handleCheckboxChange2(day_of_week, is_workDay)}
+                  onChange={() => handleCheckboxChange2(day_of_week)}
                 />
               </div>
             );
@@ -254,7 +297,7 @@ export default function EditWorkHours() {
                 className="workhours-time-input"
                 type="time"
                 defaultValue={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
+                onChange={handleStartTimeChange}
               />
             </div>
             <div>
@@ -265,7 +308,7 @@ export default function EditWorkHours() {
                 className="workhours-time-input"
                 type="time"
                 defaultValue={endTime}
-                onChange={(e) => setEndTime(e.target.value)}
+                onChange={handleEndTimeChange}
               />
             </div>
           </div>
@@ -287,7 +330,7 @@ export default function EditWorkHours() {
               <Input
                 type="time"
                 defaultValue={timeSlotDuration}
-                onChange={(e) => setTimeSlotDuration(e.target.value)}
+                onChange={handleTimeSlotDurationChange}
               />
             </div>
           </div>
@@ -319,7 +362,9 @@ export default function EditWorkHours() {
 
       <form
         style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}
-        onSubmit={(e) => handleSubmit(e, data)}>
+        // onChange={()=>setDisabled(false)}
+        onSubmit={(e) => handleSubmit(e, data)}
+        >
         {returningData}
 
         <Stack spacing={2} mt={3}>
@@ -334,7 +379,9 @@ export default function EditWorkHours() {
         <Button
           style={{ marginTop: 'auto', marginInline: 'auto', width: '90%' }}
           type="submit"
-          loading={loading}>
+          loading={loading}
+          disabled={disabled}
+          >
           Save
         </Button>
       </form>
