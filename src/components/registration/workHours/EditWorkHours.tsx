@@ -1,6 +1,13 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
-import { Button, CircularProgress, Input, Stack, Typography } from '@mui/joy';
+import {
+  Alert,
+  Button,
+  CircularProgress,
+  Input,
+  Stack,
+  Typography,
+} from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
@@ -14,6 +21,7 @@ import { useAuth } from '../../../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { rearrangeByDayOfWeek } from '../../../utils/helperFunctions';
 import { signal } from '@preact/signals';
+import ErrorAlert from '../../utilsComponents/ErrorAlert';
 
 interface DaylySchedule {
   name: string;
@@ -43,6 +51,72 @@ interface Workweek {
 //   hasChanged: boolean;
 // }
 
+const isWorkDaysArr = signal([
+  {
+    id: 0,
+    dayName: 'sunday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'monday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'tuesday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'wednesday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'thursday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'friday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+  {
+    id: 0,
+    dayName: 'saturday',
+    start_time: '',
+    endTime: '',
+    timeSlotDuration: '',
+    isWorkDay: false,
+    hasChanged: false,
+  },
+]);
+
 export default function EditWorkHours() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -51,108 +125,102 @@ export default function EditWorkHours() {
   const uid = currentUser?.uid;
 
   const [loading, setLoading] = useState(false);
-  const [disabled,setDisabled] = useState(false);
+  const [disabled, setDisabled] = useState(false);
+  const [mutateError, setMutateError] = useState(false);
+  const [mutateConfirm, setMutateConfirm] = useState(false);
 
-  const isWorkDaysArr = signal([
-    {
-      id: 0,
-      dayName: 'sunday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'monday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'tuesday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'wednesday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'thursday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'friday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-    {
-      id: 0,
-      dayName: 'saturday',
-      start_time: '',
-      endTime: '',
-      timeSlotDuration: '',
-      isWorkDay: false,
-      hasChanged: false,
-    },
-  ]);
+  // const isWorkDaysArr = signal([
+  //   {
+  //     id: 0,
+  //     dayName: 'sunday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'monday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'tuesday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'wednesday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'thursday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'friday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  //   {
+  //     id: 0,
+  //     dayName: 'saturday',
+  //     start_time: '',
+  //     endTime: '',
+  //     timeSlotDuration: '',
+  //     isWorkDay: false,
+  //     hasChanged: false,
+  //   },
+  // ]);
 
-  // const [sunday, setSunday] = useState<boolean | null>(null);
-  // const [monday, setMonday] = useState<boolean | null>(null);
-  // const [tuesday, setTuesday] = useState<boolean | null>(null);
-  // const [wednesday, setWednesday] = useState<boolean | null>(null);
-  // const [thursday, setThursday] = useState<boolean | null>(null);
-  // const [friday, setFriday] = useState<boolean | null>(null);
-  // const [saturday, setSaturday] = useState<boolean | null>(null);
-
-  // const [startTime, setStartTime] = useState('08:00');
-  // const [endTime, setEndTime] = useState('16:00');
-  // const [timeSlotDuration, setTimeSlotDuration] = useState('01:30');
-
-
-
+  console.log(isWorkDaysArr)
   // Tanstack Mutate
   const editWorkhoursMutation = useMutation({
     mutationFn: updateDailySchedule,
     onSuccess: () => {
       queryClient.invalidateQueries({
         queryKey: ['workweek'],
-        // refetchType: 'none',
+        refetchType: 'none',
       });
-       setLoading(false);
-      //  setDisabled(true);
+      setLoading(false);
+      setDisabled(true);
+      setMutateConfirm(true);
       // navigate('/settings');
+    },
+    onError: () => {
+      setMutateError(true);
+      setLoading(false);
+      setDisabled(true);
     },
   });
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     setLoading(true);
-    
+console.log(isWorkDaysArr.value)
     editWorkhoursMutation.mutate(isWorkDaysArr.value);
-
   }
   function handleAdvancedOptions() {
     navigate('/workhours-advanced-options');
@@ -174,8 +242,10 @@ export default function EditWorkHours() {
   // }
   function handleCheckboxChange2(day_of_week: string) {
     isWorkDaysArr.value.forEach(({ dayName }, index) => {
+      console.log(isWorkDaysArr)
       if (dayName === day_of_week) {
-        isWorkDaysArr.value[index].isWorkDay = !isWorkDaysArr.value[index].isWorkDay;
+        isWorkDaysArr.value[index].isWorkDay =
+          !isWorkDaysArr.value[index].isWorkDay;
         isWorkDaysArr.value[index].hasChanged = true;
       }
     });
@@ -188,7 +258,6 @@ export default function EditWorkHours() {
       isWorkDaysArr.value[index].start_time = newStartTime;
       isWorkDaysArr.value[index].hasChanged = true;
     });
-
   }
   function handleEndTimeChange(e: ChangeEvent<HTMLInputElement>) {
     const newEndTime = e.target.value;
@@ -197,7 +266,6 @@ export default function EditWorkHours() {
       isWorkDaysArr.value[index].endTime = newEndTime;
       isWorkDaysArr.value[index].hasChanged = true;
     });
-
   }
   function handleTimeSlotDurationChange(e: ChangeEvent<HTMLInputElement>) {
     const newTimeSlotDuration = e.target.value;
@@ -206,7 +274,7 @@ export default function EditWorkHours() {
       isWorkDaysArr.value[index].timeSlotDuration = newTimeSlotDuration;
       isWorkDaysArr.value[index].hasChanged = true;
     });
-    console.log(isWorkDaysArr)
+    console.log(isWorkDaysArr);
   }
 
   // -- Tanstack Query --
@@ -362,9 +430,13 @@ export default function EditWorkHours() {
 
       <form
         style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}
-        // onChange={()=>setDisabled(false)}
-        onSubmit={(e) => handleSubmit(e, data)}
-        >
+        // onChange={() => {
+        //   setDisabled(false);
+        //   setMutateError(false);
+        //   setMutateConfirm(false);
+        // }}
+        // onChange={()=>console.log('form')}
+        onSubmit={(e) => handleSubmit(e)}>
         {returningData}
 
         <Stack spacing={2} mt={3}>
@@ -376,12 +448,26 @@ export default function EditWorkHours() {
           </Button>
         </Stack>
 
+        {mutateError && (
+          <Alert
+            style={{ marginTop: 'auto', marginInline: 'auto', width: '83%' }}
+            color="danger">
+            Something went wrong
+          </Alert>
+        )}
+        {mutateConfirm && (
+          <Alert
+            style={{ marginTop: 'auto', marginInline: 'auto', width: '83%' }}
+            color="success">
+            Changed Succesfully
+          </Alert>
+        )}
+
         <Button
           style={{ marginTop: 'auto', marginInline: 'auto', width: '90%' }}
           type="submit"
           loading={loading}
-          disabled={disabled}
-          >
+          disabled={disabled}>
           Save
         </Button>
       </form>

@@ -79,27 +79,25 @@ export default function Settings() {
         <div style={{ height: '1rem' }}></div>
 
         {settings.map((setting, index) => (
-          <>
+          <div key={index}>
             <div
               id={setting.path}
-              key={index}
+              // key={index}
               onClick={() => handleSettingClick(setting.path)}
-              style={{ cursor: 'pointer' }}>
-              <div
-                style={{
-                  backgroundColor: '#fff',
-                  height: '4rem',
-                  display: 'flex',
-                  alignItems: 'center',
-                  padding: '1rem',
-                  gap: '1rem',
-                }}>
-                {setting.icon}
-                <Typography level="body-lg">{setting.title}</Typography>
-              </div>
+              style={{
+                cursor: 'pointer',
+                backgroundColor: '#fff',
+                height: '4rem',
+                display: 'flex',
+                alignItems: 'center',
+                padding: '1rem',
+                gap: '1rem',
+              }}>
+              {setting.icon}
+              <Typography level="body-lg">{setting.title}</Typography>
             </div>
             <Divider />
-          </>
+          </div>
         ))}
         <div style={{ height: '1rem' }}></div>
         <div

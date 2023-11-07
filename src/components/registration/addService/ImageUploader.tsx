@@ -17,7 +17,6 @@ export default function ImageUploader({
     dbImgageUrl ? dbImgageUrl : cameraIcon
   );
   const [loading, setLoading] = useState(false);
-console.log(dbImgageUrl)
   //image uploader
   async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
@@ -48,7 +47,10 @@ console.log(dbImgageUrl)
         id="file"
         onChange={handleImageInput}
       />
-      <label for="file">
+      <label 
+      // for="file"
+      htmlFor="file"
+      >
         <Card
           component="li"
           sx={{ height: '6rem', width: '8rem', marginInline: 'auto' }}>
