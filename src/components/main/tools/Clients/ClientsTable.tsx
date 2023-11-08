@@ -1,192 +1,76 @@
-import * as React from 'react';
-import Table from '@mui/joy/Table';
-import BackArrow from '../../../utilsComponents/BackArrow';
 
-const clients = [
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-  {
-    name: 'Cohen Lital',
-    phone: '050-854-7733',
-    email: 'LitalCohen@gmail.com',
-  },
-  {
-    name: 'Hogo Boss',
-    phone: '059-333-2233',
-    email: 'hugo@gmail.com',
-  },
-];
+// import Table from '@mui/joy/Table';
+import BackArrow from '../../../utilsComponents/BackArrow';
+import { useQuery } from '@tanstack/react-query';
+import { useAuth } from '../../../../context/AuthContext';
+import { getAllOwnersClients } from '../../../../utils/http';
+import { Alert, Card, CircularProgress, Stack, Typography } from '@mui/joy';
+import { useNavigate } from 'react-router-dom';
+
+interface Client {
+  Name: string;
+  id: number;
+}
+
 export default function ClientsTable() {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth() || {};
+  const uid = currentUser?.uid;
+
+  // -- Tanstack Query --
+  const { data, isPending, isError } = useQuery({
+    queryKey: ['clients'],
+    queryFn: () => getAllOwnersClients(uid!),
+    enabled: !!currentUser,
+  });
+  let queryData;
+
+  if (data) {
+    queryData = data.map((client: Client) => {
+      console.log(client);
+      return (
+        <div key={client.id} onClick={() => handleCardClick(client.id)}>
+          <Card>{client.Name}</Card>
+        </div>
+      );
+    });
+  }
+  if (isPending) {
+    queryData = (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: '50vh',
+          alignItems: 'center',
+        }}>
+        <CircularProgress size="lg" />;
+      </div>
+    );
+  }
+
+  function handleCardClick(clientId: number) {
+    navigate('/tools/client-card/' + clientId);
+  }
   return (
     <>
       <BackArrow />
 
-      <Table aria-label="basic table" style={{ marginTop: '-2rem' }}>
+      <Typography
+        sx={{ display: 'flex', justifyContent: 'center', mb: '1rem' }}
+        level="h3">
+        Clients
+      </Typography>
+
+      <Stack spacing={2}>
+        {isError && <Alert color="danger">We're expreiencing a problem</Alert>}
+        {queryData}
+      </Stack>
+
+      {/* <Table aria-label="basic table" style={{ marginTop: '-2rem' }}>
         <thead>
           <tr>
-            <th
-            //   style={{ width: '40%' }}
-            >
-              Name
-            </th>
+            <th>Name</th>
             <th>Phone</th>
             <th>Email</th>
           </tr>
@@ -200,7 +84,7 @@ export default function ClientsTable() {
             </tr>
           ))}
         </tbody>
-      </Table>
+      </Table> */}
     </>
   );
 }

@@ -4,20 +4,46 @@ import AdvancedWorkHoursCard from './AdvancedWorkHoursCard';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@mui/joy';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
+
+import { isWorkDaysArr } from './EditWorkHours';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { updateDailySchedule } from '../../../utils/http';
+
 export default function WorkHoursAdvanced() {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
+
+  // Tanstack Mutate
+  const editWorkhoursMutation = useMutation({
+    mutationFn: updateDailySchedule,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['workweek'],
+        // refetchType: 'none',
+        // refetchType: 'active',
+
+      });
+      navigate('/settings');
+    },
+  });
+
   function handleOk() {
-    navigate('/main-calendar');
+    editWorkhoursMutation.mutate(isWorkDaysArr.value);
   }
   return (
     <>
-      <AdvancedWorkHoursCard day="Sunday" checked={true} />
-      <AdvancedWorkHoursCard day="Monday" checked={true} />
-      <AdvancedWorkHoursCard day="Tuesday" checked={true} />
-      <AdvancedWorkHoursCard day="Wednesday" checked={true} />
-      <AdvancedWorkHoursCard day="Thursday" checked={true} />
-      <AdvancedWorkHoursCard day="Friday" checked={false} />
-      <AdvancedWorkHoursCard day="Saturday" checked={false} />
+      {isWorkDaysArr.value.map((day) => {
+        return (
+          <AdvancedWorkHoursCard
+            key={day.id}
+            id={day.id}
+            day={day.dayName}
+            checked={day.isWorkDay}
+            startTime={day.start_time}
+            endTime={day.endTime}
+          />
+        );
+      })}
 
       <div style={{ height: '5em' }}></div>
 
@@ -47,7 +73,7 @@ export default function WorkHoursAdvanced() {
           style={{ paddingInline: 50, marginBlock: 15 }}>
           Ok
         </Button>
-        <div style={{paddingLeft:'1.5rem'}}></div>
+        <div style={{ paddingLeft: '1.5rem' }}></div>
       </div>
     </>
   );

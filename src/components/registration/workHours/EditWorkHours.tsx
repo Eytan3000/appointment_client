@@ -20,38 +20,10 @@ import {
 import { useAuth } from '../../../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { rearrangeByDayOfWeek } from '../../../utils/helperFunctions';
-import { signal } from '@preact/signals';
-import ErrorAlert from '../../utilsComponents/ErrorAlert';
+import { signal } from '@preact/signals-react';
 
-interface DaylySchedule {
-  name: string;
-  isWorkDay: boolean;
-  startTime: string;
-  endTime: string;
-  timeSlotDuration: string;
-}
-interface Workweek {
-  sunday: DaylySchedule;
-  monday: DaylySchedule;
-  tuesday: DaylySchedule;
-  wednesday: DaylySchedule;
-  thursday: DaylySchedule;
-  friday: DaylySchedule;
-  saturday: DaylySchedule;
-  workweek_id: number;
-}
 
-// interface DailySchedule{
-//   id: number;
-//   dayName: string;
-//   start_time:string;
-//   endTime:string;
-//   timeSlotDuration:string;
-//   isWorkDay: boolean;
-//   hasChanged: boolean;
-// }
-
-const isWorkDaysArr = signal([
+export const isWorkDaysArr = signal([
   {
     id: 0,
     dayName: 'sunday',
@@ -117,6 +89,7 @@ const isWorkDaysArr = signal([
   },
 ]);
 
+
 export default function EditWorkHours() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
@@ -124,78 +97,9 @@ export default function EditWorkHours() {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
-  const [loading, setLoading] = useState(false);
-  const [disabled, setDisabled] = useState(false);
   const [mutateError, setMutateError] = useState(false);
-  const [mutateConfirm, setMutateConfirm] = useState(false);
 
-  // const isWorkDaysArr = signal([
-  //   {
-  //     id: 0,
-  //     dayName: 'sunday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'monday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'tuesday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'wednesday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'thursday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'friday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  //   {
-  //     id: 0,
-  //     dayName: 'saturday',
-  //     start_time: '',
-  //     endTime: '',
-  //     timeSlotDuration: '',
-  //     isWorkDay: false,
-  //     hasChanged: false,
-  //   },
-  // ]);
-
-  console.log(isWorkDaysArr)
+  console.log(isWorkDaysArr);
   // Tanstack Mutate
   const editWorkhoursMutation = useMutation({
     mutationFn: updateDailySchedule,
@@ -204,45 +108,26 @@ export default function EditWorkHours() {
         queryKey: ['workweek'],
         refetchType: 'none',
       });
-      setLoading(false);
-      setDisabled(true);
-      setMutateConfirm(true);
+      // setMutateConfirm(true);
       // navigate('/settings');
     },
     onError: () => {
       setMutateError(true);
-      setLoading(false);
-      setDisabled(true);
     },
   });
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    setLoading(true);
-console.log(isWorkDaysArr.value)
+    console.log(isWorkDaysArr.value);
     editWorkhoursMutation.mutate(isWorkDaysArr.value);
+
   }
   function handleAdvancedOptions() {
     navigate('/workhours-advanced-options');
   }
-  // function handleCheckboxChange(day_of_week: string, is_workDay: boolean) {
-  //   const weekDaysSetIsWorking = [
-  //     { day: 'sunday', setFunction: setSunday },
-  //     { day: 'monday', setFunction: setMonday },
-  //     { day: 'tuesday', setFunction: setTuesday },
-  //     { day: 'wednesday', setFunction: setWednesday },
-  //     { day: 'thursday', setFunction: setThursday },
-  //     { day: 'friday', setFunction: setFriday },
-  //     { day: 'saturday', setFunction: setSaturday },
-  //   ];
-
-  //   weekDaysSetIsWorking.forEach(({ day, setFunction }) => {
-  //     if (day === day_of_week) setFunction(!is_workDay);
-  //   });
-  // }
-  function handleCheckboxChange2(day_of_week: string) {
+  function handleCheckboxChange(day_of_week: string) {
     isWorkDaysArr.value.forEach(({ dayName }, index) => {
-      console.log(isWorkDaysArr)
+      console.log(isWorkDaysArr);
       if (dayName === day_of_week) {
         isWorkDaysArr.value[index].isWorkDay =
           !isWorkDaysArr.value[index].isWorkDay;
@@ -341,7 +226,7 @@ console.log(isWorkDaysArr.value)
                   size="lg"
                   defaultChecked={is_workDay === 1}
                   // onChange={() => setFunction((prev) => !prev)}
-                  onChange={() => handleCheckboxChange2(day_of_week)}
+                  onChange={() => handleCheckboxChange(day_of_week)}
                 />
               </div>
             );
@@ -439,35 +324,35 @@ console.log(isWorkDaysArr.value)
         onSubmit={(e) => handleSubmit(e)}>
         {returningData}
 
-        <Stack spacing={2} mt={3}>
+        {/* <Stack spacing={2} mt={3}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Typography level="title-md">Advanced Options</Typography>
           </div>
           <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
             Different daily work hours{' '}
           </Button>
-        </Stack>
+        </Stack> */}
 
-        {mutateError && (
+        {editWorkhoursMutation.isError && (
           <Alert
             style={{ marginTop: 'auto', marginInline: 'auto', width: '83%' }}
             color="danger">
             Something went wrong
           </Alert>
         )}
-        {mutateConfirm && (
+        {editWorkhoursMutation.isSuccess && (
           <Alert
             style={{ marginTop: 'auto', marginInline: 'auto', width: '83%' }}
             color="success">
-            Changed Succesfully
+            Changes saves
           </Alert>
         )}
 
         <Button
           style={{ marginTop: 'auto', marginInline: 'auto', width: '90%' }}
           type="submit"
-          loading={loading}
-          disabled={disabled}>
+          loading={editWorkhoursMutation.isPending}
+          >
           Save
         </Button>
       </form>

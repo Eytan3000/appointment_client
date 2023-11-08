@@ -25,10 +25,7 @@ import { useAuth } from '../../../context/AuthContext';
 import ImageUploader from './ImageUploader';
 import { storage } from '../../../firebase';
 import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
-// import { storage } from './../../../firebase';
-// import { getDownloadURL, listAll, ref, uploadBytes } from 'firebase/storage';
-// import { v4 } from 'uuid';
-// import cameraIcon from '../../../assets/icons/camera.png'
+
 
 interface ServiceObject {
   description: string | null;
@@ -44,12 +41,8 @@ export default function AddService() {
   const navigate = useNavigate();
   const { id: serviceId } = useParams();
 
-  //get ui from storage in json
-  // const userData = localStorage.getItem('user');
-  // const { uid } = JSON.parse(userData!);
-
-  const { currentUser } = useAuth();
-  const uid = currentUser.uid;
+  const { currentUser } = useAuth() ||{};
+  const uid = currentUser?.uid;
 
   const queryClient = useQueryClient();
 

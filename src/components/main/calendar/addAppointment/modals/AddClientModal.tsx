@@ -9,8 +9,15 @@ import {
   Stack,
 } from '@mui/joy';
 import ClientsList from '../utils/ClientsList';
+import { Dispatch } from 'react';
 
-export default function AddClientModal({ open, setOpen }) {
+export default function AddClientModal({
+  open,
+  setOpen,
+}: {
+  open: boolean;
+  setOpen: Dispatch<React.SetStateAction<boolean>>;
+}) {
   // const [layout, setLayout] = React.useState<ModalDialogProps['layout'] | undefined>(
   //     undefined,
   return (

@@ -5,21 +5,29 @@ import CircularProgress from '@mui/joy/CircularProgress';
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/joy';
 import { clients } from '../../../../../utils/db';
-import { StyledButton } from '../../../../../StyledComponents';
+import { useAuth } from '../../../../../context/AuthContext';
 
-function sleep(duration: number): Promise<void> {
-  return new Promise<void>((resolve) => {
-    setTimeout(() => {
-      resolve();
-    }, duration);
-  });
+// function sleep(duration: number): Promise<void> {
+//   return new Promise<void>((resolve) => {
+//     setTimeout(() => {
+//       resolve();
+//     }, duration);
+//   });
+// }
+function sleep(uid: string): Promise<void> {
+  getAllOwnersClients
 }
 
 export default function ClientsList() {
+
+  const {currentUser} = useAuth() || {};
+  const uid = currentUser?.uid;
+
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<typeof clients>([]);
   const loading = open && options.length === 0;
   const [selectedOption, setSelectedOption] = useState(null);
+  
   useEffect(() => {
     let active = true;
 

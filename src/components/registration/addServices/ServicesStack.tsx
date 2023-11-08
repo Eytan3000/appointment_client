@@ -18,7 +18,6 @@ export default function ServicesStack() {
   // { setAreThereAnyServices }
   const navigate = useNavigate();
   const { currentUser } = useAuth() || {};
-  console.log(currentUser);
   const uid = currentUser?.uid;
   // const [uid] = useState(currentUser?.uid);
 

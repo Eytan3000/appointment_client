@@ -217,12 +217,12 @@ export function filterChangedObjects(isWorkDaysArr: DailySchedule[]) {
 
 export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //receive owner_id and returns array of 7 daily schedules
     const changedArr = filterChangedObjects(isWorkDaysArr); //return only days that changed
-    
+
     try {
         const response = await axios.post(baseURL + '/dailySchedule/update-changed-daily-schedules', {
             changedArr
         });
-        
+
         return response.data;
 
     } catch (error) {
@@ -230,3 +230,73 @@ export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //re
         throw error;
     }
 }
+
+// Clients queries
+
+// export async function createNewClient(name: string, phone: string, email: string, uid: string) {
+export async function createNewClient(obj) {
+    const { name, phone, email, uid } = obj;
+    try {
+        const response = await axios.post(baseURL + '/clients/create-client', {
+            name,
+            phone,
+            email,
+            owner_id: uid,
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+//clients/get-all-clients/:owner_id
+export async function getAllOwnersClients(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/clients/get-all-clients/' + ownerId);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// get single client by client_id
+export async function getClient(clientId: string) {
+    try {
+        const response = await axios.get(baseURL + '/clients/get-client/' + clientId);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+// update client by client_id
+export async function updateClient({ name, phone, email, clientId }: { name: string, phone: string, email: string, clientId: string }) {
+    console.log(name, phone, email, clientId);
+
+    try {
+        const response = await axios.post(baseURL + '/clients/update-client', {
+            name,
+            phone,
+            email,
+            client_id: clientId
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+
+

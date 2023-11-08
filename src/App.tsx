@@ -21,6 +21,9 @@ import AddClient from './components/main/tools/Clients/AddClient.tsx';
 import ToolsServices from './components/main/tools/services/ToolsServices.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx';
+import ClientCard from './components/main/tools/Clients/ClientCard.tsx';
+import ClientEdit from './components/main/tools/Clients/ClientEdit.tsx';
+
 
 function App() {
   const element = useRoutes([
@@ -103,9 +106,28 @@ function App() {
     //   path: 'speed-dial-add-appointment',
     //   element:<SpeedDialAddAppointment />
     // },
+
+// ClientCard
+
     {
       path: '/tools',
-      element: <Tools />,
+      // element: <Tools />,
+      children: [
+        {
+          index: true,
+          element: <Tools />,
+        },
+        {
+          path: 'client-card/:clientId',
+          // path: 'client-card',
+          element: <ClientCard />,
+        },
+        {
+          path: 'client-edit/:clientId',
+          // path: 'client-card',
+          element: <ClientEdit />,
+        },
+      ]
     },
     {
       path: '/inbox',

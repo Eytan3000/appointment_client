@@ -58,6 +58,18 @@ export function rearrangeByDayOfWeek(array) {
   return rearrangedArray;
 }
 
+
+export function copyToClipboard(text:string) {
+  navigator.clipboard
+    .writeText(text)
+    .then(() => {
+      console.log('Text copied to clipboard');
+    })
+    .catch((err) => {
+      console.error('Failed to copy text: ', err);
+    });
+}
+
 // -- firebase --
 export function deleteImageFromFirebase(url: string) {
   const imageRef = ref(storage, url);
