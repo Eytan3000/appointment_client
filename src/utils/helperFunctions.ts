@@ -70,6 +70,23 @@ export function copyToClipboard(text:string) {
     });
 }
 
+export function addMinutesToTime(timeString, minutesToAdd) {
+  const [hours, minutes, seconds] = timeString.split(':').map(Number);
+
+  // Create a Date object with the current date and the provided time
+  const originalDate = new Date();
+  originalDate.setHours(hours, minutes, seconds);
+
+  // Add the specified minutes
+  const newDate = new Date(originalDate.getTime() + minutesToAdd * 60000);
+
+  // Format the result as "HH:mm:ss"
+  const formattedTime = `${newDate.getHours().toString().padStart(2, '0')}:${newDate.getMinutes().toString().padStart(2, '0')}:${newDate.getSeconds().toString().padStart(2, '0')}`;
+
+  return formattedTime;
+}
+
+
 // -- firebase --
 export function deleteImageFromFirebase(url: string) {
   const imageRef = ref(storage, url);
@@ -82,4 +99,21 @@ export function deleteImageFromFirebase(url: string) {
     .catch((error) => {
       return error.code;
     });
+}
+
+//-----------------------
+
+export function addDay(dateString: string) {
+  const originalDate = new Date(dateString);
+
+  // Adding one day
+  const nextDay = new Date(originalDate);
+  nextDay.setDate(originalDate.getDate() + 1);
+
+  // Formatting the result as "YYYY-MM-DD"
+  const formattedNextDay = `${nextDay.getFullYear()}-${(nextDay.getMonth() + 1)
+    .toString()
+    .padStart(2, '0')}-${nextDay.getDate().toString().padStart(2, '0')}`;
+
+  return formattedNextDay;
 }

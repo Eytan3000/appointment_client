@@ -2,41 +2,49 @@ import {
   DialogTitle,
   Avatar,
   Button,
-  Divider,
   Stack,
   FormControl,
   FormLabel,
   Input,
+  Box,
 } from '@mui/joy';
-import { useState } from 'react';
+import { ChangeEvent, useState } from 'react';
 import BasicDatePicker from './utils/BasicDatePicker';
 import { SchedulerHelpers } from '@aldabil/react-scheduler/types';
 import WarningIcon from '@mui/icons-material/Warning';
 import Alert from '@mui/joy/Alert';
-import { useNavigate } from 'react-router-dom';
+
 import AddClientModal from './modals/AddClientModal';
 import AddServiceModal from './modals/AddServiceModal';
+import { signal } from '@preact/signals-react';
+import { useAuth } from '../../../../context/AuthContext';
+import {
+  useMutation,
+  useQueries,
+  useQuery,
+  useQueryClient,
+} from '@tanstack/react-query';
+import {
+  createAppointment,
+  getAppointment,
+  getClient,
+  getService,
+  updateAppointment,
+} from '../../../../utils/http';
 //-----------------------------------------
-const client = {
-  name: 'Eytan Krief',
-  phone: '050-865-7032',
-};
-const service = {
-  name: 'Manicure',
-};
+function formteTime(timestamp: Date) {
+  const hours = timestamp.getHours();
+  const minutes = timestamp.getMinutes();
+  const seconds = timestamp.getSeconds();
 
-type Event = {
-  event_id: number;
-  title: string;
-  start: Date;
-  end: Date;
-  description: string;
-  color: string;
-};
+  return `${hours.toString().padStart(2, '0')}:${minutes
+    .toString()
+    .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+}
+//-----------------------------------------
 
 interface CustomEditorProps {
   scheduler: SchedulerHelpers;
-  // setEvents: React.Dispatch<React.SetStateAction<Event[]>>;
 }
 
 function createDateStringFromStamp(inputTimestamp: string) {
@@ -50,14 +58,11 @@ function setTimeValues(scheduler: SchedulerHelpers) {
   const startTimeStamp = scheduler.state.start.value;
   const endTimeStamp = scheduler.state.end.value;
 
-  const startTimeObj = new Date(startTimeStamp);
-  const startTimeString = `${startTimeObj.getHours()}:00`;
-
-  const endTimeObj = new Date(endTimeStamp);
-  const endTimeString = `${endTimeObj.getHours()}:00`;
-
+  const startTimeString = formteTime(startTimeStamp);
+  const endTimeString = formteTime(endTimeStamp);
   const dateString = createDateStringFromStamp(startTimeStamp);
 
+  // console.log(dateString);
   return {
     startTimeString,
     endTimeString,
@@ -71,18 +76,62 @@ function createDateObjectFromStamp(inputTimestamp: string) {
 
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
 }
+
+interface Client {
+  id: number;
+  Name: string;
+  phone: string;
+  email: string;
+  timestamp: string;
+  owner_id: string;
+}
+
+export const clientSignal = signal({});
+export const serviceSignal = signal({});
+
 //------------------------------------------------------------------------
-export default function AddAppointment({
-  scheduler,
-}: // setEvents,
-CustomEditorProps) {
-  // const navigate = useNavigate();
-  const [note, setNote] = useState('');
+export default function AddAppointment({ scheduler }: CustomEditorProps) {
+  const { currentUser } = useAuth() || {};
+  const uid = currentUser?.uid;
+  const queryClient = useQueryClient();
+  const isClientSignal = Object.keys(clientSignal.value).length > 0;
+
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
+  const [openAreYouSureDelModal, setOpenAreYouSureDelModal] = useState(false);
 
-  // console.log(scheduler.edited);
+  //---------- this is for editing existing appointment -----
+
+  const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
+
+  // get appoingment object to get client and service id
+  const editQuery = useQuery({
+    queryKey: ['appointment', appointmentId],
+    queryFn: () => getAppointment(appointmentId),
+  });
+
+  // get both client and service objects to put in signals.
+  const queries = useQueries({
+    queries: [
+      editQuery.data && {
+        queryKey: ['client', editQuery.data.client_id],
+        queryFn: () => getClient(editQuery.data.client_id),
+      },
+      editQuery.data && {
+        queryKey: ['service', editQuery.data.service_id],
+        queryFn: () => getService(editQuery.data.service_id),
+      },
+    ],
+  });
+
+  // if exist, put in signals
+  if (queries[0].data) {
+    clientSignal.value = queries[0].data[0];
+    serviceSignal.value = queries[1].data[0];
+  }
+  //---------- up to here ---------------------------------
+
   // retrieve date, start-time, end-time from var scheduler
   const { startTimeString, endTimeString, dateString } =
     setTimeValues(scheduler);
@@ -90,7 +139,34 @@ CustomEditorProps) {
   const [startTime, setStartTime] = useState(startTimeString);
   const [endTime, setEndTime] = useState(endTimeString);
   const [date, setDate] = useState(dateString);
+  const [note, setNote] = useState('');
 
+  //Mutation
+  // create appointment
+  const createAppointmentMutation = useMutation({
+    mutationFn: createAppointment,
+    onSuccess: (what) => {
+      queryClient.invalidateQueries({
+        queryKey: ['appointments'],
+      });
+      // console.log(what || 'success');
+    },
+  });
+
+  // update appointment
+  const updateAppointmentMutation = useMutation({
+    mutationFn: updateAppointment,
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['appointments'],
+      });
+    },
+    onError: (error) => {
+      console.log(error);
+    },
+  });
+
+  //Functions
   function handleEndTimeChange(e: ChangeEvent<HTMLInputElement>) {
     setAlert(false);
     setEndTime(e.target.value);
@@ -98,6 +174,7 @@ CustomEditorProps) {
   function handleStartTimeChange(e: ChangeEvent<HTMLInputElement>) {
     setStartTime(e.target.value);
   }
+
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
 
@@ -107,64 +184,54 @@ CustomEditorProps) {
     }
     const event = scheduler.edited;
 
-    // setEvents((prev) => {
-    //   console.log(prev);
-    //   return [
-    //     ...prev,
-    //     {
-    //       event_id: 1,
-    //       title: 'Event 2',
-    //       start: new Date('2023/10/16 09:30'),
-    //       end: new Date('8023/10/16 10:30'),
-    //       description: 'A meeting with the team.',
-    //       color: 'blue',
-    //     },
-    //   ];
-    // });
-    //goback
-
-    // const added_updated_event = {
-    //   event_id: 1,
-    //   title: 'Event 2',
-    //   start: new Date('2023/10/16 09:30'),
-    //   end: new Date('8023/10/16 10:30'),
-    //   description: 'A meeting with the team.',
-    //   color: 'blue',
-    // };
-    // startTime
-    // endTime
-    // date
-
+    if (scheduler.edited) {
+      //call update if it's an edit and finish
+      updateAppointmentMutation.mutate({
+        start: startTime,
+        end: endTime,
+        serviceId: serviceSignal.value.id,
+        note,
+        date,
+        appointment_id: appointmentId,
+      });
+    } else {
+      // if not edit, then it's a new appointent
+      createAppointmentMutation.mutate({
+        ownerId: uid!,
+        clientId: clientSignal.value.id,
+        start: startTime,
+        end: endTime,
+        date,
+        serviceId: serviceSignal.value.id,
+        note,
+      });
+    }
     const added_updated_event = {
       event_id: event?.event_id || Math.random(),
-      title: 'Event 10',
-      service: { name: 'Manicure', time: '01:30' },
+      title: clientSignal.value.Name,
+      service: {
+        name: serviceSignal.value.name,
+        time: serviceSignal.value.duration,
+      },
       start: new Date(`${date} ${startTime}`),
       end: new Date(`${date} ${endTime}`),
       description: note,
     };
 
+    clientSignal.value = {};
+    serviceSignal.value = {};
+
     scheduler.onConfirm(added_updated_event, event ? 'edit' : 'create');
     scheduler.close();
   };
-
-  function handleDateChange(e: any) {
-    const newDate = createDateObjectFromStamp(e.$d);
-    setDate(newDate);
-  }
-  function handleClientList() {
-    setOpenClientModal(true);
-  }
-  function handleServiceList() {
-    setOpenServiceModal(true);
-  }
 
   return (
     <>
       <div style={{ margin: '1rem 2rem', fontFamily: 'Poppins' }}>
         <form onSubmit={handleSubmit} style={{ overflow: 'scroll' }}>
-          <DialogTitle>Client</DialogTitle>
-          
+          <FormLabel>Client</FormLabel>
+
+          {/* Client Card */}
           <div
             style={{
               display: 'flex',
@@ -172,28 +239,33 @@ CustomEditorProps) {
               alignItems: 'center',
               marginBlock: '1rem',
               border: '1px solid #cdd7e1',
-              borderRadius:'10px',
-              padding:'1rem',
-              background:'#fbfcfe'
+              borderRadius: '10px',
+              padding: '1rem',
+              background: '#fbfcfe',
             }}>
-            <div style={{ display: 'flex', gap: 20 }}>
-              <div>
-                <Avatar /> {/* client.image */}
+            {isClientSignal && ( //checks if value of signal contains data
+              <div style={{ display: 'flex', gap: 20 }}>
+                <div>
+                  <h5 style={{ margin: 0 }}>{clientSignal.value.Name}</h5>
+                  <p style={{ margin: 0 }}>
+                    {<small>{clientSignal.value.phone}</small>}
+                  </p>
+                </div>
               </div>
-              <div>
-                <h5 style={{ margin: 0 }}>{client.name}</h5>
-                <p style={{ margin: 0 }}>{<small>{client.phone}</small>}</p>
-              </div>
-            </div>
-            <div>
-              <Button variant="outlined" onClick={handleClientList}>
-                {/* Add/change */}
-                {scheduler.edited ? 'Change' : 'Add'}
-              </Button>
-            </div>
+            )}
+
+            <Button
+              variant="outlined"
+              onClick={handleClientList}
+              sx={{
+                width: !isClientSignal ? '100%' : null,
+              }}>
+              {/* Add/change Button*/}
+              {isClientSignal ? 'Change' : 'Choose Client'}
+            </Button>
           </div>
 
-
+          {/* Date and Time */}
           <Stack spacing={2} sx={{ marginTop: '0.5rem' }}>
             <FormControl>
               <FormLabel>Date</FormLabel>
@@ -221,13 +293,14 @@ CustomEditorProps) {
                 <FormLabel>End Time</FormLabel>
                 <Input
                   type="time"
-                  defaultValue={endTime}
+                  // defaultValue={endTime}
+                  value={endTime}
                   onChange={handleEndTimeChange}
                 />
               </FormControl>
             </div>
 
-            {/* service */}
+            {/* Service Card */}
             <DialogTitle>Service</DialogTitle>
             <div
               style={{
@@ -236,15 +309,16 @@ CustomEditorProps) {
                 alignItems: 'center',
 
                 border: '1px solid #cdd7e1',
-                borderRadius:'10px',
-                padding:'1rem',
-                background:'#fbfcfe'
+                borderRadius: '10px',
+                padding: '1rem',
+                background: '#fbfcfe',
               }}>
               <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+                <Avatar src={serviceSignal.value.img_url} />
+
                 <div>
-                  <Avatar />
+                  {<h5 style={{ margin: 0 }}>{serviceSignal.value.name}</h5>}
                 </div>
-                <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
               </div>
               <div>
                 <Button variant="outlined" onClick={handleServiceList}>
@@ -252,7 +326,7 @@ CustomEditorProps) {
                 </Button>
               </div>
             </div>
-            {/* <Divider /> */}
+
             {/* Note */}
             <DialogTitle>Note</DialogTitle>
             <Input
@@ -262,11 +336,13 @@ CustomEditorProps) {
               onChange={(e) => setNote(e.target.value)}
             />
 
+            {/* Buttons */}
             <Button type="submit">Submit</Button>
             <Button onClick={scheduler.close} variant="plain">
               Cancel
             </Button>
 
+            {/* Alerts */}
             {alert && (
               <Alert
                 startDecorator={<WarningIcon />}
@@ -278,12 +354,27 @@ CustomEditorProps) {
             )}
           </Stack>
         </form>
+
+        {/* Modals */}
         <AddClientModal open={openClientModal} setOpen={setOpenClientModal} />
         <AddServiceModal
           open={openServiceModal}
           setOpen={setOpenServiceModal}
+          startTime={startTime}
+          setEndTime={setEndTime}
         />
+
       </div>
     </>
   );
+  function handleDateChange(e: any) {
+    const newDate = createDateObjectFromStamp(e.$d);
+    setDate(newDate);
+  }
+  function handleClientList() {
+    setOpenClientModal(true);
+  }
+  function handleServiceList() {
+    setOpenServiceModal(true);
+  }
 }

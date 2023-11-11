@@ -4,30 +4,19 @@ import Autocomplete from '@mui/joy/Autocomplete';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { useEffect, useState } from 'react';
 import { Button } from '@mui/joy';
-import { clients } from '../../../../../utils/db';
 import { useAuth } from '../../../../../context/AuthContext';
-
-// function sleep(duration: number): Promise<void> {
-//   return new Promise<void>((resolve) => {
-//     setTimeout(() => {
-//       resolve();
-//     }, duration);
-//   });
-// }
-function sleep(uid: string): Promise<void> {
-  getAllOwnersClients
-}
+import { getAllOwnersClients } from '../../../../../utils/http';
+import { clientSignal } from '../AddAppointment';
 
 export default function ClientsList() {
-
-  const {currentUser} = useAuth() || {};
+  const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<typeof clients>([]);
   const loading = open && options.length === 0;
-  const [selectedOption, setSelectedOption] = useState(null);
-  
+  // const [selectedOption, setSelectedOption] = useState(null);
+
   useEffect(() => {
     let active = true;
 
@@ -36,7 +25,7 @@ export default function ClientsList() {
     }
 
     (async () => {
-      await sleep(1e3); // For demo purposes.
+      const clients = await getAllOwnersClients(uid!); // For demo purposes.
 
       if (active) {
         // setOptions([...topFilms]);
@@ -56,8 +45,15 @@ export default function ClientsList() {
   }, [open]);
 
   function handleChange(event, newValue) {
-    setSelectedOption(newValue); // Update the selected option in state
-    // set newValue to redux 
+    // setSelectedOption(newValue); 
+    clientSignal.value = newValue;
+    console.log(clientSignal)
+
+  }
+
+
+  function handleSubmit() {
+    setOpen(false);
   }
   return (
     <FormControl id="clients-list">
@@ -74,7 +70,7 @@ export default function ClientsList() {
           setOpen(false);
         }}
         isOptionEqualToValue={(option, value) => option.name === value.name}
-        getOptionLabel={(option) => option.name}
+        getOptionLabel={(option) => option.Name}
         options={options}
         loading={loading}
         endDecorator={
@@ -86,9 +82,7 @@ export default function ClientsList() {
           ) : null
         }
       />
-      <Button sx={{ mt: '3rem', mb: '1rem', marginInline: 'auto', width: 300 }}>
-        Ok
-      </Button>
+
     </FormControl>
   );
 }

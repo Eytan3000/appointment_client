@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { timeStringToMinutes } from './helperFunctions';
+import { addDay, timeStringToMinutes } from './helperFunctions';
+import { signal } from '@preact/signals-react';
 
 interface ServiceObject {
     description: string | null;
@@ -42,12 +43,29 @@ interface DailySchedule {
     isWorkDay: boolean;
     hasChanged: boolean;
 }
+interface Appointment {
+    ownerId: string;
+    clientId: string;
+    start: string;
+    end: string;
+    date: string;
+    serviceId: string;
+    note: string;
+}
+interface AppointmentUpdate {
+    start: string;
+    end: string;
+    service_id: string;
+    note: string;
+    date: string;
+    appointment_id: number;
+}
 
 
 // axios.defaults.baseURL = 'http://192.168.1.180:8090';
 
-// const baseURL = 'http://localhost:8090';
-const baseURL = 'http://192.168.1.180:8090';
+const baseURL = 'http://localhost:8090';
+// const baseURL = 'http://192.168.1.180:8090';
 
 export async function insertNewUserInDb(
     uid: string,
@@ -297,6 +315,124 @@ export async function updateClient({ name, phone, email, clientId }: { name: str
     }
 }
 
+// Appointments:
+
+// Create Appointment
+export async function createAppointment({ ownerId, clientId, start, end, date, serviceId, note }: Appointment) {
+    // console.log(ownerId, clientId, start, end, date, serviceId, note);
+    try {
+        const response = await axios.post(baseURL + '/appointments/create-appointment', {
+            owner_id: ownerId, client_id: clientId, start, end, date, service_id: serviceId, note
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// get all Appointments
+export async function getAllAppointments(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/appointments/get-all-owner-appointments/' + ownerId);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// get single appointment
+export async function getAppointment(appointmentId: number) {
+    try {
+        const response = await axios.get(baseURL + '/appointments/get-appointment/' + appointmentId);
+
+        return response.data[0];
 
 
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
+// Update Appointment
+export async function updateAppointment({ start, end, service_id, note, date, appointment_id }: AppointmentUpdate) {
+    try {
+        const response = await axios.post(baseURL + '/appointments/update-appointment', {
+            start, end, service_id, note, date, appointment_id
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// Delete Appointment
+export async function deleteAppointment(appointmentId: string) {
+    try {
+        const response = await axios.delete(baseURL + '/appointments/delete-appointment/' + appointmentId);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// -----------------------
+
+const appointmentSignal = signal({});
+
+
+export async function fetchAppointments(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/appointments/get-all-owner-appointments/' + ownerId);
+
+        const appointments = response.data.map(appointment => {
+            
+            const appointmentDate = addDay(appointment.date.split('T')[0]);
+            return {
+                event_id: appointment.id,
+                title: 'clientsArr[index].Name',
+                start: new Date(`${appointmentDate} ${appointment.start}`),
+                end: new Date(`${appointmentDate} ${appointment.end}`),
+                service: {
+                    name: 'servicesArr[index].name',
+                    time: 'servicesArr[index].duration',
+                },
+                description: '',
+            };
+        })
+
+
+return appointments;
+        // console.log(response.data);
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+// return {
+//   event_id: appointment.id,
+//   title: clientsArr[index].Name,
+//   start: new Date(`${appointmentDate} ${appointment.start}`),
+//   end: new Date(`${appointmentDate} ${appointment.end}`),
+//   // service: servicesArr[index].name,
+//   service: {
+//     name: servicesArr[index].name,
+//     time: servicesArr[index].duration,
+//   },
+//   description: '',
+// };

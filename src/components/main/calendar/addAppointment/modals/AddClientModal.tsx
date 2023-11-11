@@ -9,7 +9,8 @@ import {
   Stack,
 } from '@mui/joy';
 import ClientsList from '../utils/ClientsList';
-import { Dispatch } from 'react';
+import { Dispatch, SyntheticEvent, useState } from 'react';
+
 
 export default function AddClientModal({
   open,
@@ -20,14 +21,25 @@ export default function AddClientModal({
 }) {
   // const [layout, setLayout] = React.useState<ModalDialogProps['layout'] | undefined>(
   //     undefined,
+  // const p[]
+
+  function handleOk(e: SyntheticEvent) {
+    e.preventDefault();
+
+    setOpen(false);
+  }
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
       <ModalDialog layout={'fullscreen'}>
         <ModalClose />
-        {/* <DialogTitle>Modal Dialog</DialogTitle> */}
-        {/* <DialogContent> */}
+
         <ClientsList />
-        {/* </DialogContent> */}
+
+        <Button
+          sx={{ mt: '3rem', mb: '1rem', marginInline: 'auto', width: 300 }}
+          onClick={handleOk}>
+          Ok
+        </Button>
         <div
           style={{
             display: 'flex',
