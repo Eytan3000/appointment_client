@@ -235,7 +235,7 @@ export default function MainCalendar() {
               <div>
                 <p>Service: {event.service.name}</p>
                 <p>Duration: {minutesToTimeDuration(event.service.time)}</p>
-                {event.note !== '' && <p>Note: {event.note}</p>}
+                {/* {event.note !== '' && <p>Note: {event.note}</p>} */}
               </div>
             );
           }}

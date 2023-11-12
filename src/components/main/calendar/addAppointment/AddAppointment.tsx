@@ -99,14 +99,16 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
-
-
-  //---------- this is for editing existing appointment -----
+  
+  const [note, setNote] = useState('');
+  
   const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
   // const [appointmentId, setAppointmentId] = useState(
   //   scheduler?.edited?.event_id
   // );
+
+  // get existing data ------------------------------------
 
   // get appointment object to get client and service id
   const editQuery = useQuery({
@@ -115,7 +117,25 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     enabled: !!appointmentId,
   });
 
-  console.log(editQuery?.data?.client_id);
+  // let queriedNote;
+  // if(editQuery.data){
+  //   queriedNote = <Input
+  //             variant="soft"
+  //             type="text"
+  //             placeholder="Only you can see this note"
+  //             onChange={(e) => setNote(e.target.value)}
+  //             defaultValue ={(editQuery.data.note)}
+  //           />
+  // }
+  // else { 
+  //   queriedNote = <Input
+  //             variant="soft"
+  //             type="text"
+  //             placeholder="Only you can see this note"
+  //             onChange={(e) => setNote(e.target.value)}
+  //           />
+  // }
+
   // get both client and service objects to put in signals.
   const queries = useQueries({
     queries: [
@@ -211,8 +231,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       <ServiceCardContainer setOpenServiceModal={setOpenServiceModal} />
     );
   }
-
-  //---------- up to here ---------------------------------
+  // -------------------------------------------------------
 
   // retrieve date, start-time, end-time from var scheduler
   const { startTimeString, endTimeString, dateString } =
@@ -221,7 +240,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [startTime, setStartTime] = useState(startTimeString);
   const [endTime, setEndTime] = useState(endTimeString);
   const [date, setDate] = useState(dateString);
-  const [note, setNote] = useState('');
+
 
   //Mutation
   // create appointment
@@ -398,13 +417,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
             </div>
 
             {/* Note */}
-            <DialogTitle>Note</DialogTitle>
-            <Input
-              variant="soft"
-              type="text"
-              placeholder="Only you can see this note"
-              onChange={(e) => setNote(e.target.value)}
-            />
+            {/* <DialogTitle>Note</DialogTitle> */}
+            {/* {queriedNote} */}
 
             {/* Buttons */}
             <Button type="submit">Submit</Button>
@@ -440,9 +454,9 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     const newDate = createDateObjectFromStamp(e.$d);
     setDate(newDate);
   }
-  function handleClientList() {
-    setOpenClientModal(true);
-  }
+  // function handleClientList() {
+  //   setOpenClientModal(true);
+  // }
   function handleServiceList() {
     setOpenServiceModal(true);
   }
