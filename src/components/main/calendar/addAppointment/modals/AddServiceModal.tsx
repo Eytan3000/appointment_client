@@ -9,7 +9,7 @@ import {
 } from '@mui/joy';
 import ServiceCard from '../utils/ServiceCard';
 import { services } from '../../../../../utils/db';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { useAuth } from '../../../../../context/AuthContext';
 import { getAllServices } from '../../../../../utils/http';
 import { Alert, CircularProgress } from '@mui/joy';
@@ -30,6 +30,8 @@ export default function AddServiceModal({ open, setOpen, startTime,
   setEndTime }) {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
+
+  const queryClient = useQueryClient();
 
   const { data, isPending, isError } = useQuery({
     queryKey: ['services'],
@@ -85,7 +87,11 @@ export default function AddServiceModal({ open, setOpen, startTime,
   function handleServiceClick(service: Service) {
     serviceSignal.value = service;
     setEndTime(addMinutesToTime(startTime, service.duration));
-
+    
+    queryClient.invalidateQueries({ queryKey: ['service', service.id] }); //added
+    
     setOpen(false);
   }
 }
+
+

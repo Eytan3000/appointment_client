@@ -7,7 +7,6 @@ import {
   FormLabel,
   Input,
   CircularProgress,
-
 } from '@mui/joy';
 import { ChangeEvent, useState } from 'react';
 import BasicDatePicker from './utils/BasicDatePicker';
@@ -98,6 +97,11 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const queryClient = useQueryClient();
   const isClientSignal = Object.keys(clientSignal.value).length > 0;
 
+  const defaultServic = {
+    img_url: '',
+    name: 'default',
+  };
+
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
@@ -105,13 +109,14 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   // const [client,setClient] = useState({})
 
   //---------- this is for editing existing appointment -----
+  const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
 
   // get appointment object to get client and service id
   const editQuery = useQuery({
     queryKey: ['appointment', appointmentId],
     queryFn: () => getAppointment(appointmentId),
-    enabled:!!appointmentId,
+    enabled: !!appointmentId,
   });
 
   // get both client and service objects to put in signals.
@@ -128,14 +133,73 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     ],
   });
 
-  // if exist, put in signals
-  if (queries[0].data && !clientOrServiceChanged.value) {
-    console.log(queries[0].data)
-    clientSignal.value = queries[0].data[0];
-    serviceSignal.value = queries[1].data[0];
+  // if (queries[0].data && !clientOrServiceChanged.value) {
+  //   console.log(queries[0].data)
+  //   clientSignal.value = queries[0].data[0];
+  //   serviceSignal.value = queries[1].data[0];
+  // }
+
+  //service card
+  let serviceCard;
+  if (queries[0].data) {
+    const service = queries[1].data[0];
+    serviceCard = (
+      <>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <Avatar src={service.img_url} />
+
+          <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
+        </div>
+        <div>
+          <Button variant="outlined" onClick={handleServiceList}>
+            Change
+          </Button>
+        </div>
+      </>
+    );
+  } else if (queries[0].isLoading) {
+    serviceCard = <CircularProgress />;
+  } else {
+    serviceCard = (
+      <>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <Avatar src={defaultServic.img_url} />
+
+          <div>{<h5 style={{ margin: 0 }}>{defaultServic.name}</h5>}</div>
+        </div>
+        <div>
+          <Button variant="outlined" onClick={handleServiceList}>
+            Change
+          </Button>
+        </div>
+      </>
+    );
+  }
+  console.log(queries);
+  // client card
+  let clientCard;
+  if (queries[0].data) {
+    const client1 = queries[0].data[0];
+
+    clientCard = (
+      <div style={{ display: 'flex', gap: '2rem' }}>
+        <Avatar />
+        <div>
+          <h5 style={{ margin: 0 }}>{client1.Name}</h5>
+          <p style={{ margin: 0 }}>{<small>{client1.phone}</small>}</p>
+        </div>
+      </div>
+    );
+  } else if (queries[0].isLoading) {
+    clientCard = <CircularProgress />;
+  } else {
+    clientCard = (
+      <Button variant="outlined" onClick={handleClientList}>
+        Choose Client
+      </Button>
+    );
   }
   //---------- up to here ---------------------------------
-
 
   // retrieve date, start-time, end-time from var scheduler
   const { startTimeString, endTimeString, dateString } =
@@ -252,26 +316,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
               padding: '1rem',
               background: '#fbfcfe',
             }}>
-            {isClientSignal && ( //checks if value of signal contains data
-              <div style={{ display: 'flex', gap: 20 }}>
-                <div>
-                  <h5 style={{ margin: 0 }}>{clientSignal.value.Name}</h5>
-                  <p style={{ margin: 0 }}>
-                    {<small>{clientSignal.value.phone}</small>}
-                  </p>
-                </div>
-              </div>
-            )}
-
-            <Button
-              variant="outlined"
-              onClick={handleClientList}
-              sx={{
-                width: !isClientSignal ? '100%' : null,
-              }}>
-              {/* Add/change Button*/}
-              {isClientSignal ? 'Change' : 'Choose Client'}
-            </Button>
+            {clientCard}
           </div>
 
           {/* Date and Time */}
@@ -311,6 +356,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
             {/* Service Card */}
             <DialogTitle>Service</DialogTitle>
+
             <div
               style={{
                 display: 'flex',
@@ -322,20 +368,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
                 padding: '1rem',
                 background: '#fbfcfe',
               }}>
-              <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-                <Avatar src={serviceSignal.value.img_url} />
-
-                <div>
-                  {<h5 style={{ margin: 0 }}>{serviceSignal.value.name}</h5>}
-                </div>
-              </div>
-              <div>
-                <Button variant="outlined" onClick={handleServiceList}>
-                  Change
-                </Button>
-              </div>
+              {serviceCard}
             </div>
-
             {/* Note */}
             <DialogTitle>Note</DialogTitle>
             <Input
@@ -372,7 +406,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
           startTime={startTime}
           setEndTime={setEndTime}
         />
-
       </div>
     </>
   );
@@ -386,5 +419,4 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   function handleServiceList() {
     setOpenServiceModal(true);
   }
-  
 }
