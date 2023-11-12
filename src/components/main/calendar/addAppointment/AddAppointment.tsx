@@ -41,11 +41,6 @@ function formteTime(timestamp: Date) {
     .toString()
     .padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
 }
-//-----------------------------------------
-
-interface CustomEditorProps {
-  scheduler: SchedulerHelpers;
-}
 
 function createDateStringFromStamp(inputTimestamp: string) {
   // Parse the input timestamp into a Date object
@@ -62,7 +57,6 @@ function setTimeValues(scheduler: SchedulerHelpers) {
   const endTimeString = formteTime(endTimeStamp);
   const dateString = createDateStringFromStamp(startTimeStamp);
 
-  // console.log(dateString);
   return {
     startTimeString,
     endTimeString,
@@ -75,6 +69,10 @@ function createDateObjectFromStamp(inputTimestamp: string) {
   const date = new Date(inputTimestamp);
 
   return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()}`;
+}
+
+interface CustomEditorProps {
+  scheduler: SchedulerHelpers;
 }
 
 interface Client {
@@ -95,7 +93,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
   const queryClient = useQueryClient();
-  const isClientSignal = Object.keys(clientSignal.value).length > 0;
+  // const isClientSignal = Object.keys(clientSignal.value).length > 0;
 
   const defaultServic = {
     img_url: '',
@@ -110,7 +108,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
   //---------- this is for editing existing appointment -----
   const isUpdating = scheduler?.edited;
-  const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
+  // const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
+  const [appointmentId, setAppointmentId] = useState(scheduler?.edited?.event_id)
 
   // get appointment object to get client and service id
   const editQuery = useQuery({
@@ -118,19 +117,23 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     queryFn: () => getAppointment(appointmentId),
     enabled: !!appointmentId,
   });
-
+  console.log(appointmentId)
+console.log(editQuery?.data?.client_id)
   // get both client and service objects to put in signals.
   const queries = useQueries({
     queries: [
-      editQuery.data && {
-        queryKey: ['client', editQuery.data.client_id],
+       {
+        queryKey: ['client', editQuery?.data?.client_id],
         queryFn: () => getClient(editQuery.data.client_id),
+        enabled: !!appointmentId
       },
-      editQuery.data && {
-        queryKey: ['service', editQuery.data.service_id],
+       {
+        queryKey: ['service', editQuery?.data?.service_id],
         queryFn: () => getService(editQuery.data.service_id),
+        enabled: !!appointmentId
       },
     ],
+    
   });
 
   // if (queries[0].data && !clientOrServiceChanged.value) {
@@ -139,47 +142,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   //   serviceSignal.value = queries[1].data[0];
   // }
 
-  //service card
-  let serviceCard;
-  if (queries[0].data) {
-    const service = queries[1].data[0];
-    serviceCard = (
-      <>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-          <Avatar src={service.img_url} />
-
-          <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
-        </div>
-        <div>
-          <Button variant="outlined" onClick={handleServiceList}>
-            Change
-          </Button>
-        </div>
-      </>
-    );
-  } else if (queries[0].isLoading && isUpdating) {
-    serviceCard = (
-      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
-        <CircularProgress />
-      </div>
-    );
-  } else {
-    serviceCard = (
-      <>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-          <Avatar src={defaultServic.img_url} />
-
-          <div>{<h5 style={{ margin: 0 }}>{defaultServic.name}</h5>}</div>
-        </div>
-        <div>
-          <Button variant="outlined" onClick={handleServiceList}>
-            Change
-          </Button>
-        </div>
-      </>
-    );
-  }
-  console.log(queries);
   // client card
   let clientCard;
   if (queries[0].data) {
@@ -200,7 +162,10 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         <CircularProgress />
       </div>
     );
-  } else {
+  } else if(queries[0].isError){
+    clientCard = <p>couldn't load</p>
+  }
+  else {
     clientCard = (
       <Button
         variant="outlined"
@@ -210,6 +175,51 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       </Button>
     );
   }
+
+  //service card
+  let serviceCard;
+  if (queries[1].data) {
+    const service = queries[1].data[0];
+    serviceCard = (
+      <>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <Avatar src={service.img_url} />
+
+          <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
+        </div>
+        <div>
+          <Button variant="outlined" onClick={handleServiceList}>
+            Change
+          </Button>
+        </div>
+      </>
+    );
+  } else if (queries[1].isLoading && isUpdating) {
+    serviceCard = (
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <CircularProgress />
+      </div>
+    );
+  } else if(queries[1].isError){
+    serviceCard = <p>couldn't load</p>
+  } else {
+    serviceCard = (
+      <>
+        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+          <Avatar src={defaultServic.img_url} />
+
+          <div>{<h5 style={{ margin: 0 }}>{defaultServic.name}</h5>}</div>
+        </div>
+        <div>
+          <Button variant="outlined" onClick={handleServiceList}>
+            Change
+          </Button>
+        </div>
+      </>
+    );
+  }
+  
+  
   //---------- up to here ---------------------------------
 
   // retrieve date, start-time, end-time from var scheduler
@@ -410,7 +420,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         </form>
 
         {/* Modals */}
-        <AddClientModal open={openClientModal} setOpen={setOpenClientModal} />
+        <AddClientModal setAppointment={setAppointmentId} open={openClientModal} setOpen={setOpenClientModal} />
         <AddServiceModal
           open={openServiceModal}
           setOpen={setOpenServiceModal}

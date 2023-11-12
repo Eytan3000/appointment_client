@@ -13,9 +13,11 @@ import { Dispatch, SyntheticEvent } from 'react';
 export default function AddClientModal({
   open,
   setOpen,
+  setAppointmentId
 }: {
   open: boolean;
   setOpen: Dispatch<React.SetStateAction<boolean>>;
+  setAppointmentId: Dispatch<React.SetStateAction<number>>;
 }) {
   // const [layout, setLayout] = React.useState<ModalDialogProps['layout'] | undefined>(
   //     undefined,
@@ -23,7 +25,6 @@ export default function AddClientModal({
 
   function handleOk(e: SyntheticEvent) {
     e.preventDefault();
-
     setOpen(false);
   }
   return (
@@ -31,7 +32,7 @@ export default function AddClientModal({
       <ModalDialog layout={'fullscreen'}>
         <ModalClose />
 
-        <ClientsList />
+        <ClientsList setAppointmentId={setAppointmentId}/>
 
         <Button
           sx={{ mt: '3rem', mb: '1rem', marginInline: 'auto', width: 300 }}
