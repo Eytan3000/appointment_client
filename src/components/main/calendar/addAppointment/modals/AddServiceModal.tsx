@@ -59,6 +59,7 @@ export default function AddServiceModal({ open, setOpen, startTime,
   }
 
   if (data) {
+
     whatToShow = data.map((service: Service) => (
       <div key={service.id} onClick={() => handleServiceClick(service)}>
         <ServiceCard
@@ -87,8 +88,8 @@ export default function AddServiceModal({ open, setOpen, startTime,
   function handleServiceClick(service: Service) {
     serviceSignal.value = service;
     setEndTime(addMinutesToTime(startTime, service.duration));
-    
-    queryClient.invalidateQueries({ queryKey: ['service', service.id] }); //added
+    // queryClient.invalidateQueries({ queryKey: ['service'] }); //added // , service.id
+
     
     setOpen(false);
   }

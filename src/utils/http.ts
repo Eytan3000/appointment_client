@@ -55,7 +55,7 @@ interface Appointment {
 interface AppointmentUpdate {
     start: string;
     end: string;
-    service_id: string;
+    serviceId: number;
     note: string;
     date: string;
     appointment_id: number;
@@ -348,6 +348,8 @@ export async function getAllAppointments(ownerId: string) {
 
 // get single appointment
 export async function getAppointment(appointmentId: number) {
+    console.log(appointmentId);
+    
     try {
         const response = await axios.get(baseURL + '/appointments/get-appointment/' + appointmentId);
 
@@ -361,10 +363,12 @@ export async function getAppointment(appointmentId: number) {
 }
 
 // Update Appointment
-export async function updateAppointment({ start, end, service_id, note, date, appointment_id }: AppointmentUpdate) {
+export async function updateAppointment({ start, end, serviceId, note, date, appointment_id }: AppointmentUpdate) {
+    console.log(start, end, serviceId, note, date, appointment_id);
+    
     try {
         const response = await axios.post(baseURL + '/appointments/update-appointment', {
-            start, end, service_id, note, date, appointment_id
+            start, end, serviceId, note, date, appointment_id
         });
 
         return response.data;
