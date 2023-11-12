@@ -122,18 +122,15 @@ console.log(editQuery?.data?.client_id)
   // get both client and service objects to put in signals.
   const queries = useQueries({
     queries: [
-       {
+      editQuery.data && {
         queryKey: ['client', editQuery?.data?.client_id],
         queryFn: () => getClient(editQuery.data.client_id),
-        enabled: !!appointmentId
       },
-       {
+      editQuery.data && {
         queryKey: ['service', editQuery?.data?.service_id],
         queryFn: () => getService(editQuery.data.service_id),
-        enabled: !!appointmentId
       },
     ],
-    
   });
 
   // if (queries[0].data && !clientOrServiceChanged.value) {
@@ -162,9 +159,7 @@ console.log(editQuery?.data?.client_id)
         <CircularProgress />
       </div>
     );
-  } else if(queries[0].isError){
-    clientCard = <p>couldn't load</p>
-  }
+  } 
   else {
     clientCard = (
       <Button
@@ -178,7 +173,7 @@ console.log(editQuery?.data?.client_id)
 
   //service card
   let serviceCard;
-  if (queries[1].data) {
+  if (queries[0].data) {
     const service = queries[1].data[0];
     serviceCard = (
       <>
@@ -194,14 +189,12 @@ console.log(editQuery?.data?.client_id)
         </div>
       </>
     );
-  } else if (queries[1].isLoading && isUpdating) {
+  } else if (queries[0].isLoading && isUpdating) {
     serviceCard = (
       <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
         <CircularProgress />
       </div>
     );
-  } else if(queries[1].isError){
-    serviceCard = <p>couldn't load</p>
   } else {
     serviceCard = (
       <>
