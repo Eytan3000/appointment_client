@@ -157,8 +157,12 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         </div>
       </>
     );
-  } else if (queries[0].isLoading) {
-    serviceCard = <CircularProgress />;
+  } else if (queries[0].isLoading && isUpdating) {
+    serviceCard = (
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <CircularProgress />
+      </div>
+    );
   } else {
     serviceCard = (
       <>
@@ -190,11 +194,18 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         </div>
       </div>
     );
-  } else if (queries[0].isLoading) {
-    clientCard = <CircularProgress />;
+  } else if (queries[0].isLoading && isUpdating) {
+    clientCard = (
+      <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+        <CircularProgress />
+      </div>
+    );
   } else {
     clientCard = (
-      <Button variant="outlined" onClick={handleClientList}>
+      <Button
+        variant="outlined"
+        onClick={handleClientList}
+        sx={{ width: '100%' }}>
         Choose Client
       </Button>
     );
@@ -356,7 +367,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
             {/* Service Card */}
             <DialogTitle>Service</DialogTitle>
-
             <div
               style={{
                 display: 'flex',
@@ -370,6 +380,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
               }}>
               {serviceCard}
             </div>
+
             {/* Note */}
             <DialogTitle>Note</DialogTitle>
             <Input

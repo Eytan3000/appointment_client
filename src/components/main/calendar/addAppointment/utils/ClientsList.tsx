@@ -51,7 +51,7 @@ console.log(clients)
     console.log(clientSignal.value);
     clientOrServiceChanged.value = true;
 
-    queryClient.invalidateQueries({ queryKey: ['client'] })
+    queryClient.invalidateQueries({ queryKey: ['client', newValue.id] });
   }
 
   // function handleSubmit() {
