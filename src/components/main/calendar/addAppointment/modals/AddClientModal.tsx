@@ -1,7 +1,5 @@
 import {
   Button,
-  DialogContent,
-  DialogTitle,
   Divider,
   Modal,
   ModalClose,
@@ -9,7 +7,7 @@ import {
   Stack,
 } from '@mui/joy';
 import ClientsList from '../utils/ClientsList';
-import { Dispatch, SyntheticEvent, useState } from 'react';
+import { Dispatch, SyntheticEvent } from 'react';
 
 
 export default function AddClientModal({

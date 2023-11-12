@@ -390,24 +390,34 @@ export async function deleteAppointment(appointmentId: string) {
 
 // -----------------------
 
-const appointmentSignal = signal({});
+// const appointmentSignal = signal({});
 
 
 export async function fetchAppointments(ownerId: string) {
     try {
-        const response = await axios.get(baseURL + '/appointments/get-all-owner-appointments/' + ownerId);
+        const appointmentsResponse = await axios.get(baseURL + '/appointments/get-all-owner-appointments/' + ownerId);
 
-        const appointments = response.data.map(appointment => {
+        const clientsArr = await getAllOwnersClients(ownerId);
+        const servicesArr = await getAllServices(ownerId);
+        
+
+
+        const appointments = appointmentsResponse.data.map((appointment) => {
+            const appointmentDate = addDay(appointment.date.split('T')[0]); // fetches one day earlier for some reason.
             
-            const appointmentDate = addDay(appointment.date.split('T')[0]);
+            const clientObj = clientsArr.filter(client=>client.id === appointment.client_id)[0];
+            const serviceObj = servicesArr.filter(service=>service.id === appointment.service_id)[0];
+            
+            
+
             return {
                 event_id: appointment.id,
-                title: 'clientsArr[index].Name',
+                title: clientObj.Name,
                 start: new Date(`${appointmentDate} ${appointment.start}`),
                 end: new Date(`${appointmentDate} ${appointment.end}`),
                 service: {
-                    name: 'servicesArr[index].name',
-                    time: 'servicesArr[index].duration',
+                    name: serviceObj.name,
+                    time: serviceObj.duration,
                 },
                 description: '',
             };

@@ -1,16 +1,16 @@
 import FormControl from '@mui/joy/FormControl';
-
 import Autocomplete from '@mui/joy/Autocomplete';
 import CircularProgress from '@mui/joy/CircularProgress';
 import { useEffect, useState } from 'react';
-import { Button } from '@mui/joy';
 import { useAuth } from '../../../../../context/AuthContext';
 import { getAllOwnersClients } from '../../../../../utils/http';
 import { clientSignal } from '../AddAppointment';
+import { useQueryClient } from '@tanstack/react-query';
 
 export default function ClientsList() {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
+  const queryClient = useQueryClient();
 
   const [open, setOpen] = useState(false);
   const [options, setOptions] = useState<typeof clients>([]);
@@ -25,10 +25,10 @@ export default function ClientsList() {
     }
 
     (async () => {
-      const clients = await getAllOwnersClients(uid!); // For demo purposes.
-
+      const clients = await getAllOwnersClients(uid!); 
+console.log(clients)
       if (active) {
-        // setOptions([...topFilms]);
+        //list opens
         setOptions([...clients]);
       }
     })();
@@ -45,16 +45,17 @@ export default function ClientsList() {
   }, [open]);
 
   function handleChange(event, newValue) {
-    // setSelectedOption(newValue); 
+    console.log(newValue)
+    // setSelectedOption(newValue);
     clientSignal.value = newValue;
-    console.log(clientSignal)
+    console.log(clientSignal.value);
 
+    queryClient.invalidateQueries({ queryKey: ['client'] })
   }
 
-
-  function handleSubmit() {
-    setOpen(false);
-  }
+  // function handleSubmit() {
+  //   setOpen(false);
+  // }
   return (
     <FormControl id="clients-list">
       <h1 style={{ marginInline: 'auto' }}>Choose Client</h1>
@@ -82,7 +83,6 @@ export default function ClientsList() {
           ) : null
         }
       />
-
     </FormControl>
   );
 }

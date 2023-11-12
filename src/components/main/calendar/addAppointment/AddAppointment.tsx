@@ -6,7 +6,7 @@ import {
   FormControl,
   FormLabel,
   Input,
-  Box,
+
 } from '@mui/joy';
 import { ChangeEvent, useState } from 'react';
 import BasicDatePicker from './utils/BasicDatePicker';
@@ -99,16 +99,17 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
-  const [openAreYouSureDelModal, setOpenAreYouSureDelModal] = useState(false);
+
+  // const [client,setClient] = useState({})
 
   //---------- this is for editing existing appointment -----
-
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
 
-  // get appoingment object to get client and service id
+  // get appointment object to get client and service id
   const editQuery = useQuery({
     queryKey: ['appointment', appointmentId],
     queryFn: () => getAppointment(appointmentId),
+    enabled:!!appointmentId,
   });
 
   // get both client and service objects to put in signals.
@@ -131,6 +132,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     serviceSignal.value = queries[1].data[0];
   }
   //---------- up to here ---------------------------------
+
+  console.log(clientSignal.value)
 
   // retrieve date, start-time, end-time from var scheduler
   const { startTimeString, endTimeString, dateString } =
@@ -377,4 +380,5 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   function handleServiceList() {
     setOpenServiceModal(true);
   }
+  
 }
