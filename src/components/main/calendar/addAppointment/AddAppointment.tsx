@@ -95,20 +95,18 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
   const queryClient = useQueryClient();
-  // const isClientSignal = Object.keys(clientSignal.value).length > 0;
-
-
 
   const [alert, setAlert] = useState(false);
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
 
-  // const [client,setClient] = useState({})
 
   //---------- this is for editing existing appointment -----
   const isUpdating = scheduler?.edited;
-  // const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
-  const [appointmentId, setAppointmentId] = useState(scheduler?.edited?.event_id)
+  const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
+  // const [appointmentId, setAppointmentId] = useState(
+  //   scheduler?.edited?.event_id
+  // );
 
   // get appointment object to get client and service id
   const editQuery = useQuery({
@@ -116,8 +114,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     queryFn: () => getAppointment(appointmentId),
     enabled: !!appointmentId,
   });
-  console.log(appointmentId)
-console.log(editQuery?.data?.client_id)
+
+  console.log(editQuery?.data?.client_id);
   // get both client and service objects to put in signals.
   const queries = useQueries({
     queries: [
@@ -132,18 +130,10 @@ console.log(editQuery?.data?.client_id)
     ],
   });
 
-  // if (queries[0].data && !clientOrServiceChanged.value) {
-  //   console.log(queries[0].data)
-  //   clientSignal.value = queries[0].data[0];
-  //   serviceSignal.value = queries[1].data[0];
-  // }
-
   // client card
   let clientCard;
   if (queries[0].data) {
     const client1 = queries[0].data[0];
-
-    // clientSignal.value.Name = queries[0].data[0].Name;
 
     clientCard = (
       <div style={{ display: 'flex', gap: '2rem' }}>
@@ -160,8 +150,7 @@ console.log(editQuery?.data?.client_id)
         <CircularProgress />
       </div>
     );
-  } 
-  else {
+  } else {
     clientCard = (
       // <Button
       //   variant="outlined"
@@ -169,7 +158,7 @@ console.log(editQuery?.data?.client_id)
       //   sx={{ width: '100%' }}>
       //   Choose Client
       // </Button>
-      <ClientCardContainer setOpenClientModal={setOpenClientModal}/>
+      <ClientCardContainer setOpenClientModal={setOpenClientModal} />
     );
   }
 
@@ -177,29 +166,13 @@ console.log(editQuery?.data?.client_id)
   let serviceCard;
   if (queries[1].data) {
     const service = queries[1].data[0];
-    if(Object.keys(serviceSignal.value).length === 0){
-    serviceCard = (
-      <>
-        <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-          <Avatar src={service.img_url} />
-
-          <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
-        </div>
-        <div>
-          <Button variant="outlined" onClick={handleServiceList}>
-            Change
-          </Button>
-        </div>
-      </>
-      
-    );
-    } else {
+    if (Object.keys(serviceSignal.value).length === 0) {
       serviceCard = (
         <>
           <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
-            <Avatar src={serviceSignal.value.img_url} />
-  
-            <div>{<h5 style={{ margin: 0 }}>{serviceSignal.value.name}</h5>}</div>
+            <Avatar src={service.img_url} />
+
+            <div>{<h5 style={{ margin: 0 }}>{service.name}</h5>}</div>
           </div>
           <div>
             <Button variant="outlined" onClick={handleServiceList}>
@@ -207,7 +180,23 @@ console.log(editQuery?.data?.client_id)
             </Button>
           </div>
         </>
-        
+      );
+    } else {
+      serviceCard = (
+        <>
+          <div style={{ display: 'flex', gap: 20, alignItems: 'center' }}>
+            <Avatar src={serviceSignal.value.img_url} />
+
+            <div>
+              {<h5 style={{ margin: 0 }}>{serviceSignal.value.name}</h5>}
+            </div>
+          </div>
+          <div>
+            <Button variant="outlined" onClick={handleServiceList}>
+              Change
+            </Button>
+          </div>
+        </>
       );
     }
   } else if (queries[0].isLoading && isUpdating) {
@@ -218,10 +207,11 @@ console.log(editQuery?.data?.client_id)
     );
   } else {
     // const defaultServic = getDefaultService(uid).then()
-    serviceCard = <ServiceCardContainer setOpenServiceModal={setOpenServiceModal}/>
+    serviceCard = (
+      <ServiceCardContainer setOpenServiceModal={setOpenServiceModal} />
+    );
   }
-  
-  
+
   //---------- up to here ---------------------------------
 
   // retrieve date, start-time, end-time from var scheduler
@@ -237,11 +227,27 @@ console.log(editQuery?.data?.client_id)
   // create appointment
   const createAppointmentMutation = useMutation({
     mutationFn: createAppointment,
-    onSuccess: (what) => {
+    onSuccess: (id) => {
       queryClient.invalidateQueries({
         queryKey: ['appointments'],
       });
-      // console.log(what || 'success');
+
+      const added_updated_event = {
+        event_id: id,
+        title: clientSignal.value.Name,
+        service: {
+          name: serviceSignal.value.name,
+          time: serviceSignal.value.duration,
+        },
+        start: new Date(`${date} ${startTime}`),
+        end: new Date(`${date} ${endTime}`),
+        description: note,
+      };
+
+      serviceSignal.value = {};
+
+      scheduler.onConfirm(added_updated_event, 'create');
+      scheduler.close();
     },
   });
 
@@ -267,21 +273,18 @@ console.log(editQuery?.data?.client_id)
     setStartTime(e.target.value);
   }
 
-
-
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
     // clientOrServiceChanged.value = false;
 
-    console.log(clientSignal.value)
-
+    console.log(clientSignal.value);
 
     if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
       setAlert(true);
       return;
     }
     const event = scheduler.edited;
-let title;
+
     if (scheduler.edited) {
       //call update if it's an edit and finish
       updateAppointmentMutation.mutate({
@@ -292,7 +295,22 @@ let title;
         date,
         appointment_id: appointmentId,
       });
-      title = queries[0].data[0].Name;
+
+      const added_updated_event = {
+        event_id: event.event_id,
+        title: queries[0].data[0].Name,
+        service: {
+          name: serviceSignal.value.name,
+          time: serviceSignal.value.duration,
+        },
+        start: new Date(`${date} ${startTime}`),
+        end: new Date(`${date} ${endTime}`),
+        description: note,
+      };
+
+      serviceSignal.value = {};
+      scheduler.onConfirm(added_updated_event, 'edit');
+      scheduler.close();
     } else {
       // if not edit, then it's a new appointent
       createAppointmentMutation.mutate({
@@ -304,25 +322,7 @@ let title;
         serviceId: serviceSignal.value.id,
         note,
       });
-      title = clientSignal.value.Name;
     }
-    const added_updated_event = {
-      event_id: event?.event_id || Math.random(),
-      title,
-      service: {
-        name: serviceSignal.value.name,
-        time: serviceSignal.value.duration,
-      },
-      start: new Date(`${date} ${startTime}`),
-      end: new Date(`${date} ${endTime}`),
-      description: note,
-    };
-
-    // clientSignal.value = {};
-    serviceSignal.value = {};
-
-    scheduler.onConfirm(added_updated_event, event ? 'edit' : 'create');
-    scheduler.close();
   };
 
   return (
