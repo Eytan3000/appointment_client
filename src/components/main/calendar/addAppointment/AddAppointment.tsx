@@ -175,7 +175,7 @@ console.log(editQuery?.data?.client_id)
 
   //service card
   let serviceCard;
-  if (queries[0].data) {
+  if (queries[1].data) {
     const service = queries[1].data[0];
     if(Object.keys(serviceSignal.value).length === 0){
     serviceCard = (
