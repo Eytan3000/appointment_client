@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   Input,
+  CircularProgress,
 
 } from '@mui/joy';
 import { ChangeEvent, useState } from 'react';
@@ -88,6 +89,7 @@ interface Client {
 
 export const clientSignal = signal({});
 export const serviceSignal = signal({});
+export const clientOrServiceChanged = signal(false);
 
 //------------------------------------------------------------------------
 export default function AddAppointment({ scheduler }: CustomEditorProps) {
@@ -127,13 +129,13 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   });
 
   // if exist, put in signals
-  if (queries[0].data) {
+  if (queries[0].data && !clientOrServiceChanged.value) {
+    console.log(queries[0].data)
     clientSignal.value = queries[0].data[0];
     serviceSignal.value = queries[1].data[0];
   }
   //---------- up to here ---------------------------------
 
-  console.log(clientSignal.value)
 
   // retrieve date, start-time, end-time from var scheduler
   const { startTimeString, endTimeString, dateString } =
@@ -180,12 +182,16 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
+    // clientOrServiceChanged.value = false;
 
     if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
       setAlert(true);
       return;
     }
     const event = scheduler.edited;
+
+    console.log(scheduler.edited);
+    console.log(serviceSignal.value);
 
     if (scheduler.edited) {
       //call update if it's an edit and finish

@@ -4,7 +4,7 @@ import CircularProgress from '@mui/joy/CircularProgress';
 import { useEffect, useState } from 'react';
 import { useAuth } from '../../../../../context/AuthContext';
 import { getAllOwnersClients } from '../../../../../utils/http';
-import { clientSignal } from '../AddAppointment';
+import { clientOrServiceChanged, clientSignal } from '../AddAppointment';
 import { useQueryClient } from '@tanstack/react-query';
 
 export default function ClientsList() {
@@ -49,6 +49,7 @@ console.log(clients)
     // setSelectedOption(newValue);
     clientSignal.value = newValue;
     console.log(clientSignal.value);
+    clientOrServiceChanged.value = true;
 
     queryClient.invalidateQueries({ queryKey: ['client'] })
   }
