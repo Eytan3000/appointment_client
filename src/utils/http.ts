@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { addDay, timeStringToMinutes } from './helperFunctions';
-import { signal } from '@preact/signals-react';
 
 interface ServiceObject {
     description: string | null;
@@ -59,6 +58,12 @@ interface AppointmentUpdate {
     note: string;
     date: string;
     appointment_id: number;
+}
+interface Business {
+    ownerId: string;
+    name: string;
+    address: string;
+    phone: string;
 }
 
 
@@ -252,7 +257,7 @@ export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //re
 // Clients queries
 
 // export async function createNewClient(name: string, phone: string, email: string, uid: string) {
-export async function createNewClient(obj) {
+export async function createNewClient(obj:{ name:string; phone:string; email:string; uid:string; }) {
     const { name, phone, email, uid } = obj;
     try {
         const response = await axios.post(baseURL + '/clients/create-client', {
@@ -349,7 +354,7 @@ export async function getAllAppointments(ownerId: string) {
 // get single appointment
 export async function getAppointment(appointmentId: number) {
     console.log(appointmentId);
-    
+
     try {
         const response = await axios.get(baseURL + '/appointments/get-appointment/' + appointmentId);
 
@@ -365,7 +370,7 @@ export async function getAppointment(appointmentId: number) {
 // Update Appointment
 export async function updateAppointment({ start, end, serviceId, note, date, appointment_id }: AppointmentUpdate) {
     console.log(start, end, serviceId, note, date, appointment_id);
-    
+
     try {
         const response = await axios.post(baseURL + '/appointments/update-appointment', {
             start, end, serviceId, note, date, appointment_id
@@ -403,16 +408,16 @@ export async function fetchAppointments(ownerId: string) {
 
         const clientsArr = await getAllOwnersClients(ownerId);
         const servicesArr = await getAllServices(ownerId);
-        
 
 
-        const appointments = appointmentsResponse.data.map((appointment) => {
+
+        const appointments = appointmentsResponse.data.map((appointment:Appointment) => {
             const appointmentDate = addDay(appointment.date.split('T')[0]); // fetches one day earlier for some reason.
-            
-            const clientObj = clientsArr.filter(client=>client.id === appointment.client_id)[0];
-            const serviceObj = servicesArr.filter(service=>service.id === appointment.service_id)[0];
-            
-            
+
+            const clientObj = clientsArr.filter(client => client.id === appointment.client_id)[0];
+            const serviceObj = servicesArr.filter(service => service.id === appointment.service_id)[0];
+
+
 
             return {
                 event_id: appointment.id,
@@ -428,7 +433,7 @@ export async function fetchAppointments(ownerId: string) {
         })
 
 
-return appointments;
+        return appointments;
         // console.log(response.data);
 
     } catch (error) {
@@ -438,15 +443,47 @@ return appointments;
 }
 
 
-// return {
-//   event_id: appointment.id,
-//   title: clientsArr[index].Name,
-//   start: new Date(`${appointmentDate} ${appointment.start}`),
-//   end: new Date(`${appointmentDate} ${appointment.end}`),
-//   // service: servicesArr[index].name,
-//   service: {
-//     name: servicesArr[index].name,
-//     time: servicesArr[index].duration,
-//   },
-//   description: '',
-// };
+// --- Business ---
+// Create Business
+export async function createBusiness({ ownerId, name, address, phone }: Business) {
+    // console.log(ownerId, clientId, start, end, date, serviceId, note);
+    try {
+        const response = await axios.post(baseURL + '/business/create-business', {
+            owner_id: ownerId, name, address, phone
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// Update Business
+export async function updateBusiness({ name, address, phone, ownerId }: Business) {
+
+    try {
+        const response = await axios.post(baseURL + '/business/update-business', {
+            name, address, phone, owner_id: ownerId
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// getBusiness
+export async function getBusiness(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/business/get-business/' + ownerId);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}

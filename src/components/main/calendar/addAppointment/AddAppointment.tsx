@@ -97,6 +97,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const queryClient = useQueryClient();
 
   const [alert, setAlert] = useState(false);
+  const [alertMessage, setAlertMessage] = useState('');
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
   
@@ -264,6 +265,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       };
 
       serviceSignal.value = {};
+      clientSignal.value = {};
 
       scheduler.onConfirm(added_updated_event, 'create');
       scheduler.close();
@@ -297,11 +299,27 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     // clientOrServiceChanged.value = false;
 
     console.log(clientSignal.value);
+    console.log(serviceSignal.value);
 
     if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
       setAlert(true);
+      setAlertMessage('Enter a valid end time');
       return;
     }
+    if(Object.keys(serviceSignal.value).length === 0){
+      setAlert(true);
+      setAlertMessage('Select a service');
+      // Service can't be left empty
+      return;
+    }
+    if(Object.keys(clientSignal.value).length === 0 && !isUpdating){
+      setAlert(true);
+      setAlertMessage('Select a client');
+      return;
+    }
+
+
+
     const event = scheduler.edited;
 
     if (scheduler.edited) {
@@ -433,7 +451,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
                 variant="soft"
                 color="danger">
                 {' '}
-                Please enter a valid End Time.
+                {alertMessage}
               </Alert>
             )}
           </Stack>

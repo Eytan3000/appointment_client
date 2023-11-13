@@ -72,7 +72,7 @@ export default function SignIn() {
             }
             throw new Error();
           }
-          navigate('/services');
+          navigate('/add-business');
         } catch (error: unknown) {
           if (error instanceof FirebaseError) {
             const errorCode = error.code;

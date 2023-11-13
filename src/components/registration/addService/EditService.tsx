@@ -93,8 +93,10 @@ export default function AddService() {
         exact: true,
         refetchType: 'none', //avoid refetching the service between delete and navigate.
       });
-      navigate('/services');
+      // navigate('/services');
+      navigate(-1);
     },
+    onError:()=>setAlert(true)
   });
   // Functions
   function handleSubmit(e: SyntheticEvent, data) {

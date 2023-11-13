@@ -25,6 +25,7 @@ export default function Services() {
   const isInSettings = window.location.href.includes('settings');
 
   function handleAddService() {
+    // navigate('/add-service');
     navigate('/add-service');
   }
   // function handleEditService() {

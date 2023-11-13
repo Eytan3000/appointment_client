@@ -13,7 +13,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  // signOut,
+  signOut,
+  updatePassword,
 } from 'firebase/auth';
 
 //------------------------------------------------
@@ -22,10 +23,10 @@ interface AuthContextValue {
   currentUser: User | null | undefined;
   signup: (email: string, password: string) => Promise<UserCredential>;
   login: (email: string, password: string) => Promise<UserCredential>;
-  // logOut: () => Promise<void>;
-  // changePassword: (password: string) => Promise<void>;
   // reAuthenticate: (password: string) => Promise<UserCredential>;
   resetPassword: (email: string) => Promise<void>;
+  updatePasswordCtx: (password: string) => Promise<void> | undefined;
+  logout: () => Promise<void> ;
 }
 
 //------------------------------------------------
@@ -38,26 +39,10 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
 
-  // // Load user data from local storage when the app initializes
-  // useEffect(() => {
-  //   const userData = localStorage.getItem('user');
-  //   if (userData) {
-  //     setCurrentUser(JSON.parse(userData));
-  //   }
-  // }, []);
-
   //sets user to state when auth state changes (when a user logs in or logs out)
   useEffect(() => {
     const unsubscribed = onAuthStateChanged(auth, (user) => {
       setCurrentUser(user);
-
-      // if (user) {
-      //   // Save user data to local storage when logged in
-      //   localStorage.setItem('user', JSON.stringify(user.uid));
-      // } else {
-      //   // Remove user data from local storage when logged out
-      //   localStorage.removeItem('user');
-      // }
     });
     return unsubscribed;
   }, []);
@@ -73,19 +58,23 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   function resetPassword(email: string) {
     return sendPasswordResetEmail(auth, email);
   }
-  // function logOut() {
-  //   localStorage.removeItem('user');
-  //   // return sendPasswordResetEmail(auth, email);
-  // }
-  // function logout(email, password) {
-  //   // localStorage.removeItem('user');
-  //   return signOut(auth, email, password);
-  // }
 
-  // logout('user4@gmail.com', '111111');
+  function logout() {
+    return signOut(auth);
+  }
 
-  // localStorage.removeItem('user');
-  const value: AuthContextValue = { currentUser, signup, login, resetPassword };
+  function updatePasswordCtx(password: string) {
+    if (currentUser) return updatePassword(currentUser, password);
+  }
+
+  const value: AuthContextValue = {
+    currentUser,
+    signup,
+    login,
+    resetPassword,
+    updatePasswordCtx,
+    logout
+  };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }

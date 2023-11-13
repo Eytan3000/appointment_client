@@ -278,14 +278,14 @@ export default function WorkHours() {
           </div>
         </div>
 
-        <Stack spacing={2} mt={3}>
+        {/* <Stack spacing={2} mt={3}>
           <div style={{ display: 'flex', justifyContent: 'center' }}>
             <Typography level="title-md">Advanced Options</Typography>
           </div>
           <Button onClick={handleAdvancedOptions} size="sm" variant="plain">
             Different daily work hours{' '}
           </Button>
-        </Stack>
+        </Stack> */}
 
         <Button
           style={{ marginTop: 'auto', marginInline: 'auto', width: '90%' }}

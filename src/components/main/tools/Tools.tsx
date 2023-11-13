@@ -79,17 +79,18 @@ export default function Tools() {
               tool={{
                 name: 'Services',
                 icon: <HomeRepairServiceIcon sx={iconSx} />,
-                function: () => navigate('/tools-services'),
+                // function: () => navigate('/tools-services'),
+                function: () => navigate('/settings/services'),
               }}
             />
 
-            <ToolsCard
+            {/* <ToolsCard
               tool={{
                 name: 'Add',
                 icon: <HomeRepairServiceIcon sx={iconSx} />,
                 function: () => navigate('/add-service'),
               }}
-            />
+            /> */}
           </div>
         </Stack>
       </Container>

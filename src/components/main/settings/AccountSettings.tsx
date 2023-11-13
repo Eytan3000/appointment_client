@@ -1,4 +1,5 @@
 import {
+  Alert,
   Avatar,
   Button,
   Container,
@@ -9,33 +10,74 @@ import {
   Input,
   Modal,
   ModalDialog,
+  Stack,
   Typography,
 } from '@mui/joy';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-
-const email = 'eytankrief@gmail.com';
+import { useAuth } from '../../../context/AuthContext';
+import { ErrorData } from '@firebase/util';
 
 export default function AccountSettings() {
+  const { currentUser, updatePasswordCtx, login } = useAuth() || {};
+
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
 
-  function handleChangePassSubmit(e: React.SyntheticEvent) {
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
+
+  const [alert, setAlert] = useState('');
+  const [alertSuccess, setAlertSuccess] = useState('');
+  const [loginModal, setLoginModal] = useState(false);
+
+  const [loginPass, setLoginPass] = useState('');
+
+  function validation(password: string, confirm: string) {
+    if (password.length < 6) {
+      setAlert('Password must be 6+ characters');
+      return false;
+    }
+    if (password !== confirmPassword) {
+      setAlert("Passwords don't match");
+      return false;
+    }
+    return true;
+  }
+  async function handleChangePassSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
-    //Form Validation:
-    // https://www.freecodecamp.org/news/how-to-validate-forms-in-react/
+    //validation:
+    if (!validation(password, confirmPassword)) return;
 
-    console.log('handleChangePassSubmit');
+    if (updatePasswordCtx) {
+      try {
+        const result = await updatePasswordCtx(password);
+        // if(result.message === 'auth/requires-recent-login'){
+        //   console.log('message')
+        // }
+        console.log(result);
+        // setPassword('');
+        // setConfirmPassword('');
+        // setAlertSuccess('Password changed successfully.');
+      } catch (error: unknown) {
+        console.log(error);
+        const firebaseError = error as ErrorData;
+        if (firebaseError.code === 'auth/requires-recent-login')
+          setLoginModal(true);
+      } 
+    }
   }
 
-  function handleDeleteAccount() {
-    setOpen(false);
-    navigate('/');
-  }
+  // function handleDeleteAccount() {
+  //   setOpen(false);
+  //   navigate('/');
+  // }
 
+  console.log(password);
+  console.log(confirmPassword);
   return (
     <>
       <Container style={{ marginTop: '1rem' }}>
@@ -64,7 +106,7 @@ export default function AccountSettings() {
             }}>
             <Typography level="title-md">Email</Typography>
             <Typography sx={{ mt: '0.5rem' }} level="body-md">
-              {email}
+              {currentUser?.email}
             </Typography>
           </div>
 
@@ -86,19 +128,39 @@ export default function AccountSettings() {
             }}>
             <Typography level="title-md">Change Password</Typography>
             <Input
+              required
               sx={{ my: '1rem' }}
               type="password"
               placeholder="Edit Password"
+              onChange={(e) => {
+                setAlert('');
+                setPassword(e.target.value);
+              }}
             />
             <Input
+              required
               sx={{ my: '1rem' }}
               type="password"
               placeholder="Re-enter Password"
+              onChange={(e) => {
+                setAlert('');
+                setConfirmPassword(e.target.value);
+              }}
             />
             <Button type="submit">Change Password</Button>
+            {alert !== '' && (
+              <Alert sx={{ mt: 2 }} color="danger">
+                {alert}
+              </Alert>
+            )}
+            {alertSuccess !== '' && (
+              <Alert sx={{ mt: 2 }} color="success">
+                {alertSuccess}
+              </Alert>
+            )}
           </form>
 
-          <Divider />
+          {/* <Divider />
           <Button
             variant="outlined"
             color="danger"
@@ -108,12 +170,12 @@ export default function AccountSettings() {
             }}
             onClick={() => setOpen(true)}>
             Delete Account
-          </Button>
+          </Button> */}
         </div>
       </Container>
 
       {/* "Are you sure" delete account Modal */}
-      <Modal open={open} onClose={() => setOpen(false)}>
+      {/* <Modal open={open} onClose={() => setOpen(false)}>
         <ModalDialog variant="outlined" role="alertdialog">
           <DialogTitle>
             <WarningRoundedIcon />
@@ -139,7 +201,57 @@ export default function AccountSettings() {
             </Button>
           </DialogActions>
         </ModalDialog>
+      </Modal> */}
+
+      {/* "Login Modal */}
+      <Modal open={loginModal} onClose={() => setLoginModal(false)}>
+        <ModalDialog variant="outlined" role="alertdialog">
+          <DialogTitle>
+            <WarningRoundedIcon />
+            Login required
+          </DialogTitle>
+          <Divider />
+          <DialogContent>Please insert your current password.</DialogContent>
+          <Stack spacing={2} mx={2}>
+            {/* <Input
+              required
+              onChange={(e) => setLoginEmail(e.target.value)}
+              type="email"
+              placeholder="Email"
+            /> */}
+            <Input
+              required
+              onChange={(e) => setLoginPass(e.target.value)}
+              type="password"
+              placeholder="Password"
+            />
+          </Stack>
+          <DialogActions>
+            <Button variant="solid" onClick={handleLogin}>
+              Login{' '}
+            </Button>
+            <Button
+              variant="plain"
+              color="neutral"
+              onClick={() => setLoginModal(false)}>
+              Cancel
+            </Button>
+          </DialogActions>
+        </ModalDialog>
       </Modal>
     </>
   );
+  async function handleLogin() {
+    console.log(currentUser?.email, loginPass);
+    try {
+      if (login && currentUser?.email) {
+        // const x = await login(currentUser?.email, loginPass);
+        // console.log(x);
+        login(currentUser?.email, loginPass);
+        setLoginModal(false);
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }

@@ -23,6 +23,7 @@ import { AuthProvider } from './context/AuthContext.tsx';
 import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx';
 import ClientCard from './components/main/tools/Clients/ClientCard.tsx';
 import ClientEdit from './components/main/tools/Clients/ClientEdit.tsx';
+import AddBusiness from './components/registration/addBusiness/AddBusiness.tsx';
 
 
 function App() {
@@ -44,13 +45,18 @@ function App() {
       element: <CreateAccount />,
     },
     {
-      path: '/services',
+      path: '/add-business',
+      element: <AddBusiness />,
+    },
+    {
+      path: '/services', //settings edit services
       element: <Services />,
     },
     {
       path: '/add-service',
       element: <AddService />,
     },
+
     {
       path: '/edit-service/:id',
       element: <EditService />,

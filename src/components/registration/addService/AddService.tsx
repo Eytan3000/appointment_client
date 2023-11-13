@@ -12,7 +12,10 @@ import {
 import { SyntheticEvent, useRef, useState } from 'react';
 import { createService } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
-import { deleteImageFromFirebase, isWholeNumber } from '../../../utils/helperFunctions';
+import {
+  deleteImageFromFirebase,
+  isWholeNumber,
+} from '../../../utils/helperFunctions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ImageUploader from './ImageUploader';
 import { deleteObject, ref } from 'firebase/storage';
@@ -33,8 +36,8 @@ import { storage } from '../../../firebase';
 
 export default function AddService() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
-  const uid = currentUser.uid;
+  const { currentUser } = useAuth() || {};
+  const uid = currentUser?.uid;
 
   // // get uid from storage in json
   // const userData = localStorage.getItem('user');
@@ -56,7 +59,8 @@ export default function AddService() {
     onSuccess: (allOwnerServicesResponse) => {
       queryClient.setQueryData(['services'], allOwnerServicesResponse.data);
       queryClient.invalidateQueries(['services'], { exact: true });
-      navigate('/services');
+      // navigate('/settings/services');
+      navigate(-1);
     },
   });
 
@@ -77,14 +81,15 @@ export default function AddService() {
       return;
     }
     // console.log(duration)
-    addServiceMutation.mutate({
-      name,
-      description,
-      duration,
-      price,
-      uid,
-      img_url: imageUrl,
-    });
+    if (uid)
+      addServiceMutation.mutate({
+        name,
+        description,
+        duration,
+        price,
+        uid,
+        img_url: imageUrl,
+      });
     // try {
     //   setLoading(true);
     //   const result = await createService(
@@ -110,8 +115,8 @@ export default function AddService() {
   function changeHandler() {
     setAlert(null);
   }
-  async function handleBackArrowClick(){
-    if(imageUrl==='') navigate(-1);
+  async function handleBackArrowClick() {
+    if (imageUrl === '') navigate(-1);
     else {
       await deleteImageFromFirebase(imageUrl);
       navigate(-1);

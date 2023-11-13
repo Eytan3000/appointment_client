@@ -5,10 +5,10 @@ import ManageAccountsIcon from '@mui/icons-material/ManageAccounts';
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import ConstructionIcon from '@mui/icons-material/Construction';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
-import ShutterSpeedIcon from '@mui/icons-material/ShutterSpeed';
 import { useNavigate } from 'react-router-dom';
 import LogoutIcon from '@mui/icons-material/Logout';
 import BottomAppBar from '../BottomAppBar';
+import { useAuth } from '../../../context/AuthContext';
 
 const settings = [
   {
@@ -32,17 +32,13 @@ const settings = [
     icon: <WorkHistoryIcon />,
     path: 'edit-work-hours',
   },
-  {
-    title: 'Booking Intervals',
-    icon: <ShutterSpeedIcon />,
-    path: 'booking-intervals',
-  },
 ];
 
 // Sign Out
 
 export default function Settings() {
   const navigate = useNavigate();
+  const { logout } = useAuth() || {};
 
   function handleSettingClick(path: string) {
     navigate(`/settings/${path}`);
@@ -100,7 +96,10 @@ export default function Settings() {
           </div>
         ))}
         <div style={{ height: '1rem' }}></div>
+
+        {/* LogOut */}
         <div
+          onClick={handleLogOut}
           style={{
             backgroundColor: '#fff',
             height: '4rem',
@@ -112,9 +111,14 @@ export default function Settings() {
           <LogoutIcon />
           <Typography level="body-lg">Sign Out</Typography>
         </div>
+
         <div style={{ height: '4rem' }}></div>
       </div>
       <BottomAppBar />
     </>
   );
+  function handleLogOut() {
+    if (logout) logout();
+    navigate('/signin');
+  }
 }
