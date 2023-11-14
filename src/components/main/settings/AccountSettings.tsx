@@ -19,6 +19,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from '../../../context/AuthContext';
 import { ErrorData } from '@firebase/util';
+import { reauthenticateWithCredential } from 'firebase/auth';
 
 export default function AccountSettings() {
   const { currentUser, updatePasswordCtx, login } = useAuth() || {};
@@ -67,7 +68,7 @@ export default function AccountSettings() {
         const firebaseError = error as ErrorData;
         if (firebaseError.code === 'auth/requires-recent-login')
           setLoginModal(true);
-      } 
+      }
     }
   }
 
@@ -249,6 +250,24 @@ export default function AccountSettings() {
         // console.log(x);
         login(currentUser?.email, loginPass);
         setLoginModal(false);
+
+        // reauthenticateWithCredential()
+
+        // // TODO(you): prompt the user to re-provide their sign-in credentials
+        // const credential = promptForCredentials();
+
+        // reauthenticateWithCredential(currentUser, credential)
+        //   .then(() => {
+        //     // User re-authenticated.
+        //   })
+        //   .catch((error) => {
+        //     // An error ocurred
+        //     // ...
+        //   });
+
+
+
+
       }
     } catch (error) {
       console.log(error);

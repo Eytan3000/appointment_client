@@ -3,12 +3,19 @@ import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import google from '../../../assets/icons/google.png';
 import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import { useAuth } from '../../../context/AuthContext';
-import { SyntheticEvent, useRef, useState } from 'react';
+import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { FirebaseError } from '@firebase/util';
 import {
+  insertNewGoogleUserInDb,
   insertNewUserInDb,
   updateNewUser_temp_to_uid,
 } from '../../../utils/http';
+import {
+  GoogleAuthProvider,
+  getRedirectResult,
+  signInWithRedirect,
+} from 'firebase/auth';
+import { auth, provider } from '../../../firebase';
 //-----------------------------------------
 
 export default function SignIn() {
@@ -16,7 +23,39 @@ export default function SignIn() {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: Unreachable code error
-  const { signup } = useAuth();
+  const { signup, googleSignIn } = useAuth();
+
+  // console.log(currentUser); //remove
+
+  useEffect(() => {
+    (async () => {
+      getRedirectResult(auth)
+        .then(async (result) => {
+          // const credential = GoogleAuthProvider.credentialFromResult(result);
+          // const token = credential.accessToken;
+          if (result) {
+            const { displayName, email, uid } = result.user;
+            console.log(displayName);
+            console.log(email);
+            console.log(uid);
+
+            await insertNewGoogleUserInDb(uid, displayName!, email!);
+            navigate('/add-business');
+          }
+        })
+        .catch((error) => {
+          // Handle Errors here.
+          const errorCode = error.code;
+          const errorMessage = error.message;
+          // The email of the user's account used.
+          const email = error.customData.email;
+          // The AuthCredential type that was used.
+          const credential = GoogleAuthProvider.credentialFromError(error);
+          // ...
+          console.log(error);
+        });
+    })();
+  }, []);
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -42,17 +81,24 @@ export default function SignIn() {
     if (password !== passwordConfirm) return setAlert('Passwords do not match');
 
     // Check which submitter - email or google:
-    if (e.nativeEvent.submitter) { //check if exist(typwscript)
+    if (e.nativeEvent.submitter) {
+      //check if exist(typescript)
 
       const submitterName = e.nativeEvent.submitter.getAttribute('name');
 
       if (submitterName === 'email-submitter') {
         try {
           setLoading(true);
-          let response = await insertNewUserInDb('temp', fullName, email, password);
+          let response = await insertNewUserInDb(
+            'temp',
+            fullName,
+            email,
+            password
+          );
 
           if (response.status !== 201) {
-            if(response.response.status===400) throw new Error(response.response.data);
+            if (response.response.status === 400)
+              throw new Error(response.response.data);
             if (response.response.data.startsWith('Duplicate entry'))
               throw new Error('Email already exists');
           }
@@ -83,9 +129,11 @@ export default function SignIn() {
             else if (errorCode === 'auth/weak-password')
               setAlert('Password should be at least 6 characters');
             else setAlert(errorMessage);
-          }
-          else if(error) setAlert(error.message);
-          else setAlert(`Oops! Something went wrong while trying to create your account.`)
+          } else if (error) setAlert(error.message);
+          else
+            setAlert(
+              `Oops! Something went wrong while trying to create your account.`
+            );
         }
       } else if (submitterName === 'google-submitter') {
         setLoading(true);
@@ -108,10 +156,7 @@ export default function SignIn() {
             marginInline: '1rem',
             marginBlock: '2rem',
           }}>
-          <Link
-            // to={-1}
-            to="#"
-            onClick={() => window.history.back()}>
+          <Link to="#" onClick={() => window.history.back()}>
             <img src={backArrow} alt="back-arrow" />
           </Link>
 
@@ -161,7 +206,7 @@ export default function SignIn() {
               Create Account
             </Button>
             <Button
-            loading={googleLoading}
+              loading={googleLoading}
               variant="outlined"
               type="submit"
               name="google-submitter"
@@ -169,15 +214,26 @@ export default function SignIn() {
               Continue with google
             </Button>
             {alert && (
-              <Alert
-                variant="soft"
-                color="danger">
+              <Alert variant="soft" color="danger">
                 {alert}
               </Alert>
             )}
           </Stack>
         </form>
+
+        <Button
+          onClick={handleGoogle2}
+          // loading={googleLoading}
+          variant="outlined"
+          type="submit"
+          startDecorator={<img className="google" src={google} alt="" />}>
+          Continue with google2
+        </Button>
       </div>
     </>
   );
+
+  function handleGoogle2() {
+    googleSignIn();
+  }
 }

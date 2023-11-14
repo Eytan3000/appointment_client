@@ -5,7 +5,7 @@ import React, {
   useEffect,
   useState,
 } from 'react';
-import { auth } from '../firebase';
+import { auth, provider } from '../firebase';
 import {
   User,
   UserCredential,
@@ -13,6 +13,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
+  signInWithPopup,
+  signInWithRedirect,
   signOut,
   updatePassword,
 } from 'firebase/auth';
@@ -27,6 +29,7 @@ interface AuthContextValue {
   resetPassword: (email: string) => Promise<void>;
   updatePasswordCtx: (password: string) => Promise<void> | undefined;
   logout: () => Promise<void> ;
+  googleSignIn: () => Promise<void> ;
 }
 
 //------------------------------------------------
@@ -67,13 +70,19 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (currentUser) return updatePassword(currentUser, password);
   }
 
+  function googleSignIn(){
+    return signInWithRedirect(auth, provider);
+    // return signInWithPopup(auth, provider);
+  }
+
   const value: AuthContextValue = {
     currentUser,
     signup,
     login,
     resetPassword,
     updatePasswordCtx,
-    logout
+    logout,
+    googleSignIn
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

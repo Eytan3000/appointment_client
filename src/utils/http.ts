@@ -110,6 +110,28 @@ export async function updateNewUser_temp_to_uid(
     return response;
 }
 
+//create-google-user
+export async function insertNewGoogleUserInDb(
+    uid: string,
+    fullname: string,
+    email: string,
+) {
+    const response = await axios.post(baseURL + '/users/create-google-user', {
+        id: uid,
+        fullname,
+        email
+    })
+        .then((response) => {
+            return response;
+        })
+        .catch((error) => {
+            return error;
+        });
+    return response;
+}
+
+
+// services
 export async function createService(
     { name,
         description,
