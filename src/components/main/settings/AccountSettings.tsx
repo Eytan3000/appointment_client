@@ -15,7 +15,7 @@ import {
 } from '@mui/joy';
 import WarningRoundedIcon from '@mui/icons-material/WarningRounded';
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from '../../../context/AuthContext';
 import { ErrorData } from '@firebase/util';
@@ -23,13 +23,7 @@ import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 
 export default function AccountSettings() {
-  const { currentUser, updatePasswordCtx, login } = useAuth() || {};
-  const [authProvider, serAuthProvider] = useState(
-    currentUser?.providerData[0].providerId
-  );
-
-  const navigate = useNavigate();
-  const [open, setOpen] = useState(false);
+  const { currentUser, updatePasswordCtx } = useAuth() || {};
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -42,7 +36,7 @@ export default function AccountSettings() {
   const [loginPass, setLoginPass] = useState('');
   const [reAuthAlert, setReAuthAlert] = useState('');
 
-  function validation(password: string, confirm: string) {
+  function validation() {
     if (password.length < 6) {
       setAlert('Password must be 6+ characters');
       return false;
@@ -53,6 +47,7 @@ export default function AccountSettings() {
     }
     return true;
   }
+
   async function handleChangePassSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
@@ -61,18 +56,15 @@ export default function AccountSettings() {
       return;
     }
     //validation:
-    if (!validation(password, confirmPassword)) return;
+    if (!validation()) return;
 
     if (updatePasswordCtx) {
       try {
         const result = await updatePasswordCtx(password);
-        // if(result.message === 'auth/requires-recent-login'){
-        //   console.log('message')
-        // }
         console.log(result);
-        // setPassword('');
-        // setConfirmPassword('');
-        // setAlertSuccess('Password changed successfully.');
+        setPassword('');
+        setConfirmPassword('');
+        setAlertSuccess('Password changed successfully.');
       } catch (error: unknown) {
         console.log(error);
         const firebaseError1 = error as ErrorData;
@@ -92,12 +84,11 @@ export default function AccountSettings() {
   return (
     <>
       <Container style={{ marginTop: '1rem' }}>
-        {/* <Stack spacing={2} display={'flex'} justifyContent={'center'}> */}
         <div
           style={{
             display: 'flex',
             flexDirection: 'column',
-            // alignItems: 'center',
+
             margin: '2rem',
           }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
@@ -112,8 +103,6 @@ export default function AccountSettings() {
             style={{
               marginBlock: '2rem 2rem',
               marginLeft: '0.4rem',
-              // width: '80%'
-              // display:'flex'
             }}>
             <Typography level="title-md">Email</Typography>
             <Typography sx={{ mt: '0.5rem' }} level="body-md">
@@ -263,7 +252,6 @@ export default function AccountSettings() {
     </>
   );
   async function handleLogin() {
-    console.log(currentUser?.email, loginPass);
     try {
       if (currentUser?.email && updatePasswordCtx) {
         const credential = EmailAuthProvider.credential(
@@ -272,9 +260,7 @@ export default function AccountSettings() {
         );
 
         await reauthenticateWithCredential(currentUser, credential);
-
         setLoginModal(false);
-        console.log('success');
 
         await updatePasswordCtx(password);
         setAlertSuccess('Password updated successfully');

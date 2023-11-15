@@ -34,6 +34,7 @@ import {
 import ClientCardContainer from './utils/ClientCardContainer';
 import ServiceCardContainer from './utils/ServiceCardContainer';
 import { isTimeRangeValid } from '../../../../utils/helperFunctions';
+import AddNewClientModal from './modals/AddNewClientModal';
 //-----------------------------------------
 function formteTime(timestamp: Date) {
   const hours = timestamp.getHours();
@@ -101,8 +102,11 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [alertMessage, setAlertMessage] = useState('');
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
-
+  
   const [note, setNote] = useState('');
+  
+  const [openAddClientModal, setOpenAddClientModal] = useState(false);
+
 
   const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
@@ -465,12 +469,16 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         </form>
 
         {/* Modals */}
-        <AddClientModal open={openClientModal} setOpen={setOpenClientModal} />
+        <AddClientModal open={openClientModal} setOpen={setOpenClientModal} setOpenAddClientModal={setOpenAddClientModal}/>
         <AddServiceModal
           open={openServiceModal}
           setOpen={setOpenServiceModal}
           startTime={startTime}
           setEndTime={setEndTime}
+        />
+        <AddNewClientModal
+          open={openAddClientModal}
+          setOpen={setOpenAddClientModal}
         />
       </div>
     </>

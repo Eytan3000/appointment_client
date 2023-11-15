@@ -45,7 +45,7 @@ console.log(clients)
   }, [open]);
 
   function handleChange(event, newValue) {
-    // console.log(newValue)
+    console.log(newValue)
     // setSelectedOption(newValue);
     clientSignal.value = newValue;
     // console.log(clientSignal.value);

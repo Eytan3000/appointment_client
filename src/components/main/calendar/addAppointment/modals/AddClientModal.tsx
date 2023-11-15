@@ -13,10 +13,12 @@ import { Dispatch, SyntheticEvent } from 'react';
 export default function AddClientModal({
   open,
   setOpen,
+  setOpenAddClientModal
 
 }: {
   open: boolean;
   setOpen: Dispatch<React.SetStateAction<boolean>>;
+  setOpenAddClientModal: Dispatch<React.SetStateAction<boolean>>;
 
 }) {
   // const [layout, setLayout] = React.useState<ModalDialogProps['layout'] | undefined>(
@@ -51,7 +53,10 @@ export default function AddClientModal({
 
             <h4 style={{ color: '#7a848e', marginInline: 'auto' }}>Or</h4>
             <Button variant="plain" 
-            // onClick={()=>setOpenAddClientModal(true)}
+            onClick={()=>{
+              setOpen(false); // closses this modal before opening the add new client modal.
+              setOpenAddClientModal(true);
+            }}
             >Add new Client</Button>
           </Stack>
         </div>

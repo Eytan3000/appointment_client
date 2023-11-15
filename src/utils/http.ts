@@ -278,7 +278,6 @@ export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //re
 
 // Clients queries
 
-// export async function createNewClient(name: string, phone: string, email: string, uid: string) {
 export async function createNewClient(obj:{ name:string; phone:string; email:string; uid:string; }) {
     const { name, phone, email, uid } = obj;
     try {
