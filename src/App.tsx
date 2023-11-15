@@ -25,6 +25,8 @@ import ClientCard from './components/main/tools/Clients/ClientCard.tsx';
 import ClientEdit from './components/main/tools/Clients/ClientEdit.tsx';
 import AddBusiness from './components/registration/addBusiness/AddBusiness.tsx';
 import GoogleSignIn from './components/auth/googleSignIn/GoogleSignIn.tsx';
+import ClientChooseService from './userArea/welcomePage/ClientChooseService.tsx';
+import ClientChooseTime from './userArea/chooseTime/ClientChooseTime.tsx';
 
 
 function App() {
@@ -160,6 +162,39 @@ function App() {
       path: '/google-signin',
       element: <GoogleSignIn />,
     },
+    // {
+    //   path: '/client',
+    //   element: <ClientChooseService />,
+    // },
+  // Client area
+    {
+      path: '/client', ///:uid
+      children: [
+        // {
+        //   index: true,
+        //   element: <ClientChooseService />,
+        // },
+        {
+          path: '/client/:uid',
+          element: <ClientChooseService />,
+        },
+        {
+          path: '/client/:uid?:serviceId',
+          element: <ClientChooseTime />,
+        },
+        // {
+        //   path: 'client-card/:clientId',
+        //   // path: 'client-card',
+        //   element: <ClientCard />,
+        // },
+        // {
+        //   path: 'client-edit/:clientId',
+        //   // path: 'client-card',
+        //   element: <ClientEdit />,
+        // },
+      ]
+    },
+
   ]);
 
   return (

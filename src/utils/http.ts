@@ -173,7 +173,7 @@ export async function createService(
 
 export async function getAllServices(owner_id: string) {
     try {
-        const response = await axios.get(baseURL + '/services/read-all-services/' + owner_id);
+        const response = await axios.get(baseURL + '/services/read-all-services/' + owner_id);    
         return response.data;
 
     } catch (error) {
