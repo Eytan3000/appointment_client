@@ -59,7 +59,7 @@ export function rearrangeByDayOfWeek(array) {
 }
 
 
-export function copyToClipboard(text:string) {
+export function copyToClipboard(text: string) {
   navigator.clipboard
     .writeText(text)
     .then(() => {
@@ -116,4 +116,13 @@ export function addDay(dateString: string) {
     .padStart(2, '0')}-${nextDay.getDate().toString().padStart(2, '0')}`;
 
   return formattedNextDay;
+}
+
+export function isTimeRangeValid(hour1: string, hour2: string) {
+
+  const date1 = new Date(`2000-01-01 ${hour1}`);
+  const date2 = new Date(`2000-01-01 ${hour2}`);
+
+  // Compare the Date objects
+  return date1 < date2;
 }

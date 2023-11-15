@@ -46,12 +46,14 @@ export default function AddClientModal({
             justifyContent: 'space-around',
             // textAlign:'center'
           }}>
-          {/* <Stack spacing={2} mt={2}>
+          <Stack spacing={2} mt={2}>
             <Divider />
 
             <h4 style={{ color: '#7a848e', marginInline: 'auto' }}>Or</h4>
-            <Button variant="plain">Add new Client</Button>
-          </Stack> */}
+            <Button variant="plain" 
+            // onClick={()=>setOpenAddClientModal(true)}
+            >Add new Client</Button>
+          </Stack>
         </div>
       </ModalDialog>
     </Modal>

@@ -24,6 +24,7 @@ import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx
 import ClientCard from './components/main/tools/Clients/ClientCard.tsx';
 import ClientEdit from './components/main/tools/Clients/ClientEdit.tsx';
 import AddBusiness from './components/registration/addBusiness/AddBusiness.tsx';
+import GoogleSignIn from './components/auth/googleSignIn/GoogleSignIn.tsx';
 
 
 function App() {
@@ -154,6 +155,10 @@ function App() {
     {
       path: '/tools-services',
       element: <ToolsServices />,
+    },
+    {
+      path: '/google-signin',
+      element: <GoogleSignIn />,
     },
   ]);
 

@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import google from '../../../assets/icons/google.png';
-import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
+import { Alert, Button, Divider, Input, Stack, Typography } from '@mui/joy';
 import { useAuth } from '../../../context/AuthContext';
 import { SyntheticEvent, useEffect, useRef, useState } from 'react';
 import { FirebaseError } from '@firebase/util';
@@ -12,8 +12,8 @@ import {
 } from '../../../utils/http';
 import {
   GoogleAuthProvider,
+  getAdditionalUserInfo,
   getRedirectResult,
-  signInWithRedirect,
 } from 'firebase/auth';
 import { auth, provider } from '../../../firebase';
 //-----------------------------------------
@@ -21,45 +21,10 @@ import { auth, provider } from '../../../firebase';
 export default function SignIn() {
   const navigate = useNavigate();
 
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: Unreachable code error
-  const { signup, googleSignIn } = useAuth();
-
-  // console.log(currentUser); //remove
-
-  useEffect(() => {
-    (async () => {
-      getRedirectResult(auth)
-        .then(async (result) => {
-          // const credential = GoogleAuthProvider.credentialFromResult(result);
-          // const token = credential.accessToken;
-          if (result) {
-            const { displayName, email, uid } = result.user;
-            console.log(displayName);
-            console.log(email);
-            console.log(uid);
-
-            await insertNewGoogleUserInDb(uid, displayName!, email!);
-            navigate('/add-business');
-          }
-        })
-        .catch((error) => {
-          // Handle Errors here.
-          const errorCode = error.code;
-          const errorMessage = error.message;
-          // The email of the user's account used.
-          const email = error.customData.email;
-          // The AuthCredential type that was used.
-          const credential = GoogleAuthProvider.credentialFromError(error);
-          // ...
-          console.log(error);
-        });
-    })();
-  }, []);
+  const { signup, googleSignIn } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
 
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -136,7 +101,7 @@ export default function SignIn() {
             );
         }
       } else if (submitterName === 'google-submitter') {
-        setLoading(true);
+        // setLoading(true);
         console.log('google signUp'); //remove later
       }
     }
@@ -205,14 +170,18 @@ export default function SignIn() {
             <Button type="submit" name="email-submitter" loading={loading}>
               Create Account
             </Button>
+
+            <Divider />
+            <Typography textAlign={'center'}>OR</Typography>
+
             <Button
-              loading={googleLoading}
+              onClick={handleGoogle}
+              // loading={googleLoading}
               variant="outlined"
-              type="submit"
-              name="google-submitter"
               startDecorator={<img className="google" src={google} alt="" />}>
               Continue with google
             </Button>
+
             {alert && (
               <Alert variant="soft" color="danger">
                 {alert}
@@ -220,20 +189,14 @@ export default function SignIn() {
             )}
           </Stack>
         </form>
-
-        <Button
-          onClick={handleGoogle2}
-          // loading={googleLoading}
-          variant="outlined"
-          type="submit"
-          startDecorator={<img className="google" src={google} alt="" />}>
-          Continue with google2
-        </Button>
       </div>
     </>
   );
 
-  function handleGoogle2() {
-    googleSignIn();
+  function handleGoogle() {
+    if (googleSignIn) googleSignIn();
+
+    setLoading(true);
+    navigate('/google-signin');
   }
 }

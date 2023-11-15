@@ -19,10 +19,14 @@ import { Link, useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { useAuth } from '../../../context/AuthContext';
 import { ErrorData } from '@firebase/util';
-import { reauthenticateWithCredential } from 'firebase/auth';
+import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
+import { FirebaseError } from '@firebase/util';
 
 export default function AccountSettings() {
   const { currentUser, updatePasswordCtx, login } = useAuth() || {};
+  const [authProvider, serAuthProvider] = useState(
+    currentUser?.providerData[0].providerId
+  );
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -32,9 +36,11 @@ export default function AccountSettings() {
 
   const [alert, setAlert] = useState('');
   const [alertSuccess, setAlertSuccess] = useState('');
+  const [noGoogleChangePass, setNoGoogleChangePass] = useState(false);
   const [loginModal, setLoginModal] = useState(false);
 
   const [loginPass, setLoginPass] = useState('');
+  const [reAuthAlert, setReAuthAlert] = useState('');
 
   function validation(password: string, confirm: string) {
     if (password.length < 6) {
@@ -50,6 +56,10 @@ export default function AccountSettings() {
   async function handleChangePassSubmit(e: React.SyntheticEvent) {
     e.preventDefault();
 
+    if (currentUser?.providerData[0].providerId !== 'password') {
+      setNoGoogleChangePass(true);
+      return;
+    }
     //validation:
     if (!validation(password, confirmPassword)) return;
 
@@ -65,8 +75,8 @@ export default function AccountSettings() {
         // setAlertSuccess('Password changed successfully.');
       } catch (error: unknown) {
         console.log(error);
-        const firebaseError = error as ErrorData;
-        if (firebaseError.code === 'auth/requires-recent-login')
+        const firebaseError1 = error as ErrorData;
+        if (firebaseError1.code === 'auth/requires-recent-login')
           setLoginModal(true);
       }
     }
@@ -159,6 +169,11 @@ export default function AccountSettings() {
                 {alertSuccess}
               </Alert>
             )}
+            {noGoogleChangePass && (
+              <Alert sx={{ mt: 2 }} color="danger">
+                Google-authenticated users cannot change passwords.{' '}
+              </Alert>
+            )}
           </form>
 
           {/* <Divider />
@@ -227,6 +242,11 @@ export default function AccountSettings() {
               placeholder="Password"
             />
           </Stack>
+          {reAuthAlert !== '' && (
+            <Alert color="danger" sx={{ width: '80%', margin: '0 auto' }}>
+              {reAuthAlert}
+            </Alert>
+          )}
           <DialogActions>
             <Button variant="solid" onClick={handleLogin}>
               Login{' '}
@@ -245,32 +265,25 @@ export default function AccountSettings() {
   async function handleLogin() {
     console.log(currentUser?.email, loginPass);
     try {
-      if (login && currentUser?.email) {
-        // const x = await login(currentUser?.email, loginPass);
-        // console.log(x);
-        login(currentUser?.email, loginPass);
+      if (currentUser?.email && updatePasswordCtx) {
+        const credential = EmailAuthProvider.credential(
+          currentUser?.email,
+          loginPass
+        );
+
+        await reauthenticateWithCredential(currentUser, credential);
+
         setLoginModal(false);
+        console.log('success');
 
-        // reauthenticateWithCredential()
-
-        // // TODO(you): prompt the user to re-provide their sign-in credentials
-        // const credential = promptForCredentials();
-
-        // reauthenticateWithCredential(currentUser, credential)
-        //   .then(() => {
-        //     // User re-authenticated.
-        //   })
-        //   .catch((error) => {
-        //     // An error ocurred
-        //     // ...
-        //   });
-
-
-
-
+        await updatePasswordCtx(password);
+        setAlertSuccess('Password updated successfully');
       }
-    } catch (error) {
-      console.log(error);
+    } catch (error: unknown) {
+      if (error instanceof FirebaseError) {
+        if (error.code === 'auth/invalid-login-credentials')
+          setReAuthAlert('Invalid Password');
+      } else setReAuthAlert('Something went wrong');
     }
   }
 }

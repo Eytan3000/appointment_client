@@ -33,6 +33,7 @@ import {
 } from '../../../../utils/http';
 import ClientCardContainer from './utils/ClientCardContainer';
 import ServiceCardContainer from './utils/ServiceCardContainer';
+import { isTimeRangeValid } from '../../../../utils/helperFunctions';
 //-----------------------------------------
 function formteTime(timestamp: Date) {
   const hours = timestamp.getHours();
@@ -100,9 +101,9 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [alertMessage, setAlertMessage] = useState('');
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
-  
+
   const [note, setNote] = useState('');
-  
+
   const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
   // const [appointmentId, setAppointmentId] = useState(
@@ -128,7 +129,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   //             defaultValue ={(editQuery.data.note)}
   //           />
   // }
-  // else { 
+  // else {
   //   queriedNote = <Input
   //             variant="soft"
   //             type="text"
@@ -187,6 +188,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   let serviceCard;
   if (queries[1].data) {
     const service = queries[1].data[0];
+    serviceSignal.value = queries[1].data[0]; // added on 14.11
     if (Object.keys(serviceSignal.value).length === 0) {
       serviceCard = (
         <>
@@ -241,7 +243,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [startTime, setStartTime] = useState(startTimeString);
   const [endTime, setEndTime] = useState(endTimeString);
   const [date, setDate] = useState(dateString);
-
 
   //Mutation
   // create appointment
@@ -301,24 +302,23 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     console.log(clientSignal.value);
     console.log(serviceSignal.value);
 
-    if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
+    // if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
+    if (!isTimeRangeValid(startTime, endTime)) {
       setAlert(true);
       setAlertMessage('Enter a valid end time');
       return;
     }
-    if(Object.keys(serviceSignal.value).length === 0){
+    if (Object.keys(serviceSignal.value).length === 0) {
       setAlert(true);
       setAlertMessage('Select a service');
       // Service can't be left empty
       return;
     }
-    if(Object.keys(clientSignal.value).length === 0 && !isUpdating){
+    if (Object.keys(clientSignal.value).length === 0 && !isUpdating) {
       setAlert(true);
       setAlertMessage('Select a client');
       return;
     }
-
-
 
     const event = scheduler.edited;
 
@@ -439,7 +439,14 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
             {/* {queriedNote} */}
 
             {/* Buttons */}
-            <Button type="submit">Submit</Button>
+            <Button
+              type="submit"
+              loading={
+                createAppointmentMutation.isPending ||
+                updateAppointmentMutation.isPending
+              }>
+              Submit
+            </Button>
             <Button onClick={scheduler.close} variant="plain">
               Cancel
             </Button>

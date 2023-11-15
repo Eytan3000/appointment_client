@@ -1,15 +1,14 @@
 import { Button, Container, Input, Typography } from '@mui/joy';
-import { Link, useNavigate } from 'react-router-dom';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { useNavigate } from 'react-router-dom';
 import React, { useState } from 'react';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { createBusiness } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function AddBusiness() {
   const navigate = useNavigate();
   const { currentUser } = useAuth() || {};
-  // const queryClient = useQueryClient();
+console.log(currentUser);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
@@ -18,7 +17,6 @@ export default function AddBusiness() {
     mutationFn: createBusiness,
     mutationKey: ['business'],
     onSuccess: () => {
-      // queryClient.invalidateQueries({ queryKey: ['business'] });
       navigate('/services');
     },
   });
@@ -40,11 +38,6 @@ export default function AddBusiness() {
             margin: '2rem',
           }}>
           <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
-            <Link to="/settings" style={{ margin: -3, paddingTop: '0.4rem' }}>
-              <ArrowBackIcon
-                style={{ marginLeft: '-2rem', marginBlock: 'auto' }}
-              />
-            </Link>
             <Typography level="h4">Business Detalis</Typography>
           </div>
 
@@ -79,7 +72,10 @@ export default function AddBusiness() {
               onChange={(e) => setPhone(e.target.value)}
             />
 
-            <Button style={{ marginTop: 'auto' }} type="submit" disabled={isPending}>
+            <Button
+              style={{ marginTop: 'auto' }}
+              type="submit"
+              disabled={isPending}>
               Continue
             </Button>
           </form>

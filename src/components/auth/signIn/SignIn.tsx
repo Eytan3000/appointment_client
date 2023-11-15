@@ -11,7 +11,7 @@ export default function SignIn() {
 
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore: Unreachable code error
-  const { login } = useAuth();
+  const { login, googleSignIn } = useAuth();
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -143,9 +143,7 @@ export default function SignIn() {
               Sign In
             </Button>
             <Button
-              loading={googleLoading}
-              type="submit"
-              name="google-submitter"
+              onClick={handleGoogle}
               variant="outlined"
               startDecorator={<img className="google" src={google} alt="" />}>
               Continue with google
@@ -160,4 +158,10 @@ export default function SignIn() {
       </form>
     </>
   );
+  function handleGoogle() {
+    if (googleSignIn) googleSignIn();
+
+    setLoading(true);
+    navigate('/google-signin');
+  }
 }
