@@ -179,7 +179,7 @@ function App() {
           element: <ClientChooseService />,
         },
         {
-          path: '/client/:uid?:serviceId',
+          path: '/client/choose-time',
           element: <ClientChooseTime />,
         },
         // {

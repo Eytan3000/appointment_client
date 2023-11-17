@@ -1,5 +1,6 @@
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../firebase";
+import { DailySchedule } from "./Interfaces";
 
 export function timeStringToMinutes(timeString: string) {
   // Split the time string into hours and minutes
@@ -34,7 +35,7 @@ export function minutesToTimeDuration(minutes: string) {
   return `${hoursString}:${minutesString}`;
 }
 
-export function rearrangeByDayOfWeek(array) {
+export function rearrangeByDayOfWeek(array:DailySchedule[]) {
   const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
   const rearrangedArray = [];
@@ -70,7 +71,7 @@ export function copyToClipboard(text: string) {
     });
 }
 
-export function addMinutesToTime(timeString, minutesToAdd) {
+export function addMinutesToTime(timeString:string, minutesToAdd:number) {
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
 
   // Create a Date object with the current date and the provided time

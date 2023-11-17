@@ -371,6 +371,18 @@ export async function getAllAppointments(ownerId: string) {
         throw error;
     }
 }
+// get all FUTURE Appointments
+export async function getAllFutureAppointments(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/appointments/get-all-future-appointments/' + ownerId);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 
 // get single appointment
 export async function getAppointment(appointmentId: number) {

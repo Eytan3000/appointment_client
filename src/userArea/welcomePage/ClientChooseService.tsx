@@ -3,20 +3,17 @@ import ServiceCard from '../../components/main/calendar/addAppointment/utils/Ser
 import { useQuery } from '@tanstack/react-query';
 import { getAllServices } from '../../utils/http';
 import { useNavigate, useParams } from 'react-router-dom';
+import { signal } from '@preact/signals-react';
+import { AppointmentSignal, Service } from '../../utils/Interfaces';
 
-interface Service {
-  id: number;
-  name: string;
-  description: string;
-  duration: string;
-  price: string;
-  img_url: string;
-}
+export const appointmentSignal: AppointmentSignal = signal({});
 
 export default function ClientChooseService() {
   const navigate = useNavigate();
   const { uid } = useParams();
   console.log(uid);
+
+  if(uid) appointmentSignal.value.uid = uid;
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['services'],
@@ -44,7 +41,7 @@ export default function ClientChooseService() {
   }
   if (data) {
     services = data.map((service: Service) => (
-      <div key={service.id} onClick={() => handleClick(service.id)}>
+      <div key={service.id} onClick={() => handleClick(service)}>
         <ServiceCard
           serviceTitle={service.name}
           time={service.duration}
@@ -74,8 +71,9 @@ export default function ClientChooseService() {
     </>
   );
 
-  function handleClick(serviceId: number) {
-    console.log(serviceId);
-    navigate(`/${uid}?${serviceId}`);
+  function handleClick(service: Service) {
+    appointmentSignal.value.service = service;
+    console.log(appointmentSignal);
+    navigate(`/client/choose-time`);
   }
 }
