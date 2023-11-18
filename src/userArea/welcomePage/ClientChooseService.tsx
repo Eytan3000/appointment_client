@@ -11,7 +11,6 @@ export const appointmentSignal: AppointmentSignal = signal({});
 export default function ClientChooseService() {
   const navigate = useNavigate();
   const { uid } = useParams();
-  console.log(uid);
 
   if(uid) appointmentSignal.value.uid = uid;
 
@@ -73,7 +72,6 @@ export default function ClientChooseService() {
 
   function handleClick(service: Service) {
     appointmentSignal.value.service = service;
-    console.log(appointmentSignal);
     navigate(`/client/choose-time`);
   }
 }

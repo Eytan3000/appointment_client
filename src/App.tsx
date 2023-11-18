@@ -27,6 +27,8 @@ import AddBusiness from './components/registration/addBusiness/AddBusiness.tsx';
 import GoogleSignIn from './components/auth/googleSignIn/GoogleSignIn.tsx';
 import ClientChooseService from './userArea/welcomePage/ClientChooseService.tsx';
 import ClientChooseTime from './userArea/chooseTime/ClientChooseTime.tsx';
+import PhoneAuthInput from './userArea/phoneAuth/PhoneAuthInput.tsx';
+import OtpInput from './userArea/phoneAuth/OtpInput.tsx';
 
 
 function App() {
@@ -181,6 +183,14 @@ function App() {
         {
           path: '/client/choose-time',
           element: <ClientChooseTime />,
+        },
+        {
+          path: '/client/auth',
+          element: <PhoneAuthInput />,
+        },
+        {
+          path: '/client/otp',
+          element: <OtpInput />,
         },
         // {
         //   path: 'client-card/:clientId',

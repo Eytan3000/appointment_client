@@ -14,6 +14,7 @@ import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import { addDay, rearrangeByDayOfWeek } from '../../utils/helperFunctions';
 import { Appointment, DailySchedule } from '../../utils/Interfaces';
 import { useState } from 'react';
+import ConfirmAppointmentModal from './ConfirmAppointmentModal';
 
 interface DailyColumn {
   id?: number;
@@ -226,8 +227,8 @@ function DayColumn({
   time_slot_duration,
   date,
   is_workDay,
-
   futureAppointments,
+  setOpenModal
 }: DailyColumn) {
   // gets back an array with start times based on the owner's start, end and duration times.
   const appointmentsStartTimes = generateAppointmentsStartTimes(
@@ -250,7 +251,7 @@ function DayColumn({
       end: endTime,
       date,
     };
-    console.log(appointmentSignal.value)
+    setOpenModal(true);
   }
 
   return (
@@ -263,7 +264,6 @@ function DayColumn({
           {date.slice(8, 11)}
         </Typography>
 
-        {/* appointment === '12:00' instead of timeSlottaken */}
         {is_workDay &&
           appointmentsStartTimes.map((appointmentsStartTime, index) => {
             // and check for overlaps between time slots and appointments
@@ -287,22 +287,34 @@ function DayColumn({
               appointmentsStartTime,
               date
             );
-            return (
+            return !isEarlier && !isOverlapping ? (
               <div
+              key={index}
                 onClick={() => handleTimeSlotClick(appointmentsStartTime)}
-                style={{ cursor: !isEarlier && !isOverlapping && 'pointer' }}>
+                style={{ cursor: 'pointer' }}>
                 <Card
-                  variant={isEarlier || isOverlapping ? 'soft' : 'outlined'}
-                  key={index}
+                  variant="outlined"
+                  // key={index}
                   sx={{
                     margin: isEarlier ? '1px' : '1.3px',
                     fontSize: '12px',
                     alignItems: 'center',
                     height: isEarlier ? '21.8px' : '20px',
                   }}>
-                  {!isEarlier && !isOverlapping && appointmentsStartTime}
+                  {appointmentsStartTime}
                 </Card>
               </div>
+            ) : (
+              <Card
+                variant="soft"
+                key={index}
+                sx={{
+                  margin: isEarlier ? '1px' : '1.3px',
+                  fontSize: '12px',
+                  alignItems: 'center',
+                  height: isEarlier ? '21.8px' : '20px',
+                }}
+              />
             );
           })}
       </div>
@@ -312,6 +324,8 @@ function DayColumn({
 //-----------------------------------------------------------------
 export default function TimePicker() {
   const [jump, setJump] = useState(0);
+  const [openModal, setOpenModal] = useState(false);
+
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['user'],
@@ -335,9 +349,9 @@ export default function TimePicker() {
 
     daysTable = (
       <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-        {weekDaysArr.map((day: DailyColumn) => (
+        {weekDaysArr.map((day: DailyColumn, index: number) => (
           <div
-            key={day.id}
+            key={index}
             style={{
               flex: '1',
               width: '0',
@@ -350,6 +364,7 @@ export default function TimePicker() {
               date={day.date}
               is_workDay={day.is_workDay === 1}
               futureAppointments={futureAppointments}
+              setOpenModal={setOpenModal}
             />
           </div>
         ))}
@@ -421,6 +436,8 @@ export default function TimePicker() {
 
       {/* Days table */}
       {daysTable}
+
+      <ConfirmAppointmentModal open={openModal} setOpen={setOpenModal}/>
     </>
   );
 
