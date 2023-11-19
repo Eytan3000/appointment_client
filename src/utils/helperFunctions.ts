@@ -127,3 +127,72 @@ export function isTimeRangeValid(hour1: string, hour2: string) {
   // Compare the Date objects
   return date1 < date2;
 }
+
+
+export function formatDate(inputDate: string) {
+  // Create an array of month names for better readability
+  const monthNames = [
+    'January',
+    'February',
+    'March',
+    'April',
+    'May',
+    'June',
+    'July',
+    'August',
+    'September',
+    'October',
+    'November',
+    'December',
+  ];
+
+  // Parse the input date string
+  const date = new Date(inputDate);
+
+  // Get the day, month, and year
+  const day = date.getDate();
+  const month = monthNames[date.getMonth()];
+  const year = date.getFullYear();
+
+  // Add the ordinal suffix to the day
+  const dayWithSuffix = addOrdinalSuffix(day);
+
+  // Get the day of the week
+  const dayOfWeek = getDayOfWeek(date.getDay());
+
+  // Construct the formatted date string
+  const formattedDate = `${dayOfWeek}, ${month} ${dayWithSuffix}, ${year}.`;
+
+  return formattedDate;
+}
+//  Function to add ordinal suffix to the day
+export function addOrdinalSuffix(day: number) {
+  if (day >= 11 && day <= 13) {
+    return day + 'th';
+  }
+
+  switch (day % 10) {
+    case 1:
+      return day + 'st';
+    case 2:
+      return day + 'nd';
+    case 3:
+      return day + 'rd';
+    default:
+      return day + 'th';
+  }
+}
+
+//  Function to get the day of the week
+export function getDayOfWeek(dayIndex: number) {
+  const dayNames = [
+    'Sunday',
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+  ];
+  return dayNames[dayIndex];
+}

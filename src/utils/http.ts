@@ -321,6 +321,18 @@ export async function getClient(clientId: string) {
         throw error;
     }
 }
+// check if client exist for owner by phone
+export async function checkOwnersClientExistsByPhone(phone: string, owner_id:string) {
+    try {
+        const response = await axios.get(baseURL + '/clients/get-client-by-phone/?phone=' + phone + '&owner_id='+owner_id);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
 // update client by client_id
 export async function updateClient({ name, phone, email, clientId }: { name: string, phone: string, email: string, clientId: string }) {
     console.log(name, phone, email, clientId);
@@ -374,6 +386,8 @@ export async function getAllAppointments(ownerId: string) {
 // get all FUTURE Appointments
 export async function getAllFutureAppointments(ownerId: string) {
     try {
+        console.log(ownerId);
+        
         const response = await axios.get(baseURL + '/appointments/get-all-future-appointments/' + ownerId);
 
         return response.data;
@@ -449,8 +463,6 @@ export async function fetchAppointments(ownerId: string) {
 
             const clientObj = clientsArr.filter(client => client.id === appointment.client_id)[0];
             const serviceObj = servicesArr.filter(service => service.id === appointment.service_id)[0];
-
-
 
             return {
                 event_id: appointment.id,

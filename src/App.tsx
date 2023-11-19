@@ -29,6 +29,7 @@ import ClientChooseService from './userArea/welcomePage/ClientChooseService.tsx'
 import ClientChooseTime from './userArea/chooseTime/ClientChooseTime.tsx';
 import PhoneAuthInput from './userArea/phoneAuth/PhoneAuthInput.tsx';
 import OtpInput from './userArea/phoneAuth/OtpInput.tsx';
+import BookingSummary from './userArea/summary/BookingSummary.tsx';
 
 
 function App() {
@@ -192,16 +193,10 @@ function App() {
           path: '/client/otp',
           element: <OtpInput />,
         },
-        // {
-        //   path: 'client-card/:clientId',
-        //   // path: 'client-card',
-        //   element: <ClientCard />,
-        // },
-        // {
-        //   path: 'client-edit/:clientId',
-        //   // path: 'client-card',
-        //   element: <ClientEdit />,
-        // },
+        {
+          path: '/client/booking-summary',
+          element: <BookingSummary />,
+        },
       ]
     },
 

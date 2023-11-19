@@ -1,3 +1,5 @@
+// note: Forward button is dissabled when jump is higher than 14. you can change is to allow more futur view of the weeks
+
 import {
   Alert,
   Button,
@@ -30,6 +32,7 @@ interface DailyColumn {
 
   futureAppointments: Appointment[];
 }
+
 
 function getNextThreeMonths(jump: number = 0) {
   const currentDate = new Date();
@@ -228,7 +231,7 @@ function DayColumn({
   date,
   is_workDay,
   futureAppointments,
-  setOpenModal
+  setOpenModal,
 }: DailyColumn) {
   // gets back an array with start times based on the owner's start, end and duration times.
   const appointmentsStartTimes = generateAppointmentsStartTimes(
@@ -289,7 +292,7 @@ function DayColumn({
             );
             return !isEarlier && !isOverlapping ? (
               <div
-              key={index}
+                key={index}
                 onClick={() => handleTimeSlotClick(appointmentsStartTime)}
                 style={{ cursor: 'pointer' }}>
                 <Card
@@ -325,7 +328,6 @@ function DayColumn({
 export default function TimePicker() {
   const [jump, setJump] = useState(0);
   const [openModal, setOpenModal] = useState(false);
-
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ['user'],
@@ -425,7 +427,7 @@ export default function TimePicker() {
             variant="plain"
           />
           <Button
-            disabled={jump > 91}
+            disabled={jump > 14}
             onClick={clickForwardCalendar}
             style={{ paddingInline: '15%' }}
             startDecorator={<ArrowForwardIosIcon />}
@@ -437,7 +439,7 @@ export default function TimePicker() {
       {/* Days table */}
       {daysTable}
 
-      <ConfirmAppointmentModal open={openModal} setOpen={setOpenModal}/>
+      <ConfirmAppointmentModal open={openModal} setOpen={setOpenModal} />
     </>
   );
 

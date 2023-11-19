@@ -7,6 +7,32 @@ import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
 import { auth } from '../../firebase';
 import { signal } from '@preact/signals-react';
 
+import PhoneInput from 'react-phone-input-2';
+import 'react-phone-input-2/lib/material.css';
+
+function validateIsraeliPhoneNumber(phoneNumber: string) {
+  //removes country code to validate.
+  const phoneForValidation_NoCountryCode = phoneNumber
+    ?.split(' ')
+    .slice(1)
+    .join('');
+
+  // Define the regular expression for an Israeli mobile number
+  const israeliPhoneNumberRegex = /^(05\d{8})$/;
+
+  // Test the input phoneNumber against the regular expression
+  return israeliPhoneNumberRegex.test(phoneForValidation_NoCountryCode);
+}
+function e164PhoneFormater(phone: string) {
+  const phoneSplitArr = phone?.split(' ');
+  return phoneSplitArr
+    .map((phonePart, index) => {
+      if (index === 1) return phonePart.slice(1);
+      return phonePart;
+    })
+    .join('');
+}
+
 export const otpConfirmation = signal({});
 
 export default function PhoneAuthInput() {
@@ -17,33 +43,56 @@ export default function PhoneAuthInput() {
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
-  const otpRef = useRef<HTMLInputElement | null>(null);
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-
+    setAlert('');
     try {
       setLoading(true);
-      // const name = nameRef?.current?.value;
-      // const phone = phoneRef?.current?.value;
-      const name = 'eytan';
-      const phone = '+972508657032';
+      const name = nameRef?.current?.value || '';
+      console.log(name);
+
+      if (name?.length < 4)
+        throw new Error('name must be at least 4 characters');
+
+
+      const phone = phoneRef?.current?.value || '';
+
+      if (!validateIsraeliPhoneNumber(phone)) {
+        throw new Error('Invalid Phone number');
+      }
+
+      // phone E164 formating (eg +972508657032)
+      const phoneE164Format = e164PhoneFormater(phone!);
 
       const recaptcha = new RecaptchaVerifier(auth, 'sign-in-button', {
         size: 'invisible',
       });
 
-      //   console.log(`+972${phone}`)
-      const confirmation = await signInWithPhoneNumber(auth, phone, recaptcha);
-      // setConfirmation(confirmation);
-      otpConfirmation.value=confirmation;
+      const confirmation = await signInWithPhoneNumber(
+        auth,
+        phoneE164Format,
+        recaptcha
+      );
+      otpConfirmation.value = confirmation; //signal
+      appointmentSignal.value.client = {
+        name:name!,
+        uid:'',
+        phone:'',
+      }
 
+      setLoading(false);
+      navigate('/client/otp');
+    } catch (error: unknown) {
       // setLoading(false);
-      // navigate('/client/otp');
-    } catch (error) {
-      // setLoading(false);
-      setAlert('We are expreienceing a problem. Please try again later.');
-      console.log(error);
+      if (error.message === 'Invalid Phone number')
+        setAlert('Invalid Phone number');
+      if (error.message === 'name must be at least 4 characters')
+        setAlert('Name must be at least 4 characters');
+      else {
+        console.log(error);
+        setAlert('We are expreienceing a problem. Please try again later.');
+      }
     } finally {
       setLoading(false);
     }
@@ -63,14 +112,25 @@ export default function PhoneAuthInput() {
             slotProps={{ input: { ref: nameRef } }}
             type="text"
             placeholder="Full Name (min 4 characters)"
-            // required
+            autoFocus
+            required
           />
-          <Input
+
+          <PhoneInput
+            country={'il'}
+            // value={this.state.phone}
+            // onChange={phone => this.setState({ phone })}
+            inputProps={{ ref: phoneRef, shrink: false }}
+            inputStyle={{ height: '10px', width: '100%' }}
+            containerStyle={{ color: 'transparent' }}
+          />
+
+          {/* <Input
             slotProps={{ input: { ref: phoneRef } }}
             type="text"
             placeholder="Phone"
             // required
-          />
+          /> */}
 
           <Button
             id="sign-in-button"

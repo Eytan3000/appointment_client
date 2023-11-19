@@ -12,74 +12,75 @@ import { Dispatch, SyntheticEvent } from 'react';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import ServiceCard from '../../components/main/calendar/addAppointment/utils/ServiceCard';
 import { useNavigate } from 'react-router-dom';
+import { formatDate } from '../../utils/helperFunctions';
 
-function formatDate(inputDate: string) {
-  // Create an array of month names for better readability
-  const monthNames = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-    'August',
-    'September',
-    'October',
-    'November',
-    'December',
-  ];
+// function formatDate(inputDate: string) {
+//   // Create an array of month names for better readability
+//   const monthNames = [
+//     'January',
+//     'February',
+//     'March',
+//     'April',
+//     'May',
+//     'June',
+//     'July',
+//     'August',
+//     'September',
+//     'October',
+//     'November',
+//     'December',
+//   ];
 
-  // Parse the input date string
-  const date = new Date(inputDate);
+//   // Parse the input date string
+//   const date = new Date(inputDate);
 
-  // Get the day, month, and year
-  const day = date.getDate();
-  const month = monthNames[date.getMonth()];
-  const year = date.getFullYear();
+//   // Get the day, month, and year
+//   const day = date.getDate();
+//   const month = monthNames[date.getMonth()];
+//   const year = date.getFullYear();
 
-  // Add the ordinal suffix to the day
-  const dayWithSuffix = addOrdinalSuffix(day);
+//   // Add the ordinal suffix to the day
+//   const dayWithSuffix = addOrdinalSuffix(day);
 
-  // Get the day of the week
-  const dayOfWeek = getDayOfWeek(date.getDay());
+//   // Get the day of the week
+//   const dayOfWeek = getDayOfWeek(date.getDay());
 
-  // Construct the formatted date string
-  const formattedDate = `${dayOfWeek}, ${month} ${dayWithSuffix}, ${year}.`;
+//   // Construct the formatted date string
+//   const formattedDate = `${dayOfWeek}, ${month} ${dayWithSuffix}, ${year}.`;
 
-  return formattedDate;
-}
-// Function to add ordinal suffix to the day
-function addOrdinalSuffix(day: number) {
-  if (day >= 11 && day <= 13) {
-    return day + 'th';
-  }
+//   return formattedDate;
+// }
+// // Function to add ordinal suffix to the day
+// function addOrdinalSuffix(day: number) {
+//   if (day >= 11 && day <= 13) {
+//     return day + 'th';
+//   }
 
-  switch (day % 10) {
-    case 1:
-      return day + 'st';
-    case 2:
-      return day + 'nd';
-    case 3:
-      return day + 'rd';
-    default:
-      return day + 'th';
-  }
-}
+//   switch (day % 10) {
+//     case 1:
+//       return day + 'st';
+//     case 2:
+//       return day + 'nd';
+//     case 3:
+//       return day + 'rd';
+//     default:
+//       return day + 'th';
+//   }
+// }
 
-// Function to get the day of the week
-function getDayOfWeek(dayIndex: number) {
-  const dayNames = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
-  return dayNames[dayIndex];
-}
+// // Function to get the day of the week
+// function getDayOfWeek(dayIndex: number) {
+//   const dayNames = [
+//     'Sunday',
+//     'Monday',
+//     'Tuesday',
+//     'Wednesday',
+//     'Thursday',
+//     'Friday',
+//     'Saturday',
+//   ];
+//   return dayNames[dayIndex];
+// }
 
 export default function ConfirmAppointmentModal({
   open,

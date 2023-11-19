@@ -12,7 +12,7 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
-  <React.StrictMode>
+  // <React.StrictMode>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <IconContext.Provider
@@ -24,5 +24,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
         </IconContext.Provider>
       </ThemeProvider>
     </BrowserRouter>
-  </React.StrictMode>
 );

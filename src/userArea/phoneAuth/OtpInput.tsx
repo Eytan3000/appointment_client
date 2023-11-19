@@ -8,6 +8,10 @@ import { auth } from '../../firebase';
 import { otpConfirmation } from './PhoneAuthInput';
 import { FirebaseError } from 'firebase/app';
 
+function simplePhoneFormatter(e164Phone: string) {
+  return '0' + e164Phone.slice(4);
+}
+
 export default function OtpInput() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
@@ -23,16 +27,20 @@ export default function OtpInput() {
     try {
       setLoading(true);
       const data = await otpConfirmation.value.confirm(otp);
-
-      console.log(data);
-      console.log(data.user.uid);
-      console.log(data.user.phoneNumber);
+console.log(data);
+      appointmentSignal.value.client.uid = data.user.uid;
+      
+      const formattedPhone = simplePhoneFormatter(data.user.phoneNumber); // formate to 0508657032
+      appointmentSignal.value.client.phone = formattedPhone;
 
       setLoading(false);
-      // navigate('/client/summery');
+      navigate('/client/booking-summary');
+      
     } catch (error: unknown) {
+      console.log(error.code);
       if (error instanceof FirebaseError) {
-        if (error.code === 'auth/code-expired') setAlert('Incorrect code');
+        if (error.code === 'auth/code-expired') setAlert('This code has expired. Please go back and try again.');
+        else if (error.code === 'auth/invalid-verification-code') setAlert('Invalid code.');
       } else
         setAlert(`We're experiencing an issue. Please retry at a later time.`);
     } finally {
@@ -54,6 +62,7 @@ export default function OtpInput() {
             type="text"
             placeholder="SMS code"
             required
+            autoFocus
           />
 
           <Button type="submit" name="email-submitter" loading={loading}>

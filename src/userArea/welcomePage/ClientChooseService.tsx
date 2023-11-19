@@ -71,6 +71,7 @@ export default function ClientChooseService() {
   );
 
   function handleClick(service: Service) {
+    console.log(service);
     appointmentSignal.value.service = service;
     navigate(`/client/choose-time`);
   }

@@ -10,7 +10,12 @@ export interface AppointmentSignal {
   value: {
     service?: Service;
     uid: string;
-    appointment: Appointment
+    appointment: Appointment;
+    client:{
+      name:string;
+      uid:string;
+      phone:string;
+    }
   }
 }
 
