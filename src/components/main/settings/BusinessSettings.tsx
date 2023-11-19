@@ -14,7 +14,7 @@ import { getBusiness, updateBusiness } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function BusinessSettings() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;

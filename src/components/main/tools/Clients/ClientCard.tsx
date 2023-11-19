@@ -1,6 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useAuth } from '../../../../context/AuthContext';
 import { getClient } from '../../../../utils/http';
 import BackArrow from '../../../utilsComponents/BackArrow';
 import {
@@ -17,7 +16,7 @@ import { copyToClipboard } from '../../../../utils/helperFunctions';
 export default function ClientCard() {
   const { clientId } = useParams();
   const navigate = useNavigate();
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ['client'],
     queryFn: () => getClient(clientId!),
   });
@@ -65,7 +64,6 @@ export default function ClientCard() {
           </Typography>
           <div />
           <form
-          // onSubmit={handleSubmit}
           >
             <Stack
               spacing={4}
@@ -76,9 +74,7 @@ export default function ClientCard() {
               <Box display="flex" justifyContent={'space-between'}>
                 <Input
                   defaultValue={Name}
-                  // slotProps={{ input: { ref: nameRef } }}
                   type="text"
-                  // placeholder="Name"
                   disabled
                 />
                 <Button variant="soft" onClick={() => copyToClipboard(Name)}>
@@ -89,7 +85,6 @@ export default function ClientCard() {
               <Box display="flex" justifyContent={'space-between'}>
                 <Input
                   defaultValue={phone}
-                  // slotProps={{ input: { ref: phoneRef } }}
                   type="tel"
                   disabled
                 />
@@ -101,7 +96,6 @@ export default function ClientCard() {
               <Box display="flex" justifyContent={'space-between'}>
                 <Input
                   defaultValue={email}
-                  // slotProps={{ input: { ref: emailRef } }}
                   type="email"
                   disabled
                 />
@@ -110,8 +104,6 @@ export default function ClientCard() {
                 </Button>
               </Box>
 
-              {/* {isSuccess && <Alert color="success">{data}</Alert>}
-            {isError && <Alert color="danger">{errorMessage}</Alert>} */}
               <Button
                 type="submit"
                 style={{ marginTop: 'auto' }}

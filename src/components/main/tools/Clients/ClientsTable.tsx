@@ -1,5 +1,4 @@
 
-// import Table from '@mui/joy/Table';
 import BackArrow from '../../../utilsComponents/BackArrow';
 import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../../../context/AuthContext';
@@ -67,24 +66,6 @@ export default function ClientsTable() {
         {queryData}
       </Stack>
 
-      {/* <Table aria-label="basic table" style={{ marginTop: '-2rem' }}>
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Phone</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {clients.map((client, index) => (
-            <tr key={index}>
-              <td>{client.name}</td>
-              <td>{client.phone}</td>
-              <td>{client.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </Table> */}
     </>
   );
 }

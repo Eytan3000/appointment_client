@@ -8,14 +8,12 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 export default function AddClient() {
   const queryClient = useQueryClient();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
-  console.log(uid);
-
-  const nameRef = useRef<HTMLInputElement | null>(null);
+    const nameRef = useRef<HTMLInputElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
 
@@ -23,7 +21,7 @@ export default function AddClient() {
   const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
     mutationFn: createNewClient,
     onSuccess: () => {
-      queryClient.invalidateQueries(['clients'], { exact: true });
+      queryClient.invalidateQueries({queryKey:['clients'], exact: true});
 
       // Reset the input fields
       if (nameRef.current) {

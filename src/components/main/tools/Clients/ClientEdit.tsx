@@ -1,6 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useParams } from 'react-router-dom';
-import { useAuth } from '../../../../context/AuthContext';
 import { getClient, updateClient } from '../../../../utils/http';
 import BackArrow from '../../../utilsComponents/BackArrow';
 import {
@@ -157,9 +156,7 @@ export default function ClientEdit() {
   //functions
   function handleSubmit(
     e: SyntheticEvent
-    // name: string,
-    // phone: string,
-    // email: string
+
   ) {
     e.preventDefault();
     const name = nameRef?.current?.value || '';

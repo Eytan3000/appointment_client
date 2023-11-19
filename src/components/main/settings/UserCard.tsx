@@ -1,4 +1,3 @@
-import * as React from 'react';
 import Avatar from '@mui/joy/Avatar';
 import Box from '@mui/joy/Box';
 import Button from '@mui/joy/Button';
@@ -6,6 +5,7 @@ import Card from '@mui/joy/Card';
 import CardContent from '@mui/joy/CardContent';
 import CardActions from '@mui/joy/CardActions';
 import Typography from '@mui/joy/Typography';
+import { copyToClipboard } from '../../../utils/helperFunctions';
 
 const url = 'https://plannieapp.com/?name=eytan';
 
@@ -14,9 +14,6 @@ const url = 'https://plannieapp.com/?name=eytan';
 export default function UserCard() {
   return (
     <>
-      {/* <Typography mt={2} level="h3">
-        Settings
-      </Typography> */}
       <Card
         variant="outlined"
         sx={{

@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../components/utilsComponents/BackArrow';
@@ -38,7 +38,6 @@ export const otpConfirmation = signal({});
 export default function PhoneAuthInput() {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
-  const [confirmation, setConfirmation] = useState();
   const [alert, setAlert] = useState('');
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -124,13 +123,6 @@ export default function PhoneAuthInput() {
             inputStyle={{ height: '10px', width: '100%' }}
             containerStyle={{ color: 'transparent' }}
           />
-
-          {/* <Input
-            slotProps={{ input: { ref: phoneRef } }}
-            type="text"
-            placeholder="Phone"
-            // required
-          /> */}
 
           <Button
             id="sign-in-button"

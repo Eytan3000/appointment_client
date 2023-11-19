@@ -10,7 +10,6 @@ export default function BackArrow() {
         marginBlock: '2rem',
       }}>
       <Link
-        // to={-1}
         to="#"
         onClick={() => window.history.back()}>
         <img src={backArrow} alt="back-arrow" />

@@ -74,11 +74,6 @@ export default function AccountSettings() {
     }
   }
 
-  // function handleDeleteAccount() {
-  //   setOpen(false);
-  //   navigate('/');
-  // }
-
   console.log(password);
   console.log(confirmPassword);
   return (
@@ -165,50 +160,10 @@ export default function AccountSettings() {
             )}
           </form>
 
-          {/* <Divider />
-          <Button
-            variant="outlined"
-            color="danger"
-            style={{
-              marginTop: '2rem',
-              marginLeft: '0.4rem',
-            }}
-            onClick={() => setOpen(true)}>
-            Delete Account
-          </Button> */}
         </div>
       </Container>
 
-      {/* "Are you sure" delete account Modal */}
-      {/* <Modal open={open} onClose={() => setOpen(false)}>
-        <ModalDialog variant="outlined" role="alertdialog">
-          <DialogTitle>
-            <WarningRoundedIcon />
-            Confirmation
-          </DialogTitle>
-          <Divider />
-          <DialogContent>
-            Are you sure you want to delete your account? <br />
-            <small>All your data will be lost permanently</small>
-          </DialogContent>
-          <DialogActions>
-            <Button
-              variant="solid"
-              color="danger"
-              onClick={handleDeleteAccount}>
-              Delete Account
-            </Button>
-            <Button
-              variant="plain"
-              color="neutral"
-              onClick={() => setOpen(false)}>
-              Cancel
-            </Button>
-          </DialogActions>
-        </ModalDialog>
-      </Modal> */}
-
-      {/* "Login Modal */}
+        {/* "Login Modal */}
       <Modal open={loginModal} onClose={() => setLoginModal(false)}>
         <ModalDialog variant="outlined" role="alertdialog">
           <DialogTitle>
@@ -218,12 +173,6 @@ export default function AccountSettings() {
           <Divider />
           <DialogContent>Please insert your current password.</DialogContent>
           <Stack spacing={2} mx={2}>
-            {/* <Input
-              required
-              onChange={(e) => setLoginEmail(e.target.value)}
-              type="email"
-              placeholder="Email"
-            /> */}
             <Input
               required
               onChange={(e) => setLoginPass(e.target.value)}

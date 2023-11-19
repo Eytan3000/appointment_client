@@ -1,6 +1,4 @@
 import { useNavigate } from 'react-router-dom';
-import { StyledButton } from '../../../StyledComponents';
-import icon from '../../../assets/icons/main-appointment-icon.png';
 import { Button, Stack, Typography } from '@mui/joy';
 
 import { BsCalendarCheckFill } from 'react-icons/bs';

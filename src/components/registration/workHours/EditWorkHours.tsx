@@ -5,17 +5,14 @@ import {
   Button,
   CircularProgress,
   Input,
-  Stack,
   Typography,
 } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import {
-  createWorkweek,
   getWorkWeek,
   updateDailySchedule,
-  workWeekScheduleUpdater,
 } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -315,12 +312,6 @@ export default function EditWorkHours() {
 
       <form
         style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}
-        // onChange={() => {
-        //   setDisabled(false);
-        //   setMutateError(false);
-        //   setMutateConfirm(false);
-        // }}
-        // onChange={()=>console.log('form')}
         onSubmit={(e) => handleSubmit(e)}>
         {returningData}
 

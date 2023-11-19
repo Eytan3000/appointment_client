@@ -3,19 +3,12 @@ import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import google from '../../../assets/icons/google.png';
 import { Alert, Button, Divider, Input, Stack, Typography } from '@mui/joy';
 import { useAuth } from '../../../context/AuthContext';
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useRef, useState } from 'react';
 import { FirebaseError } from '@firebase/util';
 import {
-  insertNewGoogleUserInDb,
   insertNewUserInDb,
   updateNewUser_temp_to_uid,
 } from '../../../utils/http';
-import {
-  GoogleAuthProvider,
-  getAdditionalUserInfo,
-  getRedirectResult,
-} from 'firebase/auth';
-import { auth, provider } from '../../../firebase';
 //-----------------------------------------
 
 export default function SignIn() {
@@ -71,7 +64,7 @@ export default function SignIn() {
           const { user } = await signup(email, password);
 
           const uid = user.uid;
-          const accessToken = user.accessToken;
+          // const accessToken = user.accessToken;
 
           response = await updateNewUser_temp_to_uid(uid);
 
@@ -100,10 +93,7 @@ export default function SignIn() {
               `Oops! Something went wrong while trying to create your account.`
             );
         }
-      } else if (submitterName === 'google-submitter') {
-        // setLoading(true);
-        console.log('google signUp'); //remove later
-      }
+      } 
     }
     setLoading(false);
   }
@@ -176,7 +166,6 @@ export default function SignIn() {
 
             <Button
               onClick={handleGoogle}
-              // loading={googleLoading}
               variant="outlined"
               startDecorator={<img className="google" src={google} alt="" />}>
               Continue with google

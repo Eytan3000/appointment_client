@@ -79,14 +79,14 @@ interface CustomEditorProps {
   scheduler: SchedulerHelpers;
 }
 
-interface Client {
-  id: number;
-  Name: string;
-  phone: string;
-  email: string;
-  timestamp: string;
-  owner_id: string;
-}
+// interface Client {
+//   id: number;
+//   Name: string;
+//   phone: string;
+//   email: string;
+//   timestamp: string;
+//   owner_id: string;
+// }
 
 export const clientSignal = signal({});
 export const serviceSignal = signal({});
@@ -103,16 +103,14 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
   
-  const [note, setNote] = useState('');
+  const [note] = useState('');
   
   const [openAddClientModal, setOpenAddClientModal] = useState(false);
 
 
   const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
-  // const [appointmentId, setAppointmentId] = useState(
-  //   scheduler?.edited?.event_id
-  // );
+
 
   // get existing data ------------------------------------
 
@@ -122,25 +120,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     queryFn: () => getAppointment(appointmentId),
     enabled: !!appointmentId,
   });
-
-  // let queriedNote;
-  // if(editQuery.data){
-  //   queriedNote = <Input
-  //             variant="soft"
-  //             type="text"
-  //             placeholder="Only you can see this note"
-  //             onChange={(e) => setNote(e.target.value)}
-  //             defaultValue ={(editQuery.data.note)}
-  //           />
-  // }
-  // else {
-  //   queriedNote = <Input
-  //             variant="soft"
-  //             type="text"
-  //             placeholder="Only you can see this note"
-  //             onChange={(e) => setNote(e.target.value)}
-  //           />
-  // }
 
   // get both client and service objects to put in signals.
   const queries = useQueries({
@@ -178,12 +157,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     );
   } else {
     clientCard = (
-      // <Button
-      //   variant="outlined"
-      //   onClick={handleClientList}
-      //   sx={{ width: '100%' }}>
-      //   Choose Client
-      // </Button>
       <ClientCardContainer setOpenClientModal={setOpenClientModal} />
     );
   }
@@ -233,7 +206,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       </div>
     );
   } else {
-    // const defaultServic = getDefaultService(uid).then()
     serviceCard = (
       <ServiceCardContainer setOpenServiceModal={setOpenServiceModal} />
     );
@@ -301,12 +273,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
   const handleSubmit = (e: React.SyntheticEvent) => {
     e.preventDefault();
-    // clientOrServiceChanged.value = false;
 
-    console.log(clientSignal.value);
-    console.log(serviceSignal.value);
-
-    // if (startTime.slice(0, 2) >= endTime.slice(0, 2)) {
     if (!isTimeRangeValid(startTime, endTime)) {
       setAlert(true);
       setAlertMessage('Enter a valid end time');
@@ -324,8 +291,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       return;
     }
 
+    
     const event = scheduler.edited;
-
     if (scheduler.edited) {
       //call update if it's an edit and finish
       updateAppointmentMutation.mutate({
@@ -487,9 +454,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
     const newDate = createDateObjectFromStamp(e.$d);
     setDate(newDate);
   }
-  // function handleClientList() {
-  //   setOpenClientModal(true);
-  // }
   function handleServiceList() {
     setOpenServiceModal(true);
   }

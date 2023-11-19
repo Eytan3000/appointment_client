@@ -18,7 +18,6 @@ import Inbox from './components/main/inbox/Inbox.tsx';
 import ForgotPassword from './components/auth/forgotPassword/ForgotPassword.tsx';
 import ClientsTable from './components/main/tools/Clients/ClientsTable.tsx';
 import AddClient from './components/main/tools/Clients/AddClient.tsx';
-import ToolsServices from './components/main/tools/services/ToolsServices.tsx';
 import { AuthProvider } from './context/AuthContext.tsx';
 import EditWorkHours from './components/registration/workHours/EditWorkHours.tsx';
 import ClientCard from './components/main/tools/Clients/ClientCard.tsx';
@@ -157,10 +156,10 @@ function App() {
       path: '/clients-table',
       element: <ClientsTable />,
     },
-    {
-      path: '/tools-services',
-      element: <ToolsServices />,
-    },
+    // {
+    //   path: '/tools-services',
+    //   element: <ToolsServices />,
+    // },
     {
       path: '/google-signin',
       element: <GoogleSignIn />,

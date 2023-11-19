@@ -123,8 +123,6 @@ export default function BookingSummary() {
             Appointment Confirmation{' '}
           </Typography>
 
-          {/* <Typography level="body-lg">Service:</Typography> */}
-
           <ServiceCard
             serviceTitle={serviceTitle}
             time={time}
@@ -145,7 +143,6 @@ export default function BookingSummary() {
               {' '}
               <b> Address:</b> {address}
             </Typography>
-            {/* <Typography level="body-lg">Price: 180₪</Typography> */}
 
             <Typography mt={2} level="body-sm">
               *Please make sure to arrive on time.

@@ -8,14 +8,10 @@ import { FirebaseError } from 'firebase/app';
 
 export default function SignIn() {
   const navigate = useNavigate();
-
-  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-  // @ts-ignore: Unreachable code error
-  const { login, googleSignIn } = useAuth();
+  const { login, googleSignIn } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
-  const [googleLoading, setGoogleLoading] = useState(false);
 
   const emailRef = useRef<HTMLInputElement | null>(null);
   const passwordRef = useRef<HTMLInputElement | null>(null);
@@ -45,7 +41,7 @@ export default function SignIn() {
           const { user } = await login(email, password);
 
           const uid = user.uid;
-          const accessToken = user.accessToken;
+          // const accessToken = user.accessToken;
 
           console.log('uid: ' + uid); //remove later
           console.log('access Token: ' + accessToken); //remove later

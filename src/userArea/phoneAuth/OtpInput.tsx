@@ -1,10 +1,8 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../components/utilsComponents/BackArrow';
 import { SyntheticEvent, useRef, useState } from 'react';
-import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
-import { auth } from '../../firebase';
 import { otpConfirmation } from './PhoneAuthInput';
 import { FirebaseError } from 'firebase/app';
 

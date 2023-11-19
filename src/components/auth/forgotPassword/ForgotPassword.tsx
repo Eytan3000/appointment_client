@@ -14,7 +14,7 @@ import { useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 
 export default function ForgotPassword() {
-  const { resetPassword } = useAuth();
+  const { resetPassword } = useAuth()|| {};
 
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -34,11 +34,11 @@ export default function ForgotPassword() {
 
     try {
       setLoading(true);
-      await resetPassword(email);
+      if(resetPassword) await resetPassword(email);
 
       setOpen(true);
       setLoading(false);
-    } catch (error) {
+    } catch (error:unknown) {
       setAlert(error.message);
       setLoading(false);
     }

@@ -5,7 +5,6 @@ import {
   Button,
   Card,
   CircularProgress,
-  Divider,
   Typography,
 } from '@mui/joy';
 import ArrowBackIosNewIcon from '@mui/icons-material/ArrowBackIosNew';

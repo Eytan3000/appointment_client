@@ -1,13 +1,9 @@
-import { Link, useNavigate, useParams } from 'react-router-dom';
-// import backArrow from '../../../assets/icons/Arrow - Down 2.png';
+import {useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { AiOutlineCamera } from 'react-icons/ai';
+
 import {
   Alert,
   Button,
-  Card,
-  CardActions,
-  CardCover,
   Input,
   Typography,
 } from '@mui/joy';
@@ -20,11 +16,10 @@ import {
   minutesToTimeDuration,
   timeStringToMinutes,
 } from '../../../utils/helperFunctions';
-import { SyntheticEvent, useEffect, useRef, useState } from 'react';
+import { SyntheticEvent, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import ImageUploader from './ImageUploader';
-import { storage } from '../../../firebase';
-import { deleteObject, getDownloadURL, ref } from 'firebase/storage';
+
 
 
 interface ServiceObject {
@@ -68,7 +63,8 @@ export default function AddService() {
     mutationFn: udpateService,
     onSuccess: (allOwnerServicesResponse) => {
       queryClient.setQueryData(['services'], allOwnerServicesResponse);
-      queryClient.invalidateQueries(['services'], { exact: true });
+      // queryClient.invalidateQueries(['services'], { exact: true });
+      queryClient.invalidateQueries({queryKey:['services'],  exact: true });
       navigate(-1);
     },
   });
@@ -93,11 +89,11 @@ export default function AddService() {
         exact: true,
         refetchType: 'none', //avoid refetching the service between delete and navigate.
       });
-      // navigate('/services');
       navigate(-1);
     },
     onError:()=>setAlert(true)
   });
+
   // Functions
   function handleSubmit(e: SyntheticEvent, data) {
     e.preventDefault();
@@ -164,7 +160,6 @@ export default function AddService() {
             alignItems: 'center',
           }}>
           <div 
-          // to={-1}
           onClick={handleBackArrowClick}
           >
             <ArrowBackIcon />

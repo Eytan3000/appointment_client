@@ -1,4 +1,4 @@
-import { Divider, Typography } from '@mui/joy';
+import {Typography } from '@mui/joy';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import ServiceCard from '../../components/main/calendar/addAppointment/utils/ServiceCard';
 import TimePicker from './TimePicker';
@@ -8,7 +8,6 @@ export default function ClientChooseTime() {
 
   return (
     <>
-      {/* <Container> */}
         <Typography mt={'2rem'} level="h3" textAlign="center">
           Schedule
         </Typography>
@@ -30,7 +29,6 @@ export default function ClientChooseTime() {
         <div style={{ marginTop: '2rem' }}>
           <TimePicker />
         </div>
-      {/* </Container> */}
     </>
   );
 }

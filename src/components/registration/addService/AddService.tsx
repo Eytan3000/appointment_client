@@ -1,14 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import {
-  Alert,
-  Button,
-  Card,
-  CardActions,
-  CardCover,
-  Input,
-  Typography,
-} from '@mui/joy';
+import { Alert, Button, Input, Typography } from '@mui/joy';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { createService } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
@@ -18,21 +10,6 @@ import {
 } from '../../../utils/helperFunctions';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import ImageUploader from './ImageUploader';
-import { deleteObject, ref } from 'firebase/storage';
-import { storage } from '../../../firebase';
-
-// function deleteImageFromFirebase(url: string) {
-//   const imageRef = ref(storage, url);
-
-//   // Delete the file
-//   return deleteObject(imageRef)
-//     .then(() => {
-//       return 'Image deleted';
-//     })
-//     .catch((error) => {
-//       return error.code;
-//     });
-// }
 
 export default function AddService() {
   const navigate = useNavigate();
@@ -46,7 +23,7 @@ export default function AddService() {
   const queryClient = useQueryClient();
 
   const [alert, setAlert] = useState<string | null>(null);
-  const [loading, setLoading] = useState(false);
+  const [loading] = useState(false);
   const [imageUrl, setImageUrl] = useState('');
 
   const nameRef = useRef<HTMLInputElement | null>(null);
@@ -58,8 +35,8 @@ export default function AddService() {
     mutationFn: createService,
     onSuccess: (allOwnerServicesResponse) => {
       queryClient.setQueryData(['services'], allOwnerServicesResponse.data);
-      queryClient.invalidateQueries(['services'], { exact: true });
-      // navigate('/settings/services');
+      // queryClient.invalidateQueries(['services'], { exact: true });
+      queryClient.invalidateQueries({ queryKey: ['services'], exact: true });
       navigate(-1);
     },
   });
@@ -90,27 +67,6 @@ export default function AddService() {
         uid,
         img_url: imageUrl,
       });
-    // try {
-    //   setLoading(true);
-    //   const result = await createService(
-    //     name,
-    //     description,
-    //     duration,
-    //     price,
-    //     currentUser.uid
-    //   );
-    //   if (result.status !== 201) {
-    //     console.log(result.response.data.error[0].msg);
-    //     throw new Error('Something went wrong');
-    //   }
-
-    //   setLoading(false);
-    //   navigate('/services');
-    // } catch (error: unknown) {
-    //   if (error instanceof Error) setAlert(error.message);
-    //   else setAlert('An unknown error occurred.');
-    //   setLoading(false);
-    // }
   }
   function changeHandler() {
     setAlert(null);
@@ -132,10 +88,6 @@ export default function AddService() {
           padding: '14px',
           alignItems: 'center',
         }}>
-        {/* <Link
-          // to={-1}
-          to="#"
-          onClick={() => window.history.back()}> */}
         <div onClick={handleBackArrowClick}>
           <ArrowBackIcon />
         </div>
@@ -154,19 +106,6 @@ export default function AddService() {
         }}
         onSubmit={handleSubmit}>
         <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} />
-        {/* <Card
-          component="li"
-          sx={{ flexGrow: 1, height: '6rem', width: '8rem' }}>
-          <CardActions>
-            <CardCover>
-              <img
-                src="https://www.rockabillyhairstyle.com/wp-content/uploads/images/4-white-nail-art-with-leaves.jpg"
-                loading="lazy"
-                alt="Service Image"
-              />
-            </CardCover>
-          </CardActions>
-        </Card> */}
 
         <div
           style={{

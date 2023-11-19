@@ -446,8 +446,6 @@ export async function deleteAppointment(appointmentId: string) {
 
 // -----------------------
 
-// const appointmentSignal = signal({});
-
 
 export async function fetchAppointments(ownerId: string) {
     try {
