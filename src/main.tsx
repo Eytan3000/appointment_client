@@ -18,7 +18,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           value={{ color: 'blue', className: 'global-class-name' }}>
           <QueryClientProvider client={queryClient}>
             <App />
-            <ReactQueryDevtools />
+            {/* <ReactQueryDevtools /> */}
           </QueryClientProvider>
         </IconContext.Provider>
     </BrowserRouter>

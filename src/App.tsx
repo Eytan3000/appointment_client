@@ -29,7 +29,7 @@ import ClientChooseTime from './userArea/chooseTime/ClientChooseTime.tsx';
 import PhoneAuthInput from './userArea/phoneAuth/PhoneAuthInput.tsx';
 import OtpInput from './userArea/phoneAuth/OtpInput.tsx';
 import BookingSummary from './userArea/summary/BookingSummary.tsx';
-
+import HomePage from './Website/HomePage.tsx';
 
 function App() {
   const element = useRoutes([
@@ -118,7 +118,7 @@ function App() {
     //   element:<SpeedDialAddAppointment />
     // },
 
-// ClientCard
+    // ClientCard
 
     {
       path: '/tools',
@@ -138,7 +138,7 @@ function App() {
           // path: 'client-card',
           element: <ClientEdit />,
         },
-      ]
+      ],
     },
     {
       path: '/inbox',
@@ -168,7 +168,7 @@ function App() {
     //   path: '/client',
     //   element: <ClientChooseService />,
     // },
-  // Client area
+    // Client area
     {
       path: '/client', ///:uid
       children: [
@@ -196,16 +196,18 @@ function App() {
           path: '/client/booking-summary',
           element: <BookingSummary />,
         },
-      ]
+      ],
     },
 
+    {
+      path: '/homepage',
+      element: <HomePage />,
+    },
   ]);
 
   return (
     <>
-      <AuthProvider>
-        {element}
-      </AuthProvider>
+      <AuthProvider>{element}</AuthProvider>
     </>
   );
 }

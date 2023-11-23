@@ -41,12 +41,12 @@ export default function SignIn() {
           const { user } = await login(email, password);
 
           const uid = user.uid;
-          // const accessToken = user.accessToken;
+          const accessToken = user.accessToken;
 
-          console.log('uid: ' + uid); //remove later
-          console.log('access Token: ' + accessToken); //remove later
-          console.log('email: ' + email); //remove later
-          console.log('password: ' + password); //remove later
+          // console.log('uid: ' + uid); //remove later
+          // console.log('access Token: ' + accessToken); //remove later
+          // console.log('email: ' + email); //remove later
+          // console.log('password: ' + password); //remove later
 
           // db functions here if needed
 

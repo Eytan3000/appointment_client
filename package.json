@@ -14,6 +14,8 @@
     "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
     "@mui/joy": "^5.0.0-beta.9",
+    "@mui/lab": "^5.0.0-alpha.153",
+    "@mui/material": "^5.14.18",
     "@mui/x-date-pickers": "^6.16.2",
     "@preact/signals": "^1.2.1",
     "@preact/signals-react": "^1.3.6",

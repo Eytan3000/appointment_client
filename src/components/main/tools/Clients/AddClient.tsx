@@ -52,7 +52,7 @@ export default function AddClient() {
     const phone = phoneRef?.current?.value || '';
     const email = emailRef?.current?.value || '';
 
-    mutate({ name, phone, email, uid });
+    if(uid) mutate({ name, phone, email, uid });
   }
 
   return (
@@ -84,7 +84,7 @@ export default function AddClient() {
               type="email"
               placeholder="email"
             />
-            {isSuccess && <Alert color="success">{data}</Alert>}
+            {isSuccess && <Alert color="success">Client Added Successfully</Alert>}
             {isError && <Alert color="danger">{errorMessage}</Alert>}
             <Button type="submit" loading={isPending}>
               Save
