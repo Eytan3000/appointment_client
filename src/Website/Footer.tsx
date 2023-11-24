@@ -5,8 +5,24 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
+import { useEffect, useState } from 'react';
 
 export default function Footer() {
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
+    };
+
+    window.addEventListener('resize', handleResize);
+    handleResize(); // Set initial mobile state
+
+    return () => {
+      window.removeEventListener('resize', handleResize);
+    };
+  }, []);
+
   return (
     <>
       <div
@@ -14,12 +30,12 @@ export default function Footer() {
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'center',
-          marginTop: '7rem',
-          marginBlock: '7rem',
+          marginTop: isMobile ? '0rem' : '7rem',
+          marginBottom: isMobile ? '4rem' : '7rem',
         }}>
         <Typography
-          level="h1"
-          fontSize={'40px'}
+          level={isMobile ? 'body-lg' : 'h1'}
+          fontSize={isMobile ? '' : '40px'}
           textAlign={'center'}
           width={'70%'}
           marginInline={'auto'}
@@ -28,7 +44,11 @@ export default function Footer() {
           app
         </Typography>
         <Button
-          sx={{ background: '#2f9fdf', width: '20%', marginInline: 'auto' }}>
+          sx={{
+            background: '#2f9fdf',
+            width: isMobile ? '80%' : '20%',
+            marginInline: 'auto',
+          }}>
           Sign Up for free
         </Button>
       </div>
@@ -37,9 +57,10 @@ export default function Footer() {
       <div
         style={{
           display: 'flex',
+          flexDirection: isMobile ? 'column' : 'row',
           justifyContent: 'space-between',
         }}>
-        <div style={{ margin: '2rem 0', width: '20rem', height:'100%' }}>
+        <div style={{ margin: '2rem 0', width: '20rem', height: '100%' }}>
           <img
             src={logoGrey}
             alt="grey planify logo"
@@ -49,7 +70,6 @@ export default function Footer() {
             Join millions of people who organize their business days with
             Planify.
           </Typography>
-          
         </div>
 
         <div>
@@ -90,7 +110,6 @@ export default function Footer() {
         </div>
         <div>
           <Stack spacing={3} ml={-8} my={4}>
-
             <TwitterIcon />
             <YouTubeIcon />
             <FacebookIcon />

@@ -1,8 +1,7 @@
 import { Divider, Typography } from '@mui/joy';
-import screens from '../../assets/Images/Screens.svg';
 
-import desktop from '../../assets/Images/desktopCalendar.png';
-import mobile from '../../assets/Images/mobileCalendar.png';
+import desktop from '../../../assets/Images/desktopCalendar.png';
+import mobile from '../../../assets/Images/mobileCalendar.png';
 
 
 export default function MultipleDevices() {

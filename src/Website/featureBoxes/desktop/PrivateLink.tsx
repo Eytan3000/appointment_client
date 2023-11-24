@@ -1,5 +1,5 @@
 import { Divider, Typography } from '@mui/joy';
-import clientBookingGIF from '../../assets/video/clientBookingGIF.gif';
+import clientBookingGIF from '../../../assets/video/clientBookingGIF.gif';
 
 
 export default function PrivateLink() {

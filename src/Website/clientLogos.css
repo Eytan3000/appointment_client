@@ -1,0 +1,43 @@
+.clientLogos__container__div {
+    margin-block: 6rem;
+}
+.clientLogos__typography__div {
+  display: flex;
+  justify-content: center;
+}
+.clientLogos__logo__div {
+  display: flex;
+  flex-grow: 1;
+  justify-content: space-around;
+  max-height: 2rem;
+  margin-top: 2rem;
+  margin-bottom: 10rem;
+  flex-wrap: wrap;
+}
+
+@media only screen and (min-width: 1025px) {
+  /* Styles for screens larger than 1024px */
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1120px) {
+}
+
+@media only screen and (max-width: 600px) {
+  .clientLogos__typography__div {
+    text-align: center;
+  }
+
+  .clientLogos__logo__div {
+    display: flex;
+    flex-grow: 1;
+    justify-content: space-around;
+    max-height: 2rem;
+    margin-top: 1rem;
+    margin-bottom: 26rem;
+    flex-wrap: wrap;
+  }
+
+  .clientLogos__container__div {
+    margin-top: 4rem;
+}
+}

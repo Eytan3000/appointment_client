@@ -1,65 +1,43 @@
 import { Button, Typography } from '@mui/joy';
 import heroImage from '../assets/Images/hero.png';
 import star from '../assets/icons/star.svg';
-
+import './hero.css';
 export default function Hero() {
   return (
-    <div style={{ display: 'flex', marginTop: '12rem' }}>
-      <div
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          zIndex: 100,
-          gap: '5%',
-        }}>
+    <div className="hero__main__div">
+      <div className="hero__titles__div">
         <Typography level="h1">
           Business calendar for scheduling appointments
         </Typography>
         <Typography>
-          Manage appointments, streamline your schedule, boost productivity: All in
-          your hand. Say goodbye to hassles, embrace efficiency effortlessly.
+          Manage appointments, streamline your schedule, boost productivity: All
+          in your hand. Say goodbye to hassles, embrace efficiency effortlessly.
         </Typography>
-        <div
-          style={{
-            padding: '2rem',
-          }}>
-          <Button
-            sx={{
-              width: '50%',
-              mt: '1rem',
-              boxShadow: '0px 8px 16px rgba(0, 0, 0, 0.2)',
-              background: '#309fdf',
-            }}>
-            Sign Up
-          </Button>
+        <div className="hero__button__div">
+          <Button className="hero__button__div--signup--button">Sign Up</Button>
+          <div className='hero__button__div--signup--button--caption'>
           <Typography
             level="body-xs"
-            sx={{ mt: 2, textAlign: 'center', paddingRight: '48%' }}>
+            // sx={{ mt: 2, textAlign: 'center', paddingRight: '48%' }}
+            >
             FREE FOREVER. <br />
             NO CREDIT CARD.
           </Typography>
-
-          
-        </div>
-        <div style={{display:'flex', marginTop:'-1rem'}}>
-            <img src={star} alt="star" />
-            <img src={star} alt="star" />
-            <img src={star} alt="star" />
-            <img src={star} alt="star" />
-            <img src={star} alt="star" />
-            <Typography ml={2} level="body-xs">Based on 10,000+ reviews</Typography>
           </div>
+        </div>
+        <div className='hero__star__div'>
+          <img src={star} alt="star" />
+          <img src={star} alt="star" />
+          <img src={star} alt="star" />
+          <img src={star} alt="star" />
+          <img src={star} alt="star" />
+          <Typography ml={2} level="body-xs">
+            Based on 10,000+ reviews
+          </Typography>
+        </div>
       </div>
-      <img
-        src={heroImage}
-        alt="Hero Image"
-        style={{
-          height: '25rem',
-          marginLeft: '-10rem',
-        }}
-      />
+      <img src={heroImage} alt="Hero Image" className="hero__img" />
     </div>
   );
 }
 
-// style={{zIndex:0}}

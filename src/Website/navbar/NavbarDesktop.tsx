@@ -41,12 +41,12 @@
 //   );
 // }
 
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
-import logoSvg from '../assets/Images/LogoBlack.svg';
+import logoSvg from '../../assets/Images/LogoBlack.svg';
 import { Box, Button, Typography } from '@mui/joy';
 
-export default function Navbar() {
+export default function NavbarDesktop() {
   // State to keep track of the scroll position
   const [prevScrollPos, setPrevScrollPos] = useState(0);
 
@@ -104,18 +104,20 @@ export default function Navbar() {
         </Button> */}
 
         <Box display="flex" alignSelf={'center'} gap={10} mr={3}>
-          <Typography >Features</Typography>
-          <Typography >For Teams</Typography>
-          <Typography >Resources</Typography>
-          <Typography >Pricing</Typography>
+          <Typography>Features</Typography>
+          <Typography>For Teams</Typography>
+          <Typography>Resources</Typography>
+          <Typography>Pricing</Typography>
         </Box>
 
-<div style={{
-borderLeft: '1px solid #ccc',
-height: '50%',
-margin: '0 10px',
-alignSelf:'center'
-}} />
+        <div
+          style={{
+            borderLeft: '1px solid #ccc',
+            height: '50%',
+            margin: '0 10px',
+            alignSelf: 'center',
+          }}
+        />
         <Button variant="plain" size="sm">
           Log In
         </Button>

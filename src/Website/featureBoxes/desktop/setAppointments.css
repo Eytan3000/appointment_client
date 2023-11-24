@@ -1,0 +1,41 @@
+.setAppointments__main__div {
+  height: 28rem;
+  background: rgba(162, 223, 253, 0.3);
+  border-radius: 20px;
+  box-shadow: 0px 0.1px 8px rgba(0, 0, 0, 0.1);
+  padding: 6rem;
+  display: flex;
+}
+
+.setAppointments__typography__div {
+  display: flex;
+  flex-direction: column;
+  gap: 4%;
+  justify-content: center;
+  align-items: center;
+  margin-left: 4rem;
+}
+.setAppointments__Typography1 {
+  width: 100%;
+}
+.setAppointments__Typography2 {
+  padding-right: 4rem;
+}
+.setAppointments__Typography__divider {
+  width: 20%;
+  height: 4px;
+  border-radius: 2px;
+  background: #0395de;
+}
+.setAppointments__Typography3 {
+  padding-right: 4rem;
+}
+.setAppointments__img__div {
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1120px) {
+}
+
+@media only screen and (max-width: 660px) {
+
+}
