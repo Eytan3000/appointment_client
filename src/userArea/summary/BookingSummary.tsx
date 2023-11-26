@@ -37,7 +37,7 @@ function test() {
 // test();
 
 export default function BookingSummary() {
-  const [address,setAddress] = useState(); // query address from business.
+  const [address, setAddress] = useState(); // query address from business.
   if (
     !appointmentSignal.value.uid ||
     !appointmentSignal.value.client ||
@@ -52,7 +52,6 @@ export default function BookingSummary() {
       </Container>
     );
 
-    
   const phone = appointmentSignal.value.client.phone;
   const name = appointmentSignal.value.client.name;
   const owner_id = appointmentSignal.value.uid;
@@ -62,11 +61,10 @@ export default function BookingSummary() {
   const formattedDate = formatDate(date);
   const startTime = appointmentSignal.value.appointment.start;
   const endTime = appointmentSignal.value.appointment.end;
-  
 
   const serviceTitle = appointmentSignal.value.service?.name;
   const serviceId = appointmentSignal.value.service?.id;
-  console.log(appointmentSignal.value)
+  console.log(appointmentSignal.value);
   const time = appointmentSignal.value.service?.duration;
   const price = appointmentSignal.value.service?.price;
   const imgUrl = appointmentSignal.value.service?.img_url;
@@ -98,65 +96,66 @@ export default function BookingSummary() {
       }
     })();
   }, []);
-  
-  
-  useEffect(()=>{
-    (async()=>{
-      const {address} = await getBusiness(owner_id);
+
+  useEffect(() => {
+    (async () => {
+      const { address } = await getBusiness(owner_id);
       setAddress(address);
-    })()
-  },[])
+    })();
+  }, []);
 
   if (serviceTitle && time && price && imgUrl) {
     return (
       <>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            marginInline: '2rem',
-          }}>
-          <Typography
-            sx={{ margin: '2rem auto', mt: 3, mb: 2 }}
-            level="h3"
-            color="primary">
-            Appointment Confirmation{' '}
-          </Typography>
-
-          <ServiceCard
-            serviceTitle={serviceTitle}
-            time={time}
-            price={price}
-            imgUrl={imgUrl}
-          />
-          <Card sx={{ mt: 2 }}>
-            <Typography level="body-lg">
-              Your appointment is scheduled for:
-            </Typography>
-            <Typography mt={2} level="body-md">
-              <b>Date:</b> {formattedDate}
-            </Typography>
-            <Typography level="body-md">
-              <b> Time: </b> {startTime} - {endTime}
-            </Typography>
-            <Typography level="body-md">
-              {' '}
-              <b> Address:</b> {address}
+        <Container>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              marginInline: '2rem',
+            }}>
+            <Typography
+              sx={{ margin: '2rem auto', mt: 3, mb: 2 }}
+              level="h3"
+              color="primary">
+              Appointment Confirmation{' '}
             </Typography>
 
-            <Typography mt={2} level="body-sm">
-              *Please make sure to arrive on time.
-            </Typography>
-            <Typography level="body-sm">
-              *Any cancellations within 24 hours of the appointment will incur
-              the full cost.
-            </Typography>
-            <Typography level="body-sm">
-              *Additional services such as painting, removal, and others will be
-              subject to an extra charge.
-            </Typography>
-          </Card>
-        </div>
+            <ServiceCard
+              serviceTitle={serviceTitle}
+              time={time}
+              price={price}
+              imgUrl={imgUrl}
+            />
+            <Card sx={{ mt: 2 }}>
+              <Typography level="body-lg">
+                Your appointment is scheduled for:
+              </Typography>
+              <Typography mt={2} level="body-md">
+                <b>Date:</b> {formattedDate}
+              </Typography>
+              <Typography level="body-md">
+                <b> Time: </b> {startTime} - {endTime}
+              </Typography>
+              <Typography level="body-md">
+                {' '}
+                <b> Address:</b> {address}
+              </Typography>
+
+              <Typography mt={2} level="body-sm">
+                *Please make sure to arrive on time.
+              </Typography>
+              <Typography level="body-sm">
+                *Any cancellations within 24 hours of the appointment will incur
+                the full cost.
+              </Typography>
+              <Typography level="body-sm">
+                *Additional services such as painting, removal, and others will
+                be subject to an extra charge.
+              </Typography>
+            </Card>
+          </div>
+        </Container>
       </>
     );
   }

@@ -7,15 +7,19 @@ import {
   Box,
   Button,
   CircularProgress,
+  Container,
   Input,
   Stack,
   Typography,
 } from '@mui/joy';
 import { copyToClipboard } from '../../../../utils/helperFunctions';
+import { useAuth } from '../../../../context/AuthContext';
 
 export default function ClientCard() {
   const { clientId } = useParams();
   const navigate = useNavigate();
+  const { isMobile } = useAuth();
+
   const { data, isLoading, isError } = useQuery({
     queryKey: ['client'],
     queryFn: () => getClient(clientId!),
@@ -55,10 +59,11 @@ export default function ClientCard() {
     const { Name, phone, email } = data[0];
     return (
       <>
+      <Container>
         <BackArrow />
 
         <div
-          style={{ marginInline: '2rem', height: '80vh', marginTop: '-1rem' }}>
+          style={{ marginInline: 'auto', height: '80vh', marginTop: '-1rem', width: isMobile ? '' : '30vw',}}>
           <Typography textAlign={'center'} level="h4">
             Client
           </Typography>
@@ -113,6 +118,7 @@ export default function ClientCard() {
             </Stack>
           </form>
         </div>
+        </Container>
       </>
     );
   }

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
-import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
+import { Alert, Button, Container, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../components/utilsComponents/BackArrow';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
@@ -9,6 +9,7 @@ import { signal } from '@preact/signals-react';
 
 import PhoneInput from 'react-phone-input-2';
 import 'react-phone-input-2/lib/material.css';
+import { useAuth } from '../../context/AuthContext';
 
 function validateIsraeliPhoneNumber(phoneNumber: string) {
   //removes country code to validate.
@@ -36,6 +37,7 @@ function e164PhoneFormater(phone: string) {
 export const otpConfirmation = signal({});
 
 export default function PhoneAuthInput() {
+  const { isMobile } = useAuth();
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState('');
@@ -53,7 +55,6 @@ export default function PhoneAuthInput() {
 
       if (name?.length < 4)
         throw new Error('name must be at least 4 characters');
-
 
       const phone = phoneRef?.current?.value || '';
 
@@ -75,10 +76,10 @@ export default function PhoneAuthInput() {
       );
       otpConfirmation.value = confirmation; //signal
       appointmentSignal.value.client = {
-        name:name!,
-        uid:'',
-        phone:'',
-      }
+        name: name!,
+        uid: '',
+        phone: '',
+      };
 
       setLoading(false);
       navigate('/client/otp');
@@ -99,41 +100,57 @@ export default function PhoneAuthInput() {
 
   return (
     <>
-      <BackArrow />
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginInline: 'auto',
+          borderRadius: '20px',
+          height: '30vh',
 
-      <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
-        SMS log in
-      </Typography>
+          maxWidth: isMobile ? '' : '300px',
+          marginTop: isMobile ? '' : '30vh',
+          border: isMobile ? '' : '1px solid #d4dce5',
+          padding: isMobile ? '' : '0 4rem 4rem 4rem',
+        }}>
+        {isMobile ? <BackArrow /> : (
+          <div style={{ marginLeft: '-40px', marginBottom: '-20px' }}>
+            <BackArrow />
+          </div>)}
+        <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
+          SMS log in
+        </Typography>
 
-      <form onSubmit={handleSubmit}>
-        <Stack spacing={2} mx={2}>
-          <Input
-            slotProps={{ input: { ref: nameRef } }}
-            type="text"
-            placeholder="Full Name (min 4 characters)"
-            autoFocus
-            required
-          />
+        <form onSubmit={handleSubmit}>
+          <Stack spacing={2} mx={2}>
+            <Input
+              slotProps={{ input: { ref: nameRef } }}
+              type="text"
+              placeholder="Full Name (min 4 characters)"
+              autoFocus
+              required
+            />
 
-          <PhoneInput
-            country={'il'}
-            // value={this.state.phone}
-            // onChange={phone => this.setState({ phone })}
-            inputProps={{ ref: phoneRef, shrink: false }}
-            inputStyle={{ height: '10px', width: '100%' }}
-            containerStyle={{ color: 'transparent' }}
-          />
+            <PhoneInput
+              country={'il'}
+              // value={this.state.phone}
+              // onChange={phone => this.setState({ phone })}
+              inputProps={{ ref: phoneRef, shrink: false }}
+              inputStyle={{ height: '10px', width: '100%' }}
+              containerStyle={{ color: 'transparent' }}
+            />
 
-          <Button
-            id="sign-in-button"
-            type="submit"
-            name="email-submitter"
-            loading={loading}>
-            Send SMS
-          </Button>
-          {alert !== '' && <Alert color="danger">{alert}</Alert>}
-        </Stack>
-      </form>
+            <Button
+              id="sign-in-button"
+              type="submit"
+              name="email-submitter"
+              loading={loading}>
+              Send SMS
+            </Button>
+            {alert !== '' && <Alert color="danger">{alert}</Alert>}
+          </Stack>
+        </form>
+      </div>
     </>
   );
 }

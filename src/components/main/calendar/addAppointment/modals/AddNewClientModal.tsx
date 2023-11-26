@@ -71,12 +71,12 @@ export default function AddNewClientModal({
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <ModalDialog layout={'fullscreen'}>
+      <ModalDialog layout={'center'}>
         <div style={{ marginBlock: '1rem' }}>
           <ModalClose />
         </div>
 
-        <div style={{ marginInline: '2rem', height: '90vh' }}>
+        <div style={{ marginInline: '2rem', height: '50vh' }}>
           <Typography textAlign={'center'} level="h4">
             Add New Client
           </Typography>

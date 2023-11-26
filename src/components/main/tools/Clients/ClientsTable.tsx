@@ -29,7 +29,7 @@ export default function ClientsTable() {
       console.log(client);
       return (
         <div key={client.id} onClick={() => handleCardClick(client.id)}>
-          <Card>{client.Name}</Card>
+          <Card sx={{cursor:'pointer'}}>{client.Name}</Card>
         </div>
       );
     });
@@ -62,7 +62,7 @@ export default function ClientsTable() {
       </Typography>
 
       <Stack spacing={2}>
-        {isError && <Alert color="danger">We're expreiencing a problem</Alert>}
+        {isError && <Alert color="danger">We're experiencing a problem</Alert>}
         {queryData}
       </Stack>
 

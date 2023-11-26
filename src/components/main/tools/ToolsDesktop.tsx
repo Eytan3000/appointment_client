@@ -1,9 +1,9 @@
-import { Container, Stack, Typography } from '@mui/joy';
+import { Button, Container, Stack, Typography } from '@mui/joy';
 import IosShareIcon from '@mui/icons-material/IosShare';
 import EditIcon from '@mui/icons-material/Edit';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import ToolsCard from './ToolsCard';
-import { useNavigate } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TocIcon from '@mui/icons-material/Toc';
 import SideAppColumn from '../SideAppColumn';
@@ -11,6 +11,9 @@ import { useState } from 'react';
 import ClientsTable from './Clients/ClientsTable';
 import AddClient from './Clients/AddClient';
 import Services from '../../registration/addServices/Services';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useAuth } from '../../../context/AuthContext';
+import { copyToClipboard } from '../../../utils/helperFunctions';
 
 const clientsSum = 59;
 
@@ -21,9 +24,31 @@ const iconSx = {
   alignSelf: 'center',
 };
 
+const baseUrl = 'http://localhost:5173';
+
 export default function ToolsDesktop() {
-  const navigate = useNavigate();
+  const { currentUser } = useAuth() || {};
+
+  const uid = currentUser?.uid;
+  const url = `${baseUrl}/client/${uid}`;
+
   const [path, setPath] = useState('clients-table');
+
+  function handleShare() {
+    if (navigator.share) {
+      navigator
+        .share({
+          text: 'eytankrr',
+          url: url,
+        })
+        .then(() => console.log('Share successful'))
+        .catch((error) => console.error('Share error:', error));
+    } else {
+      console.log('navigator.share doesnt work');
+    }
+  }
+
+
 
   return (
     <>
@@ -55,9 +80,19 @@ export default function ToolsDesktop() {
                   tool={{
                     name: 'Share',
                     icon: <IosShareIcon sx={iconSx} />,
-                    function: () => console.log('Share Page'),
+                    // function: () => console.log('Share Page'),
+                    function: handleShare,
                   }}
                 />
+
+                  <ToolsCard
+                    tool={{
+                      name: 'Copy Link',
+                      icon: <ContentCopyIcon sx={iconSx} />,
+                      function: ()=>copyToClipboard(url),
+                    }}
+                  />
+        
 
                 {/* <ToolsCard
                   tool={{
@@ -115,9 +150,8 @@ export default function ToolsDesktop() {
               width: '40%',
             }}>
             {path === 'clients-table' && <ClientsTable />}
-             {path === 'add-client' && <AddClient />}
+            {path === 'add-client' && <AddClient />}
             {path === 'settings/services' && <Services />}
-
           </div>
         </div>
       </div>

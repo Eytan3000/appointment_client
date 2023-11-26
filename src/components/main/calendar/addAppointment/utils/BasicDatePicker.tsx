@@ -4,10 +4,20 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import dayjs from 'dayjs';
 import 'dayjs/locale/en-gb';
+import { ChangeEvent, SyntheticEvent } from 'react';
 
-export default function BasicDatePicker({ date, handleDateChange }: any) {
+export default function BasicDatePicker({
+  date,
+  handleDateChange,
+}: {
+  date: Date;
+  handleDateChange: (e: ChangeEvent) => void;
+}) {
+  console.log(date, handleDateChange);
   return (
-    <LocalizationProvider dateAdapter={AdapterDayjs} adapterLocale="en-gb">
+    <LocalizationProvider dateAdapter={AdapterDayjs} 
+    // adapterLocale="en-gb"
+    >
       <DemoContainer components={['DatePicker']}>
         <DatePicker
           defaultValue={dayjs(date)}

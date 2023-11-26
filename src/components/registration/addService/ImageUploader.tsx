@@ -53,7 +53,7 @@ export default function ImageUploader({
       >
         <Card
           component="li"
-          sx={{ height: '6rem', width: '8rem', marginInline: 'auto' }}>
+          sx={{ height: '6rem', width: '8rem', marginInline: 'auto', cursor:'pointer' }}>
           <CardActions>
             <CardCover>
               {loading ? (

@@ -5,6 +5,7 @@ import BackArrow from '../../components/utilsComponents/BackArrow';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { otpConfirmation } from './PhoneAuthInput';
 import { FirebaseError } from 'firebase/app';
+import { useAuth } from '../../context/AuthContext';
 
 function simplePhoneFormatter(e164Phone: string) {
   return '0' + e164Phone.slice(4);
@@ -12,6 +13,7 @@ function simplePhoneFormatter(e164Phone: string) {
 
 export default function OtpInput() {
   const navigate = useNavigate();
+  const { isMobile } = useAuth();
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState('');
 
@@ -25,7 +27,6 @@ export default function OtpInput() {
     try {
       setLoading(true);
       const data = await otpConfirmation.value.confirm(otp);
-console.log(data);
       appointmentSignal.value.client.uid = data.user.uid;
       
       const formattedPhone = simplePhoneFormatter(data.user.phoneNumber); // formate to 0508657032
@@ -48,7 +49,23 @@ console.log(data);
 
   return (
     <>
-      <BackArrow />
+    <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          marginInline: 'auto',
+          borderRadius: '20px',
+          height: '30vh',
+
+          maxWidth: isMobile ? '' : '300px',
+          marginTop: isMobile ? '' : '30vh',
+          border: isMobile ? '' : '1px solid #d4dce5',
+          padding: isMobile ? '' : '0 4rem 4rem 4rem',
+        }}>
+          {isMobile ? <BackArrow /> : (
+          <div style={{ marginLeft: '-40px', marginBottom: '-20px' }}>
+            <BackArrow />
+          </div>)}
 
       <Typography mt={4} level="h4" textAlign="center" marginBottom={'2rem'}>
         Insert code
@@ -69,6 +86,7 @@ console.log(data);
           {alert !== '' && <Alert color="danger">{alert}</Alert>}
         </Stack>
       </form>
+      </div>
     </>
   );
 }

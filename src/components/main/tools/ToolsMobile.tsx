@@ -7,9 +7,13 @@ import ToolsCard from './ToolsCard';
 import { useNavigate } from 'react-router-dom';
 import PersonAddIcon from '@mui/icons-material/PersonAdd';
 import TocIcon from '@mui/icons-material/Toc';
+import { useAuth } from '../../../context/AuthContext';
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
+import { copyToClipboard } from '../../../utils/helperFunctions';
+
+const baseUrl = 'http://localhost:5173';
 
 const clientsSum = 59;
-
 const iconSx = {
   fontSize: 25,
   marginBottom: -3,
@@ -19,11 +23,30 @@ const iconSx = {
 
 export default function Tools() {
   const navigate = useNavigate();
+  const { currentUser } = useAuth() || {};
+
+  const uid = currentUser?.uid;
+  const url = `${baseUrl}/client/${uid}`;
+
+  function handleShare() {
+    console.log(navigator.share);
+    if (navigator.share) {
+      navigator
+        .share({
+          text: 'eytankrr',
+          url: url,
+        })
+        .then(() => console.log('Share successful'))
+        .catch((error) => console.error('Share error:', error));
+    } else {
+      // console.log('navigator.share doesnt work');
+      console.log(url);
+    }
+  }
 
   return (
     <>
-
-      <Container >
+      <Container>
         <div
           style={{
             display: 'flex',
@@ -41,10 +64,18 @@ export default function Tools() {
               tool={{
                 name: 'Share',
                 icon: <IosShareIcon sx={iconSx} />,
-                function: () => console.log('Share Page'),
+                function: handleShare,
               }}
             />
-{/* 
+
+            <ToolsCard
+              tool={{
+                name: 'Copy Link',
+                icon: <ContentCopyIcon sx={iconSx} />,
+                function: () => copyToClipboard(url),
+              }}
+            />
+            {/* 
             <ToolsCard
               tool={{
                 name: 'Edit',
@@ -85,7 +116,6 @@ export default function Tools() {
                 function: () => navigate('/settings/services'),
               }}
             />
-
           </div>
         </Stack>
       </Container>
