@@ -5,7 +5,13 @@ import { Button, IconButton } from '@mui/joy';
 import MenuIcon from '@mui/icons-material/Menu';
 import MenuModalNavbarMobile from './menuModalNavbarMobile';
 
-export default function NavbarMobile() {
+export default function NavbarMobile({
+  handleLogin,
+  handleCreateAccount
+}: {
+  handleLogin: () => void;
+  handleCreateAccount: ()=>void;
+}) {
   const [open, setOpen] = useState<boolean>(false);
 
   // State to keep track of the scroll position
@@ -74,7 +80,8 @@ export default function NavbarMobile() {
         <Button
           sx={{ width: '100px', marginRight: '10px', marginLeft: '-20px' }}
           variant="plain"
-          size="lg">
+          size="lg"
+          onClick={handleLogin}>
           Log In
         </Button>
 
@@ -82,14 +89,13 @@ export default function NavbarMobile() {
           variant="outlined"
           color="neutral"
           sx={{ p: 1 }}
-          onClick={()=>setOpen(true)}
-          >
+          onClick={() => setOpen(true)}>
           <MenuIcon />
         </IconButton>
 
         {/* <MenuIcon sx={{ fontSize: '300%', marginBlock: 'auto' }}/> */}
       </div>
-      <MenuModalNavbarMobile open={open} setOpen={setOpen} />
+      <MenuModalNavbarMobile open={open} setOpen={setOpen} handleCreateAccount={handleCreateAccount} />
     </nav>
   );
 }

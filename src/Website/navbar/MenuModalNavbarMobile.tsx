@@ -1,11 +1,9 @@
 import {
   Box,
   Button,
-  DialogContent,
-  DialogTitle,
   Modal,
   ModalClose,
-  ModalDialog,
+
   Sheet,
   Typography,
 } from '@mui/joy';
@@ -13,9 +11,11 @@ import {
 export default function MenuModalNavbarMobile({
   open,
   setOpen,
+  handleCreateAccount
 }: {
   open: boolean;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleCreateAccount: ()=>void;
 }) {
   return (
     <Modal
@@ -33,20 +33,6 @@ export default function MenuModalNavbarMobile({
           boxShadow: 'lg',
         }}>
         <ModalClose variant="plain" sx={{ m: 1 }} />
-        {/* <Typography
-            component="h2"
-            id="modal-title"
-            level="h4"
-            textColor="inherit"
-            fontWeight="lg"
-            mb={1}
-          >
-Menu          </Typography> */}
-        {/* <Typography id="modal-desc" textColor="text.tertiary">
-            Make sure to use <code>aria-labelledby</code> on the modal dialog with an
-            optional <code>aria-describedby</code> attribute.
-          </Typography> */}
-
         <Box
           display="flex"
           flexDirection={'column'}
@@ -59,16 +45,14 @@ Menu          </Typography> */}
           <Typography level="title-md">Resources</Typography>
           <Typography level="title-md">Pricing</Typography>
 
-          <Button variant="outlined" size="lg" sx={{width:'130%'}}>
+          <Button variant="outlined" size="lg" sx={{width:'130%'}} onClick={()=>{
+            setOpen(false);
+            handleCreateAccount();
+          
+          }}>
             Sign up
           </Button>
 
-          <Button
-            // variant="plain"
-            sx={{width:'130%'}}
-            size="lg">
-            Log In
-          </Button>
         </Box>
       </Sheet>
     </Modal>

@@ -8,19 +8,21 @@ import {
 } from '../../../utils/http';
 import { minutesToTimeDuration } from '../../../utils/helperFunctions';
 import { CircularProgress } from '@mui/joy';
+import SideAppColumn from '../SideAppColumn';
 
 // export const eventsSignal = signal([]);
 
 //--------------------------------------------------
 export default function MainCalendar() {
   console.log('render');
-  const { currentUser } = useAuth() || {};
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
   console.log('uid: ', uid);
 
   if (uid) {
     return (
       <>
+      <div style={{marginLeft:isMobile ? '':'150px'}}>
         <Scheduler
           view="week"
           getRemoteEvents={() => fetchAppointments(uid)}
@@ -70,7 +72,10 @@ export default function MainCalendar() {
             });
           }}
         />
-        <BottomAppBar />
+        </div>
+       {isMobile && <BottomAppBar />}
+       {!isMobile && <SideAppColumn />}
+
       </>
     );
   }

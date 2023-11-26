@@ -19,9 +19,11 @@ const iconSx = {
 
 export default function Tools() {
   const navigate = useNavigate();
+
   return (
     <>
-      <Container>
+
+      <Container >
         <div
           style={{
             display: 'flex',
@@ -42,14 +44,14 @@ export default function Tools() {
                 function: () => console.log('Share Page'),
               }}
             />
-
+{/* 
             <ToolsCard
               tool={{
                 name: 'Edit',
                 icon: <EditIcon sx={iconSx} />,
                 function: () => console.log('Edit Page'),
               }}
-            />
+            /> */}
           </div>
 
           {/* Clients */}

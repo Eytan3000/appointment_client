@@ -25,13 +25,11 @@ export default function ServiceCard({
       <Card
         orientation="horizontal"
         variant="outlined"
-        sx={{ width: 260, marginInline: 'auto', mt: 2 }}>
+        sx={{ width: 260, marginInline: 'auto', mt: 2, cursor:'pointer' }}>
         <CardOverflow>
           <AspectRatio ratio="1" sx={{ width: 90 }}>
             <img
               src={imgUrl}
-              // src="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90"
-              // srcSet="https://images.unsplash.com/photo-1507833423370-a126b89d394b?auto=format&fit=crop&w=90&dpr=2 2x"
               loading="lazy"
               alt=""
             />

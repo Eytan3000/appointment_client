@@ -74,7 +74,7 @@ export default function AddServiceModal({ open, setOpen, startTime,
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <ModalDialog layout={'fullscreen'}>
+      <ModalDialog layout={'center'}>
         <div style={{ marginBlock: '1rem' }}>
           <ModalClose />
         </div>

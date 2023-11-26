@@ -4,6 +4,7 @@ import { Box, Button, Divider, Stack, Typography } from '@mui/joy';
 import { useState } from 'react';
 import ServicesStack from './ServicesStack';
 import BackArrow from '../../utilsComponents/BackArrow';
+import { getAuth } from 'firebase/auth';
 //-------------------------------------------
 // interface Service {
 //   id: number;
@@ -19,7 +20,7 @@ export default function Services() {
 
   // const [areThereAnyServices, setAreThereAnyServices] = useState(false);
 
-  // const { currentUser } = getAuth();
+  const { isMobile } = getAuth();
 
   // check if user comes from settings or signup
   const isInSettings = window.location.href.includes('settings');
@@ -36,7 +37,7 @@ export default function Services() {
   }
   return (
     <>
-      {isInSettings && (
+      {isInSettings && isMobile && (
         <div
           style={{
             display: 'flex',
@@ -49,6 +50,7 @@ export default function Services() {
         </div>
       )}
       <Box
+      mt={isMobile ? 2 : 10}
         display={'flex'}
         alignItems={'center'}
         flexDirection={'column'}

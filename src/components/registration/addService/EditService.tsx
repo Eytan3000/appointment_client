@@ -1,12 +1,7 @@
-import {useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
-import {
-  Alert,
-  Button,
-  Input,
-  Typography,
-} from '@mui/joy';
+import { Alert, Button, Input, Typography } from '@mui/joy';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { deleteService, getService, udpateService } from '../../../utils/http';
 import Loader from '../../utilsComponents/Loader';
@@ -19,8 +14,6 @@ import {
 import { SyntheticEvent, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import ImageUploader from './ImageUploader';
-
-
 
 interface ServiceObject {
   description: string | null;
@@ -36,7 +29,7 @@ export default function AddService() {
   const navigate = useNavigate();
   const { id: serviceId } = useParams();
 
-  const { currentUser } = useAuth() ||{};
+  const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
 
   const queryClient = useQueryClient();
@@ -49,7 +42,6 @@ export default function AddService() {
   const [imageUrl, setImageUrl] = useState('');
   const [alert, setAlert] = useState(false);
 
-  
   let button = (
     <Button style={{ marginTop: alert ? 0 : '2rem' }} type="submit">
       {' '}
@@ -64,7 +56,7 @@ export default function AddService() {
     onSuccess: (allOwnerServicesResponse) => {
       queryClient.setQueryData(['services'], allOwnerServicesResponse);
       // queryClient.invalidateQueries(['services'], { exact: true });
-      queryClient.invalidateQueries({queryKey:['services'],  exact: true });
+      queryClient.invalidateQueries({ queryKey: ['services'], exact: true });
       navigate(-1);
     },
   });
@@ -91,7 +83,7 @@ export default function AddService() {
       });
       navigate(-1);
     },
-    onError:()=>setAlert(true)
+    onError: () => setAlert(true),
   });
 
   // Functions
@@ -128,8 +120,8 @@ export default function AddService() {
       else setAlert(true);
     } else deleteServiceMutation.mutate(serviceId);
   }
-  async function handleBackArrowClick(){
-    if(imageUrl==='') navigate(-1);
+  async function handleBackArrowClick() {
+    if (imageUrl === '') navigate(-1);
     else {
       await deleteImageFromFirebase(imageUrl);
       navigate(-1);
@@ -159,9 +151,7 @@ export default function AddService() {
             padding: '14px',
             alignItems: 'center',
           }}>
-          <div 
-          onClick={handleBackArrowClick}
-          >
+          <div onClick={handleBackArrowClick}>
             <ArrowBackIcon />
           </div>
         </div>

@@ -23,7 +23,7 @@ import { EmailAuthProvider, reauthenticateWithCredential } from 'firebase/auth';
 import { FirebaseError } from '@firebase/util';
 
 export default function AccountSettings() {
-  const { currentUser, updatePasswordCtx } = useAuth() || {};
+  const { currentUser, updatePasswordCtx, isMobile } = useAuth() || {};
 
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -86,14 +86,14 @@ export default function AccountSettings() {
 
             margin: '2rem',
           }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
+          {isMobile && <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
             <Link to="/settings" style={{ margin: -3, paddingTop: '0.4rem' }}>
               <ArrowBackIcon
                 style={{ marginLeft: '-2rem', marginBlock: 'auto' }}
               />
             </Link>
             <Typography level="h3">Account Settings</Typography>
-          </div>
+          </div>}
           <div
             style={{
               marginBlock: '2rem 2rem',

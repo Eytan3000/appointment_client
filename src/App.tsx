@@ -13,7 +13,8 @@ import WorkHoursAdvanced from './components/registration/workHours/WorkHoursAdva
 import AccountSettings from './components/main/settings/AccountSettings.tsx';
 import BusinessSettings from './components/main/settings/BusinessSettings.tsx';
 import Services from './components/registration/addServices/Services.tsx';
-import Tools from './components/main/tools/Tools.tsx';
+import ToolsMobile from './components/main/tools/ToolsMobile.tsx';
+import ToolsDesktop from './components/main/tools/ToolsDesktop.tsx';
 import Inbox from './components/main/inbox/Inbox.tsx';
 import ForgotPassword from './components/auth/forgotPassword/ForgotPassword.tsx';
 import ClientsTable from './components/main/tools/Clients/ClientsTable.tsx';
@@ -30,6 +31,7 @@ import PhoneAuthInput from './userArea/phoneAuth/PhoneAuthInput.tsx';
 import OtpInput from './userArea/phoneAuth/OtpInput.tsx';
 import BookingSummary from './userArea/summary/BookingSummary.tsx';
 import HomePage from './Website/HomePage.tsx';
+import SettingsDesktop from './components/main/settings/SettingsDesktop.tsx';
 
 function App() {
   const element = useRoutes([
@@ -111,7 +113,16 @@ function App() {
           path: 'edit-work-hours',
           element: <EditWorkHours />,
         },
+
       ],
+    },
+    {
+      path: '/settings-desktop',
+      element: <SettingsDesktop />,
+    },
+    {
+      path: 'tools-desktop',
+      element: <ToolsDesktop />,
     },
     // {
     //   path: 'speed-dial-add-appointment',
@@ -126,7 +137,7 @@ function App() {
       children: [
         {
           index: true,
-          element: <Tools />,
+          element: <ToolsMobile />,
         },
         {
           path: 'client-card/:clientId',

@@ -14,7 +14,7 @@ import {
 export default function SignIn() {
   const navigate = useNavigate();
 
-  const { signup, googleSignIn } = useAuth() || {};
+  const { signup, googleSignIn, isMobile } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -93,7 +93,7 @@ export default function SignIn() {
               `Oops! Something went wrong while trying to create your account.`
             );
         }
-      } 
+      }
     }
     setLoading(false);
   }
@@ -104,7 +104,7 @@ export default function SignIn() {
   return (
     <>
       <div>
-        <div
+        {isMobile && <div
           style={{
             display: 'flex',
             justifyContent: 'space-between',
@@ -121,13 +121,20 @@ export default function SignIn() {
             style={{ margin: -10 }}>
             Sign In
           </Button>
-        </div>
+        </div>}
 
         <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
           Create Account
         </Typography>
 
-        <form onSubmit={handleSubmit}>
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'space-between',
+            height: isMobile ? 'calc(100vh - 12rem)' : '40vh',
+          }}>
           <Stack spacing={2} mx={2}>
             <Input
               onChange={changeHandler}
@@ -157,6 +164,8 @@ export default function SignIn() {
               placeholder="Confirm Password"
               required
             />
+          </Stack>
+          <Stack spacing={2} mx={2}>
             <Button type="submit" name="email-submitter" loading={loading}>
               Create Account
             </Button>

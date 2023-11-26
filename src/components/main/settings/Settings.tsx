@@ -34,8 +34,6 @@ const settings = [
   },
 ];
 
-// Sign Out
-
 export default function Settings() {
   const navigate = useNavigate();
   const { logout } = useAuth() || {};
@@ -50,6 +48,7 @@ export default function Settings() {
           background: '#f0f1f4',
           paddingBlock: '1rem',
           height: '100vh',
+          // marginLeft: isMobile ? '' : '150px',
         }}>
         <Box paddingLeft={2}>
           <Typography level="h3">Settings</Typography>
@@ -107,6 +106,7 @@ export default function Settings() {
             alignItems: 'center',
             padding: '1rem',
             gap: '1rem',
+            cursor: 'pointer',
           }}>
           <LogoutIcon />
           <Typography level="body-lg">Sign Out</Typography>

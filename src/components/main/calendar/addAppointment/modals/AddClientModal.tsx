@@ -31,7 +31,11 @@ export default function AddClientModal({
   }
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
-      <ModalDialog layout={'fullscreen'}>
+      <ModalDialog 
+      // layout={'fullscreen'}
+      layout={'center'}
+      
+      >
         <ModalClose />
 
         <ClientsList />

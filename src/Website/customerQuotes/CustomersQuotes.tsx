@@ -2,23 +2,8 @@ import { Box, Typography } from '@mui/joy';
 import CustomerSheet from './CustomerSheet';
 import { quotes } from './quotesArray';
 import Masonry from '@mui/lab/Masonry';
-import { useEffect, useState } from 'react';
 
-export default function CustomersQuotes() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Set initial mobile state
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+export default function CustomersQuotes({isMobile}:{isMobile:boolean}) {
   return (
     <>
       <Box

@@ -6,12 +6,12 @@ import CardContent from '@mui/joy/CardContent';
 import CardActions from '@mui/joy/CardActions';
 import Typography from '@mui/joy/Typography';
 import { copyToClipboard } from '../../../utils/helperFunctions';
+import { useAuth } from '../../../context/AuthContext';
 
 const url = 'https://plannieapp.com/?name=eytan';
 
-
-
 export default function UserCard() {
+  const { currentUser, isMobile } = useAuth() ||{};
   return (
     <>
       <Card
@@ -23,17 +23,21 @@ export default function UserCard() {
         <Box
           sx={{
             display: 'flex',
-            gap: '1.3rem',
+            gap: isMobile ? '1.3rem' : '',
           }}>
           <Avatar src="/static/images/avatar/1.jpg" size="lg" />
 
           <CardContent>
-            <Typography level="title-lg">Eytan</Typography>
-            <Typography level="body-sm">{url.slice(0, 20) + '...'}</Typography>
+            {/* {isMobile && <Typography level="title-lg">{currentUser.}</Typography>} */}
+            {isMobile && (
+              <Typography level="body-sm">
+                {url.slice(0, 20) + '...'}
+              </Typography>
+            )}
           </CardContent>
           <CardActions sx={{ pt: 0 }}>
             <Button
-                onClick={() => copyToClipboard(url)}
+              onClick={() => copyToClipboard(url)}
               variant="outlined"
               color="primary">
               Copy

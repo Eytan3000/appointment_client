@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { Alert, Button, Input, Typography } from '@mui/joy';
+import { Alert, Button, Container, Input, Typography } from '@mui/joy';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { createService } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
@@ -81,76 +81,81 @@ export default function AddService() {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          padding: '14px',
-          alignItems: 'center',
-        }}>
-        <div onClick={handleBackArrowClick}>
-          <ArrowBackIcon />
-        </div>
-      </div>
-
-      <Typography style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
-        Descrive your service
-      </Typography>
-      <form
-        style={{
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'center',
-          alignItems: 'center',
-          marginTop: '3em',
-        }}
-        onSubmit={handleSubmit}>
-        <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} />
 
         <div
           style={{
-            marginTop: '3em',
             display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'column',
-            width: '46vh',
-            gap: '1rem',
+            justifyContent: 'space-between',
+            padding: '14px',
+            alignItems: 'center',
           }}>
-          <Input
-            onChange={changeHandler}
-            slotProps={{ input: { ref: nameRef } }}
-            placeholder="Service Name"
-            required
-          />
-          <Input
-            onChange={changeHandler}
-            slotProps={{ input: { ref: descriptionRef } }}
-            placeholder="Service Description"
-          />
-          <Input
-            onChange={changeHandler}
-            slotProps={{ input: { ref: durationRef } }}
-            type="time"
-            defaultValue={'01:00'}
-          />
-          <Input
-            onChange={changeHandler}
-            slotProps={{ input: { ref: priceRef } }}
-            type="text"
-            placeholder="Price"
-          />
-
-          <Button loading={loading} type="submit" style={{ marginTop: '2rem' }}>
-            {' '}
-            Add
-          </Button>
-          {alert && (
-            <Alert variant="soft" color="danger">
-              {alert}
-            </Alert>
-          )}
+          <div onClick={handleBackArrowClick}>
+            <ArrowBackIcon />
+          </div>
         </div>
-      </form>
+
+        <Typography
+          style={{ textAlign: 'center', margin: '0px 16px 32px 16px' }}>
+          Descrive your service
+        </Typography>
+        <form
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            marginTop: '3em',
+          }}
+          onSubmit={handleSubmit}>
+          <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} />
+
+          <div
+            style={{
+              marginTop: '3em',
+              display: 'flex',
+              justifyContent: 'center',
+              flexDirection: 'column',
+              width: '46vh',
+              gap: '1rem',
+            }}>
+            <Input
+              onChange={changeHandler}
+              slotProps={{ input: { ref: nameRef } }}
+              placeholder="Service Name"
+              required
+            />
+            <Input
+              onChange={changeHandler}
+              slotProps={{ input: { ref: descriptionRef } }}
+              placeholder="Service Description"
+            />
+            <Input
+              onChange={changeHandler}
+              slotProps={{ input: { ref: durationRef } }}
+              type="time"
+              defaultValue={'01:00'}
+            />
+            <Input
+              onChange={changeHandler}
+              slotProps={{ input: { ref: priceRef } }}
+              type="text"
+              placeholder="Price"
+            />
+
+            <Button
+              loading={loading}
+              type="submit"
+              style={{ marginTop: '2rem' }}>
+              {' '}
+              Add
+            </Button>
+            {alert && (
+              <Alert variant="soft" color="danger">
+                {alert}
+              </Alert>
+            )}
+          </div>
+        </form>
     </>
   );
 }

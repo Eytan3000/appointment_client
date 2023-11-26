@@ -13,7 +13,7 @@ interface Client {
 
 export default function ClientsTable() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth() || {};
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
 
   // -- Tanstack Query --
@@ -53,7 +53,7 @@ export default function ClientsTable() {
   }
   return (
     <>
-      <BackArrow />
+      {isMobile ? <BackArrow /> : <div style={{ height: '2rem' }} />}
 
       <Typography
         sx={{ display: 'flex', justifyContent: 'center', mb: '1rem' }}

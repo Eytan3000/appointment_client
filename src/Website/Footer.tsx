@@ -5,23 +5,9 @@ import TwitterIcon from '@mui/icons-material/Twitter';
 import YouTubeIcon from '@mui/icons-material/YouTube';
 import FacebookIcon from '@mui/icons-material/Facebook';
 import InstagramIcon from '@mui/icons-material/Instagram';
-import { useEffect, useState } from 'react';
 
-export default function Footer() {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const handleResize = () => {
-      setIsMobile(window.innerWidth <= 768); // Adjust the breakpoint as needed
-    };
-
-    window.addEventListener('resize', handleResize);
-    handleResize(); // Set initial mobile state
-
-    return () => {
-      window.removeEventListener('resize', handleResize);
-    };
-  }, []);
+export default function Footer({isMobile, handleCreateAccount}:{isMobile:boolean;
+  handleCreateAccount:()=>void}) {
 
   return (
     <>
@@ -48,7 +34,8 @@ export default function Footer() {
             background: '#2f9fdf',
             width: isMobile ? '80%' : '20%',
             marginInline: 'auto',
-          }}>
+          }}
+          onClick={handleCreateAccount}>
           Sign Up for free
         </Button>
       </div>

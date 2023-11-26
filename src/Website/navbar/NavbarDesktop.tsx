@@ -1,52 +1,15 @@
-// import { Link } from 'react-router-dom';
-// import logoSvg from '../assets/Images/LogoBlack.svg';
-// import { Button } from '@mui/joy';
-
-// export default function Navbar() {
-//   return (
-//     <nav
-//       style={{
-//         display: 'flex',
-//         justifyContent: 'space-between',
-//         boxShadow: '0px 2px 16px rgba(0, 0, 0, 0.1)', // Add shadow
-//         padding: '2rem', // Add padding to give space for the shadow
-//         margin: '-1rem',
-
-//         position: 'fixed',
-//       width: '98%',
-//       top: '10px',
-//       zIndex: '1000',
-//       background:'#ffffff',
-
-//       }}>
-//       <Link to="/homepage">
-//         <img
-//           src={logoSvg}
-//           alt="logo"
-//           style={{ width: '40%', height: '100%' }}
-//         />
-//       </Link>
-//       <div style={{display:'flex', gap:'1rem'}}>
-//         {/* <Button variant="outlined" size="lg">
-//           Go to console
-//         </Button> */}
-//         <Button variant="outlined" size="lg">
-//           Sign Up
-//         </Button>
-//         <Button variant="plain" size="lg">
-//           Log In
-//         </Button>
-//       </div>
-//     </nav>
-//   );
-// }
-
 import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import logoSvg from '../../assets/Images/LogoBlack.svg';
 import { Box, Button, Typography } from '@mui/joy';
 
-export default function NavbarDesktop() {
+export default function NavbarDesktop({
+  handleLogin,
+  handleCreateAccount
+}: {
+  handleLogin: () => void;
+  handleCreateAccount: ()=>void;
+}) {
   // State to keep track of the scroll position
   const [prevScrollPos, setPrevScrollPos] = useState(0);
 
@@ -118,10 +81,10 @@ export default function NavbarDesktop() {
             alignSelf: 'center',
           }}
         />
-        <Button variant="plain" size="sm">
+        <Button variant="plain" size="sm" onClick={handleLogin}>
           Log In
         </Button>
-        <Button variant="outlined" size="sm">
+        <Button variant="outlined" size="sm" onClick={handleCreateAccount}>
           Sign Up
         </Button>
         {/* <div style={{width:'20px'}}/> */}

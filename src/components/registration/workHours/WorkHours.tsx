@@ -6,6 +6,7 @@ import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { SyntheticEvent, useState } from 'react';
 import { createWeeklySchedule, createWorkweek } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
+import NavbarRegistration from '../../../Website/navbar/NavbarRegistration';
 
 interface DaylySchedule {
   name: string;
@@ -27,7 +28,7 @@ interface Workweek {
 
 export default function WorkHours() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth();
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser.uid;
 
   const [sunday, setSunday] = useState(true);
@@ -115,7 +116,6 @@ export default function WorkHours() {
 
     response = await createWeeklySchedule(weekDays);
 
-    // console.log(response.data);
     setLoading(false);
     navigate('/main-calendar');
   }
@@ -124,27 +124,36 @@ export default function WorkHours() {
   }
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginInline: '1rem',
-          marginBlock: '2rem 1rem',
-        }}>
-        <Link
-          // to={-1}
-          to="#"
-          onClick={() => window.history.back()}>
-          <img src={backArrow} alt="back-arrow" />
-        </Link>
-      </div>
+      {!isMobile && <NavbarRegistration />}
+      {isMobile && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginInline: '1rem',
+            marginBlock: '2rem 1rem',
+          }}>
+          <Link
+            // to={-1}
+            to="#"
+            onClick={() => window.history.back()}>
+            <img src={backArrow} alt="back-arrow" />
+          </Link>
+        </div>
+      )}
 
-      <div style={{ display: 'flex', justifyContent: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'center', marginTop:isMobile ? '' : '10rem' }}>
         <Typography level="h3">Workweek</Typography>
       </div>
 
       <form
-        style={{ height: '75vh', display: 'flex', flexDirection: 'column' }}
+        style={{
+          height: '75vh',
+          display: 'flex',
+          flexDirection: 'column',
+          maxWidth: isMobile ? '' : '30vw',
+          marginInline: 'auto',
+        }}
         onSubmit={handleSubmit}>
         {/* Checkboxes */}
         <div className="days-checkboxes">

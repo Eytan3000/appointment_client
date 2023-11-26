@@ -2,7 +2,16 @@ import { Button, Typography } from '@mui/joy';
 import heroImage from '../assets/Images/hero.png';
 import star from '../assets/icons/star.svg';
 import './hero.css';
-export default function Hero() {
+
+export default function Hero({
+  isMobile,
+  handleCreateAccount,
+}: {
+  isMobile: boolean;
+  handleCreateAccount: () => void;
+}) {
+
+
   return (
     <div className="hero__main__div">
       <div className="hero__titles__div">
@@ -14,18 +23,22 @@ export default function Hero() {
           in your hand. Say goodbye to hassles, embrace efficiency effortlessly.
         </Typography>
         <div className="hero__button__div">
-          <Button className="hero__button__div--signup--button">Sign Up</Button>
-          <div className='hero__button__div--signup--button--caption'>
-          <Typography
-            level="body-xs"
-            // sx={{ mt: 2, textAlign: 'center', paddingRight: '48%' }}
+          <Button
+            className="hero__button__div--signup--button"
+            onClick={handleCreateAccount}>
+            Sign Up
+          </Button>
+          <div className="hero__button__div--signup--button--caption">
+            <Typography
+              level="body-xs"
+              // sx={{ mt: 2, textAlign: 'center', paddingRight: '48%' }}
             >
-            FREE FOREVER. <br />
-            NO CREDIT CARD.
-          </Typography>
+              FREE FOREVER. <br />
+              NO CREDIT CARD.
+            </Typography>
           </div>
         </div>
-        <div className='hero__star__div'>
+        <div className="hero__star__div">
           <img src={star} alt="star" />
           <img src={star} alt="star" />
           <img src={star} alt="star" />
@@ -40,4 +53,3 @@ export default function Hero() {
     </div>
   );
 }
-

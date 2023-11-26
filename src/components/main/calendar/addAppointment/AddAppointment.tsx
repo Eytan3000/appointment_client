@@ -79,15 +79,6 @@ interface CustomEditorProps {
   scheduler: SchedulerHelpers;
 }
 
-// interface Client {
-//   id: number;
-//   Name: string;
-//   phone: string;
-//   email: string;
-//   timestamp: string;
-//   owner_id: string;
-// }
-
 export const clientSignal = signal({});
 export const serviceSignal = signal({});
 export const clientOrServiceChanged = signal(false);
@@ -102,15 +93,13 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   const [alertMessage, setAlertMessage] = useState('');
   const [openClientModal, setOpenClientModal] = useState(false);
   const [openServiceModal, setOpenServiceModal] = useState(false);
-  
-  const [note] = useState('');
-  
-  const [openAddClientModal, setOpenAddClientModal] = useState(false);
 
+  const [note] = useState('');
+
+  const [openAddClientModal, setOpenAddClientModal] = useState(false);
 
   const isUpdating = scheduler?.edited;
   const appointmentId = scheduler?.edited?.event_id; // if scheduler.edited true, means the modal was opened by clicking edit
-
 
   // get existing data ------------------------------------
 
@@ -291,7 +280,6 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       return;
     }
 
-    
     const event = scheduler.edited;
     if (scheduler.edited) {
       //call update if it's an edit and finish
@@ -335,8 +323,14 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
 
   return (
     <>
-      <div style={{ margin: '1rem 2rem', fontFamily: 'Poppins' }}>
-        <form onSubmit={handleSubmit} style={{ overflow: 'scroll' }}>
+      <div
+        style={{
+          margin: '1rem 2rem',
+        }}>
+        <form
+          onSubmit={handleSubmit}
+          // style={{ overflow: 'scroll' }}
+        >
           <FormLabel>Client</FormLabel>
 
           {/* Client Card */}
@@ -436,7 +430,11 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
         </form>
 
         {/* Modals */}
-        <AddClientModal open={openClientModal} setOpen={setOpenClientModal} setOpenAddClientModal={setOpenAddClientModal}/>
+        <AddClientModal
+          open={openClientModal}
+          setOpen={setOpenClientModal}
+          setOpenAddClientModal={setOpenAddClientModal}
+        />
         <AddServiceModal
           open={openServiceModal}
           setOpen={setOpenServiceModal}

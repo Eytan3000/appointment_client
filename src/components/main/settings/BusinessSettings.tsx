@@ -16,7 +16,7 @@ import { useAuth } from '../../../context/AuthContext';
 export default function BusinessSettings() {
   // const navigate = useNavigate();
 
-  const { currentUser } = useAuth() || {};
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
   const queryClient = useQueryClient();
 
@@ -127,14 +127,14 @@ export default function BusinessSettings() {
 
             margin: '2rem',
           }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
+          {isMobile && <div style={{ display: 'flex', alignItems: 'center', gap: '0.7rem' }}>
             <Link to="/settings" style={{ margin: -3, paddingTop: '0.4rem' }}>
               <ArrowBackIcon
                 style={{ marginLeft: '-2rem', marginBlock: 'auto' }}
               />
             </Link>
             <Typography level="h4">Business Settings</Typography>
-          </div>
+          </div>}
 
           {form}
           {alert.message && (

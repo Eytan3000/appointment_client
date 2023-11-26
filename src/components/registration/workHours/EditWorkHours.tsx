@@ -1,24 +1,14 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
-import {
-  Alert,
-  Button,
-  CircularProgress,
-  Input,
-  Typography,
-} from '@mui/joy';
+import { Alert, Button, CircularProgress, Input, Typography } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
-import {
-  getWorkWeek,
-  updateDailySchedule,
-} from '../../../utils/http';
+import { getWorkWeek, updateDailySchedule } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { rearrangeByDayOfWeek } from '../../../utils/helperFunctions';
 import { signal } from '@preact/signals-react';
-
 
 export const isWorkDaysArr = signal([
   {
@@ -86,12 +76,11 @@ export const isWorkDaysArr = signal([
   },
 ]);
 
-
 export default function EditWorkHours() {
   const navigate = useNavigate();
   const queryClient = useQueryClient();
 
-  const { currentUser } = useAuth() || {};
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
 
   const [mutateError, setMutateError] = useState(false);
@@ -117,7 +106,6 @@ export default function EditWorkHours() {
     e.preventDefault();
     console.log(isWorkDaysArr.value);
     editWorkhoursMutation.mutate(isWorkDaysArr.value);
-
   }
   function handleAdvancedOptions() {
     navigate('/workhours-advanced-options');
@@ -291,20 +279,24 @@ export default function EditWorkHours() {
 
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginInline: '1rem',
-          marginBlock: '2rem 1rem',
-        }}>
-        <Link
-          // to={-1}
-          to="#"
-          onClick={() => window.history.back()}>
-          <img src={backArrow} alt="back-arrow" />
-        </Link>
-      </div>
+      {isMobile ? (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginInline: '1rem',
+            marginBlock: '2rem 1rem',
+          }}>
+          <Link
+            // to={-1}
+            to="#"
+            onClick={() => window.history.back()}>
+            <img src={backArrow} alt="back-arrow" />
+          </Link>
+        </div>
+      ) : (
+        <div style={{ marginTop: '4rem' }} />
+      )}
 
       <div style={{ display: 'flex', justifyContent: 'center' }}>
         <Typography level="h3">Edit Workweek</Typography>
@@ -340,10 +332,9 @@ export default function EditWorkHours() {
         )}
 
         <Button
-          style={{ marginTop: 'auto', marginInline: 'auto', width: '90%' }}
+          style={{ marginTop: isMobile ?'auto': '6rem', marginInline: 'auto', width: '90%' }}
           type="submit"
-          loading={editWorkhoursMutation.isPending}
-          >
+          loading={editWorkhoursMutation.isPending}>
           Save
         </Button>
       </form>

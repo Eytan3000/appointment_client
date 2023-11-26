@@ -10,10 +10,10 @@ export default function AddClient() {
   const queryClient = useQueryClient();
   // const navigate = useNavigate();
 
-  const { currentUser } = useAuth() || {};
+  const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
 
-    const nameRef = useRef<HTMLInputElement | null>(null);
+  const nameRef = useRef<HTMLInputElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
   const emailRef = useRef<HTMLInputElement | null>(null);
 
@@ -21,7 +21,7 @@ export default function AddClient() {
   const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
     mutationFn: createNewClient,
     onSuccess: () => {
-      queryClient.invalidateQueries({queryKey:['clients'], exact: true});
+      queryClient.invalidateQueries({ queryKey: ['clients'], exact: true });
 
       // Reset the input fields
       if (nameRef.current) {
@@ -52,12 +52,12 @@ export default function AddClient() {
     const phone = phoneRef?.current?.value || '';
     const email = emailRef?.current?.value || '';
 
-    if(uid) mutate({ name, phone, email, uid });
+    if (uid) mutate({ name, phone, email, uid });
   }
 
   return (
     <>
-      <BackArrow />
+      {isMobile ? <BackArrow /> : <div style={{ height: '2rem' }} />}
 
       <div style={{ marginInline: '2rem', height: '90vh' }}>
         <Typography textAlign={'center'} level="h4">
@@ -84,7 +84,9 @@ export default function AddClient() {
               type="email"
               placeholder="email"
             />
-            {isSuccess && <Alert color="success">Client Added Successfully</Alert>}
+            {isSuccess && (
+              <Alert color="success">Client Added Successfully</Alert>
+            )}
             {isError && <Alert color="danger">{errorMessage}</Alert>}
             <Button type="submit" loading={isPending}>
               Save

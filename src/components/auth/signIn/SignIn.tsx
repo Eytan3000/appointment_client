@@ -8,7 +8,7 @@ import { FirebaseError } from 'firebase/app';
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { login, googleSignIn } = useAuth() || {};
+  const { login, googleSignIn, isMobile } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -77,27 +77,26 @@ export default function SignIn() {
   }
   return (
     <>
-      <div
-        style={{
-          display: 'flex',
-          justifyContent: 'space-between',
-          marginInline: '1rem',
-          marginBlock: '2rem',
-        }}>
-        <Link
-          // to={-1}
-          to="#"
-          onClick={() => window.history.back()}>
-          <img src={backArrow} alt="back-arrow" />
-        </Link>
+      {isMobile && (
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            marginInline: '1rem',
+            marginBlock: '2rem',
+          }}>
+          <Link to="#" onClick={() => window.history.back()}>
+            <img src={backArrow} alt="back-arrow" />
+          </Link>
 
-        <Button
-          onClick={() => navigate('/create-account')}
-          variant="plain"
-          style={{ margin: -10 }}>
-          Create Account
-        </Button>
-      </div>
+          <Button
+            onClick={() => navigate('/create-account')}
+            variant="plain"
+            style={{ margin: -10 }}>
+            Create Account
+          </Button>
+        </div>
+      )}
 
       <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
         Sign In
@@ -109,7 +108,7 @@ export default function SignIn() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: '50vh',
+            height: isMobile ? 'calc(100vh - 12rem)' : '30vh',
           }}>
           <Stack spacing={2} mx={2}>
             <Input

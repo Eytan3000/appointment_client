@@ -4,23 +4,54 @@ import ClientLogos from './ClientLogos';
 import FeaturesBoxes from './featureBoxes/FeaturesBoxes';
 import Footer from './Footer';
 import CustomersQuotes from './customerQuotes/CustomersQuotes';
-import NavbarSwitch from './navbar/NavbarSwitch';
+
+import { useState } from 'react';
+import NavbarMobile from './navbar/NavbarMobile';
+import NavbarDesktop from './navbar/NavbarDesktop';
+import { useNavigate } from 'react-router-dom';
+import SignInModal from '../components/auth/signIn/SignInModal';
+import { useAuth } from '../context/AuthContext';
+import CreateAccountModal from '../components/auth/creactAccount/CreateAccountModal';
 
 export default function HomePage() {
+  const navigate = useNavigate();
+  const { isMobile } = useAuth();
+
+  const [openSignInModal, SetOpenSignInModal] = useState(false);
+  const [openCreateAccountModal, SetOpenCreateAccountModal] = useState(false);
+
+  function handleCreateAccount() {
+    isMobile ? navigate('../create-account') : SetOpenCreateAccountModal(true);
+    console.log('CreateAccount')
+  }
+
+  function handleLogin() {
+    isMobile ? navigate('../signin') : SetOpenSignInModal(true);
+  }
+
   return (
     <>
-      <NavbarSwitch />
+      {isMobile ? (
+        <NavbarMobile handleLogin={handleLogin}  handleCreateAccount={handleCreateAccount}/>
+      ) : (
+        <NavbarDesktop handleLogin={handleLogin} handleCreateAccount={handleCreateAccount}/>
+      )}
 
       <Container>
-        <Hero />
+        <Hero isMobile={isMobile} handleCreateAccount={handleCreateAccount} />
         <ClientLogos />
-        <FeaturesBoxes />
+        <FeaturesBoxes isMobile={isMobile} />
+        <CustomersQuotes isMobile={isMobile} />
+        <Footer isMobile={isMobile} handleCreateAccount={handleCreateAccount}/>
       </Container>
 
-      <Container>
-        <CustomersQuotes />
-        <Footer />
-      </Container>
+      {openSignInModal && (
+        <SignInModal open={openSignInModal} setOpen={SetOpenSignInModal} />
+      )}
+      {openCreateAccountModal && (
+        <CreateAccountModal open={openCreateAccountModal} setOpen={SetOpenCreateAccountModal} />
+      )}
+
     </>
   );
 }
