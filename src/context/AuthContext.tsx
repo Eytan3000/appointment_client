@@ -27,9 +27,10 @@ interface AuthContextValue {
   // reAuthenticate: (password: string) => Promise<UserCredential>;
   resetPassword: (email: string) => Promise<void>;
   updatePasswordCtx: (password: string) => Promise<void> | undefined;
-  logout: () => Promise<void> ;
-  googleSignIn: () => Promise<void> ;
-  isMoblie: boolean;
+  logout: () => Promise<void>;
+  googleSignIn: () => Promise<void>;
+  isMobile: boolean;
+  token: string;
 }
 
 //------------------------------------------------
@@ -42,15 +43,21 @@ export function useAuth() {
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isMobile, setIsMobile] = useState<boolean>(false);
+  const [token, setToken] = useState<string>('');
 
   //sets user to state when auth state changes (when a user logs in or logs out)
   useEffect(() => {
-    const unsubscribed = onAuthStateChanged(auth, (user) => {
-      setCurrentUser(user);
+    const unsubscribed = onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        setCurrentUser(user);
+        const token = await user.getIdToken();
+        setToken(token);
+      }
+      else console.log('No signed in user');
     });
     return unsubscribed;
   }, []);
-
+  console.log(token);
   // isMobile
   useEffect(() => {
     const handleResize = () => {
@@ -64,7 +71,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       window.removeEventListener('resize', handleResize);
     };
   }, []);
-
 
   function signup(email: string, password: string) {
     return createUserWithEmailAndPassword(auth, email, password);
@@ -86,7 +92,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     if (currentUser) return updatePassword(currentUser, password);
   }
 
-  function googleSignIn(){
+  function googleSignIn() {
     return signInWithRedirect(auth, provider);
     // return signInWithPopup(auth, provider);
   }
@@ -99,7 +105,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     updatePasswordCtx,
     logout,
     googleSignIn,
-    isMobile
+    isMobile,
+    token,
   };
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

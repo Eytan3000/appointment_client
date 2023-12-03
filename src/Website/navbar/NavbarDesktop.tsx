@@ -1,15 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import logoSvg from '../../assets/Images/LogoBlack.svg';
 import { Box, Button, Typography } from '@mui/joy';
+import { useAuth } from '../../context/AuthContext';
 
 export default function NavbarDesktop({
   handleLogin,
-  handleCreateAccount
+  handleCreateAccount,
 }: {
   handleLogin: () => void;
-  handleCreateAccount: ()=>void;
+  handleCreateAccount: () => void;
 }) {
+  const navigate = useNavigate();
+  const { currentUser } = useAuth() || {};
   // State to keep track of the scroll position
   const [prevScrollPos, setPrevScrollPos] = useState(0);
 
@@ -66,7 +69,12 @@ export default function NavbarDesktop({
           Go to console
         </Button> */}
 
-        <Box display="flex" alignSelf={'center'} gap={10} mr={3} textAlign={'center'}>
+        <Box
+          display="flex"
+          alignSelf={'center'}
+          gap={10}
+          mr={3}
+          textAlign={'center'}>
           <Typography>Features</Typography>
           <Typography>For Teams</Typography>
           <Typography>Resources</Typography>
@@ -81,6 +89,14 @@ export default function NavbarDesktop({
             alignSelf: 'center',
           }}
         />
+        {currentUser && (
+          <Button
+            variant="plain"
+            size="sm"
+            onClick={() => navigate('/main-calendar')}>
+            Calendar
+          </Button>
+        )}
         <Button variant="plain" size="sm" onClick={handleLogin}>
           Log In
         </Button>
