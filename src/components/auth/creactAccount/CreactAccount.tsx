@@ -61,6 +61,13 @@ export default function SignIn() {
               throw new Error('Email already exists');
           }
 
+          if (!signup) {
+            // Handle the case where signup is not defined, e.g., display an error message
+            setAlert('Signup function is not available');
+            setLoading(false);
+            return;
+          }
+          
           const { user } = await signup(email, password);
 
           const uid = user.uid;
