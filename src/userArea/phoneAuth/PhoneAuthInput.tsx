@@ -154,20 +154,6 @@ export default function PhoneAuthInput() {
             {alert !== '' && <Alert color="danger">{alert}</Alert>}
           </Stack>
         </form>
-
-        <Button //remove later
-          sx={{ mt: 2 }}
-          onClick={() => {
-            appointmentSignal.value.client = {
-              name: 'eytankrief',
-              uid: 'juwZqBaLkZY3bfe6na45YGB1ryo1',
-              phone: '0508657032',
-            };
-
-            navigate('../booking-summary');
-          }}>
-          Jump
-        </Button>
       </div>
     </>
   );

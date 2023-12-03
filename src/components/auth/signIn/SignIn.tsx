@@ -63,7 +63,6 @@ export default function SignIn() {
         }
       } else if (submitterName === 'google-submitter') {
         setLoading(true);
-        console.log('google signUp'); //remove later
       }
     }
     setLoading(false);
