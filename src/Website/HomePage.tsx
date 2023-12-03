@@ -22,7 +22,6 @@ export default function HomePage() {
 
   function handleCreateAccount() {
     isMobile ? navigate('../create-account') : SetOpenCreateAccountModal(true);
-    console.log('CreateAccount')
   }
 
   function handleLogin() {

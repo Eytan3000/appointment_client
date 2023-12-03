@@ -15,14 +15,14 @@ export default function FeaturesBoxes({isMobile}:{isMobile:boolean}) {
       {isMobile ? (
         <Stack spacing={6} mt={12}>
           <SetAppointmentsMobile />
-          <AutomaticRemindersMobile />
+          {/* <AutomaticRemindersMobile /> */}
           <PrivateLinkMobile />
           <MultipleDevicesMobile />
         </Stack>
       ) : (
         <Stack spacing={6} mt={12}>
           <SetAppointments />
-          <AutomaticReminders />
+          {/* <AutomaticReminders /> */}
           <PrivateLink />
           <MultipleDevices />
         </Stack>

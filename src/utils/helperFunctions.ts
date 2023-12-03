@@ -35,7 +35,7 @@ export function minutesToTimeDuration(minutes: string) {
   return `${hoursString}:${minutesString}`;
 }
 
-export function rearrangeByDayOfWeek(array:DailySchedule[]) {
+export function rearrangeByDayOfWeek(array: DailySchedule[]) {
   const daysOfWeek = ["sunday", "monday", "tuesday", "wednesday", "thursday", "friday", "saturday"];
 
   const rearrangedArray = [];
@@ -61,8 +61,14 @@ export function rearrangeByDayOfWeek(array:DailySchedule[]) {
 
 
 export function copyToClipboard(text: string) {
+
+  const type = "text/plain";
+  const blob = new Blob([text], { type });
+  const data = [new ClipboardItem({ [type]: blob })];
+
   navigator.clipboard
-    .writeText(text)
+    // .writeText(text) //this is for just text, also works.
+    .write(data)
     .then(() => {
       console.log('Text copied to clipboard');
     })
@@ -71,7 +77,7 @@ export function copyToClipboard(text: string) {
     });
 }
 
-export function addMinutesToTime(timeString:string, minutesToAdd:number) {
+export function addMinutesToTime(timeString: string, minutesToAdd: number) {
   const [hours, minutes, seconds] = timeString.split(':').map(Number);
 
   // Create a Date object with the current date and the provided time
@@ -195,4 +201,21 @@ export function getDayOfWeek(dayIndex: number) {
     'Saturday',
   ];
   return dayNames[dayIndex];
+}
+
+export function formateDateToDD_MM_YYYY(date: string) { // input: 2020-02-27
+  return date.split('-').reverse().join('.');
+}
+
+export function formatIsraeliPhoneNumberToE164(phone:string) {
+  // Remove non-numeric characters from the input
+  const numericOnly = phone.replace(/\D/g, '');
+
+  // Check if the number starts with "0" and remove it
+  const withoutLeadingZero = numericOnly.startsWith('0') ? numericOnly.slice(1) : numericOnly;
+
+  // Add the country code for Israel (+972) to the formatted number
+  const formattedNumber = `+972${withoutLeadingZero}`;
+
+  return formattedNumber;
 }

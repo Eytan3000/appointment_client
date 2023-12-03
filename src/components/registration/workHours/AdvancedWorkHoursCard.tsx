@@ -1,7 +1,6 @@
 import { Checkbox, Input, Typography } from '@mui/joy';
 import { StyledH3, StyledSmallP } from '../../../StyledComponents';
 import { isWorkDaysArr } from './EditWorkHours';
-import { SyntheticEvent } from 'react';
 
 export default function AdvancedWorkHoursCard({
   id,
@@ -30,7 +29,7 @@ export default function AdvancedWorkHoursCard({
   }
 
   //loops through daysArr and changes isWorking and hasChanged
-  function handleStartTimeChange(e: SyntheticEvent<HTMLInputElement>) {
+  function handleStartTimeChange(e: React.ChangeEvent<HTMLInputElement>) {
     isWorkDaysArr.value.forEach((day, index) => {
       if (day.id === id) {
         isWorkDaysArr.value[index].start_time = e.target.value;
@@ -39,7 +38,7 @@ export default function AdvancedWorkHoursCard({
       }
     });
   }
-  function handleEndTimeChange(e: SyntheticEvent<HTMLInputElement>) {
+  function handleEndTimeChange(e: React.ChangeEvent<HTMLInputElement>) {
     isWorkDaysArr.value.forEach((day, index) => {
       if (day.id === id) {
         isWorkDaysArr.value[index].endTime = e.target.value;

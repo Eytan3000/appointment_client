@@ -66,7 +66,7 @@ export default function NavbarDesktop({
           Go to console
         </Button> */}
 
-        <Box display="flex" alignSelf={'center'} gap={10} mr={3}>
+        <Box display="flex" alignSelf={'center'} gap={10} mr={3} textAlign={'center'}>
           <Typography>Features</Typography>
           <Typography>For Teams</Typography>
           <Typography>Resources</Typography>

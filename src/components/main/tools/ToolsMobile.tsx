@@ -27,6 +27,7 @@ export default function Tools() {
 
   const uid = currentUser?.uid;
   const url = `${baseUrl}/client/${uid}`;
+  // const url = `Hello eytan!`;
 
   function handleShare() {
     console.log(navigator.share);

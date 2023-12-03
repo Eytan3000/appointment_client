@@ -243,6 +243,7 @@ function DayColumn({
   const columnDayAppointments = filterObjectsByDate(date, futureAppointments);
 
   function handleTimeSlotClick(slotStartTime: string) {
+
     const endTime = calculateEndTime(
       slotStartTime,
       appointmentSignal.value.service?.duration || ''

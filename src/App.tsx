@@ -1,6 +1,6 @@
 import { useRoutes } from 'react-router-dom';
 import './App.css';
-import MainAuth from './components/auth/mainAuth/MainAuth';
+// import MainAuth from './components/auth/mainAuth/MainAuth';
 import SignIn from './components/auth/signIn/SignIn';
 import CreateAccount from './components/auth/creactAccount/CreactAccount.tsx';
 import AddService from './components/registration/addService/AddService.tsx';
@@ -34,6 +34,84 @@ import HomePage from './Website/HomePage.tsx';
 import SettingsDesktop from './components/main/settings/SettingsDesktop.tsx';
 
 function App() {
+  const settings = {
+    path: '/settings',
+    // element: <SettingsLayout />,
+    children: [
+      {
+        index: true,
+        element: <Settings />,
+      },
+      {
+        path: 'account-settings', // This is a child route of '/settings'
+        element: <AccountSettings />,
+      },
+      {
+        path: 'business-settings', // This is a child route of '/settings'
+        element: <BusinessSettings />,
+      },
+      {
+        path: 'work-hours',
+        element: <WorkHours />,
+      },
+      {
+        path: 'services',
+        element: <Services />,
+      },
+      {
+        path: 'edit-work-hours',
+        element: <EditWorkHours />,
+      },
+    ],
+  };
+
+  const tools = {
+    path: '/tools',
+    // element: <Tools />,
+    children: [
+      {
+        index: true,
+        element: <ToolsMobile />,
+      },
+      {
+        path: 'client-card/:clientId',
+        // path: 'client-card',
+        element: <ClientCard />,
+      },
+      {
+        path: 'client-edit/:clientId',
+        // path: 'client-card',
+        element: <ClientEdit />,
+      },
+    ],
+  };
+
+  const client = {
+    path: '/client', ///:uid
+    children: [
+      {
+        path: '/client/:uid',
+        element: <ClientChooseService />,
+      },
+      {
+        path: '/client/choose-time',
+        element: <ClientChooseTime />,
+      },
+      {
+        path: '/client/auth',
+        element: <PhoneAuthInput />,
+      },
+      {
+        path: '/client/otp',
+        element: <OtpInput />,
+      },
+      {
+        path: '/client/booking-summary',
+        element: <BookingSummary />,
+      },
+    ],
+  };
+
   const element = useRoutes([
     // {
     // path: '/auth',
@@ -41,7 +119,8 @@ function App() {
     // children: [
     {
       path: '/',
-      element: <MainAuth />,
+      // element: <MainAuth />,
+      element: <HomePage />,
     },
     {
       path: '/signin',
@@ -85,37 +164,7 @@ function App() {
       path: '/clients-list',
       element: <ClientsList />,
     },
-    {
-      path: '/settings',
-      // element: <SettingsLayout />,
-      children: [
-        {
-          index: true,
-          element: <Settings />,
-        },
-        {
-          path: 'account-settings', // This is a child route of '/settings'
-          element: <AccountSettings />,
-        },
-        {
-          path: 'business-settings', // This is a child route of '/settings'
-          element: <BusinessSettings />,
-        },
-        {
-          path: 'work-hours',
-          element: <WorkHours />,
-        },
-        {
-          path: 'services',
-          element: <Services />,
-        },
-        {
-          path: 'edit-work-hours',
-          element: <EditWorkHours />,
-        },
-
-      ],
-    },
+    settings,
     {
       path: '/settings-desktop',
       element: <SettingsDesktop />,
@@ -124,33 +173,7 @@ function App() {
       path: 'tools-desktop',
       element: <ToolsDesktop />,
     },
-    // {
-    //   path: 'speed-dial-add-appointment',
-    //   element:<SpeedDialAddAppointment />
-    // },
-
-    // ClientCard
-
-    {
-      path: '/tools',
-      // element: <Tools />,
-      children: [
-        {
-          index: true,
-          element: <ToolsMobile />,
-        },
-        {
-          path: 'client-card/:clientId',
-          // path: 'client-card',
-          element: <ClientCard />,
-        },
-        {
-          path: 'client-edit/:clientId',
-          // path: 'client-card',
-          element: <ClientEdit />,
-        },
-      ],
-    },
+    tools,
     {
       path: '/inbox',
       element: <Inbox />,
@@ -167,53 +190,11 @@ function App() {
       path: '/clients-table',
       element: <ClientsTable />,
     },
-    // {
-    //   path: '/tools-services',
-    //   element: <ToolsServices />,
-    // },
     {
       path: '/google-signin',
       element: <GoogleSignIn />,
     },
-    // {
-    //   path: '/client',
-    //   element: <ClientChooseService />,
-    // },
-    // Client area
-    {
-      path: '/client', ///:uid
-      children: [
-        // {
-        //   index: true,
-        //   element: <ClientChooseService />,
-        // },
-        {
-          path: '/client/:uid',
-          element: <ClientChooseService />,
-        },
-        {
-          path: '/client/choose-time',
-          element: <ClientChooseTime />,
-        },
-        {
-          path: '/client/auth',
-          element: <PhoneAuthInput />,
-        },
-        {
-          path: '/client/otp',
-          element: <OtpInput />,
-        },
-        {
-          path: '/client/booking-summary',
-          element: <BookingSummary />,
-        },
-      ],
-    },
-
-    {
-      path: '/homepage',
-      element: <HomePage />,
-    },
+    client,
   ]);
 
   return (

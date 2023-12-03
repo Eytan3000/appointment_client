@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { addDay, timeStringToMinutes } from './helperFunctions';
+import { addDay, formatIsraeliPhoneNumberToE164, formateDateToDD_MM_YYYY, timeStringToMinutes } from './helperFunctions';
 
 interface ServiceObject {
     description: string | null;
@@ -130,8 +130,20 @@ export async function insertNewGoogleUserInDb(
     return response;
 }
 
+export async function getUser(ownerId: string) {
+    try {
+        const response = await axios.get(baseURL + '/users/read-user/' + ownerId);
+        return response.data;
 
-// services
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+
+//  ---- services  ---- 
 export async function createService(
     { name,
         description,
@@ -173,7 +185,7 @@ export async function createService(
 
 export async function getAllServices(owner_id: string) {
     try {
-        const response = await axios.get(baseURL + '/services/read-all-services/' + owner_id);    
+        const response = await axios.get(baseURL + '/services/read-all-services/' + owner_id);
         return response.data;
 
     } catch (error) {
@@ -278,7 +290,7 @@ export async function updateDailySchedule(isWorkDaysArr: DailySchedule[]) { //re
 
 // Clients queries
 
-export async function createNewClient(obj:{ name:string; phone:string; email:string; uid:string; }) {
+export async function createNewClient(obj: { name: string; phone: string; email: string; uid: string; }) {
     const { name, phone, email, uid } = obj;
     try {
         const response = await axios.post(baseURL + '/clients/create-client', {
@@ -322,9 +334,22 @@ export async function getClient(clientId: string) {
     }
 }
 // check if client exist for owner by phone
-export async function checkOwnersClientExistsByPhone(phone: string, owner_id:string) {
+export async function checkOwnersClientExistsByPhone(phone: string, owner_id: string) {
     try {
-        const response = await axios.get(baseURL + '/clients/get-client-by-phone/?phone=' + phone + '&owner_id='+owner_id);
+        const response = await axios.get(baseURL + '/clients/get-client-exists-by-phone/?phone=' + phone + '&owner_id=' + owner_id);
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// get existing client id for owner by phone
+export async function getClientIdByPhone(phone: string, owner_id: string) {
+    try {
+        const response = await axios.get(baseURL + '/clients/get-client-id-by-phone/?phone=' + phone + '&owner_id=' + owner_id);
 
         return response.data;
 
@@ -387,7 +412,7 @@ export async function getAllAppointments(ownerId: string) {
 export async function getAllFutureAppointments(ownerId: string) {
     try {
         console.log(ownerId);
-        
+
         const response = await axios.get(baseURL + '/appointments/get-all-future-appointments/' + ownerId);
 
         return response.data;
@@ -444,6 +469,39 @@ export async function deleteAppointment(appointmentId: string) {
     }
 }
 
+///
+// Check overlapping Appointment
+export async function checkOverlappingAppointment(start: string, end: string, date: string, owner_id: string) {
+    // console.log(start,
+    //     end,
+    //     date,
+    //     owner_id);
+
+    try {
+        const response = await axios.post(baseURL + '/appointments/check-overlap', {
+            start,
+            end,
+            date,
+            owner_id
+        });
+
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+// console.log(await checkOverlappingAppointment(
+
+//     "15:30",
+//     "17:31",
+//     "2023-11-28",
+//     "nbl4kT3L2pNLEcZ1W4zQAzfcUsA3",
+
+// ));
+
 // -----------------------
 
 
@@ -456,7 +514,7 @@ export async function fetchAppointments(ownerId: string) {
 
 
 
-        const appointments = appointmentsResponse.data.map((appointment:Appointment) => {
+        const appointments = appointmentsResponse.data.map((appointment: Appointment) => {
             const appointmentDate = addDay(appointment.date.split('T')[0]); // fetches one day earlier for some reason.
 
             const clientObj = clientsArr.filter(client => client.id === appointment.client_id)[0];
@@ -523,6 +581,42 @@ export async function updateBusiness({ name, address, phone, ownerId }: Business
 export async function getBusiness(ownerId: string) {
     try {
         const response = await axios.get(baseURL + '/business/get-business/' + ownerId);
+        return response.data;
+
+    } catch (error) {
+        console.error(error);
+        throw error;
+    }
+}
+
+
+
+
+// Send creation appointment client message summary
+export async function sendNewAppointmentMessageClient(
+    Clientname: string,
+    Ownername: string,
+    date: string,
+    startTime: string,
+    duration: string,
+    businessAddress: string,
+    phone: string
+) {
+
+    // formate date, startTime
+    const formattedDate = formateDateToDD_MM_YYYY(date);
+    const formattedPhone = formatIsraeliPhoneNumberToE164(phone);
+
+    try {
+        const response = await axios.post(baseURL + '/send-message/client-new-appointment', {
+            Clientname,
+            Ownername,
+            date: formattedDate,
+            startTime,
+            duration,
+            businessAddress,
+            phone: formattedPhone
+        });
         return response.data;
 
     } catch (error) {

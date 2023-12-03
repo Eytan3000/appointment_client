@@ -149,6 +149,6 @@ export default function SettingsDesktop() {
   );
   function handleLogOut() {
     if (logout) logout();
-    navigate('/homepage');
+    navigate('/');
   }
 }

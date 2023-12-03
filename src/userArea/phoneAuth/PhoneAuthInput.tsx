@@ -113,10 +113,13 @@ export default function PhoneAuthInput() {
           border: isMobile ? '' : '1px solid #d4dce5',
           padding: isMobile ? '' : '0 4rem 4rem 4rem',
         }}>
-        {isMobile ? <BackArrow /> : (
+        {isMobile ? (
+          <BackArrow />
+        ) : (
           <div style={{ marginLeft: '-40px', marginBottom: '-20px' }}>
             <BackArrow />
-          </div>)}
+          </div>
+        )}
         <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
           SMS log in
         </Typography>
@@ -147,9 +150,24 @@ export default function PhoneAuthInput() {
               loading={loading}>
               Send SMS
             </Button>
+
             {alert !== '' && <Alert color="danger">{alert}</Alert>}
           </Stack>
         </form>
+
+        <Button //remove later
+          sx={{ mt: 2 }}
+          onClick={() => {
+            appointmentSignal.value.client = {
+              name: 'eytankrief',
+              uid: 'juwZqBaLkZY3bfe6na45YGB1ryo1',
+              phone: '0508657032',
+            };
+
+            navigate('../booking-summary');
+          }}>
+          Jump
+        </Button>
       </div>
     </>
   );

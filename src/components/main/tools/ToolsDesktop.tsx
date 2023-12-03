@@ -14,6 +14,7 @@ import Services from '../../registration/addServices/Services';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useAuth } from '../../../context/AuthContext';
 import { copyToClipboard } from '../../../utils/helperFunctions';
+import tools from '../../../assets/Images/tools.png';
 
 const clientsSum = 59;
 
@@ -32,7 +33,7 @@ export default function ToolsDesktop() {
   const uid = currentUser?.uid;
   const url = `${baseUrl}/client/${uid}`;
 
-  const [path, setPath] = useState('clients-table');
+  const [path, setPath] = useState('image');
 
   function handleShare() {
     if (navigator.share) {
@@ -47,8 +48,6 @@ export default function ToolsDesktop() {
       console.log('navigator.share doesnt work');
     }
   }
-
-
 
   return (
     <>
@@ -85,14 +84,13 @@ export default function ToolsDesktop() {
                   }}
                 />
 
-                  <ToolsCard
-                    tool={{
-                      name: 'Copy Link',
-                      icon: <ContentCopyIcon sx={iconSx} />,
-                      function: ()=>copyToClipboard(url),
-                    }}
-                  />
-        
+                <ToolsCard
+                  tool={{
+                    name: 'Copy Link',
+                    icon: <ContentCopyIcon sx={iconSx} />,
+                    function: () => copyToClipboard(url),
+                  }}
+                />
 
                 {/* <ToolsCard
                   tool={{
@@ -149,6 +147,7 @@ export default function ToolsDesktop() {
               justifyContent: 'center',
               width: '40%',
             }}>
+            {path === 'image' && initialState}
             {path === 'clients-table' && <ClientsTable />}
             {path === 'add-client' && <AddClient />}
             {path === 'settings/services' && <Services />}
@@ -158,3 +157,21 @@ export default function ToolsDesktop() {
     </>
   );
 }
+
+const initialState = (
+  <div
+    style={{
+      marginTop:'5rem',
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+    }}>
+    <Typography level="h1" textAlign={'center'}>Tools</Typography>
+    <img
+      // style={{ height: '500px'}}
+      style={{ height: 'auto', maxWidth: '100%'}}
+      src={tools}
+      alt="tools image"
+    />
+  </div>
+);

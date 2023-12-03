@@ -108,7 +108,7 @@ export default function SignIn() {
             display: 'flex',
             flexDirection: 'column',
             justifyContent: 'space-between',
-            height: isMobile ? 'calc(100vh - 12rem)' : '30vh',
+            height: isMobile ? 'calc(100dvh - 12rem)' : '30vh',
           }}>
           <Stack spacing={2} mx={2}>
             <Input
