@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
-import { Alert, Button, Container, Input, Stack, Typography } from '@mui/joy';
+import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../components/utilsComponents/BackArrow';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
