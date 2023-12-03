@@ -1,0 +1,90 @@
+body{
+  overflow-x: hidden;
+}
+.hero__main__div {
+  display: flex;
+  margin-top: 12rem;
+}
+.hero__titles__div {
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  gap: 5%;
+}
+.hero__button__div {
+  padding: 2rem;
+}
+.hero__button__div--signup--button {
+  width: 50%;
+  margin-top: 1rem;
+  box-shadow: 0px 8px 16px rgba(0, 0, 0, 0.2);
+  background: #309fdf;
+}
+
+.hero__button__div--signup--button--caption{
+    margin-top: 2rem;
+    text-align: center;
+    padding-right: 48%;
+}
+
+.hero__star__div {
+    display: flex;
+    margin-top: -1rem;
+}
+.hero__img {
+  height: 25rem;
+  margin-left: -10rem;
+}
+
+@media only screen and (min-width: 1025px) {
+  /* Styles for screens larger than 1024px */
+}
+
+@media only screen and (min-width: 601px) and (max-width: 1120px) {
+  .hero__main__div {
+    margin-top: 10rem;
+  }
+  .hero__titles__div {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .hero__img {
+    height: 15rem;
+    margin-left: -5rem;
+    margin-top: 8rem;
+  }
+}
+
+@media only screen and (max-width: 600px) {
+
+  .hero__main__div {
+    flex-direction: column;
+    margin-top: 6rem;
+  }
+
+  .hero__titles__div {
+    text-align: center;
+  }
+  .hero__button__div {
+
+  }
+  .hero__button__div--signup--button--caption{
+    margin-top: 1rem;
+    text-align: center;
+    padding-right: 0%;
+}
+
+  
+.hero__star__div {
+    /* display: flex; */
+    justify-content: center;
+    margin-top: -1rem;
+    margin-bottom: 3rem;
+}
+  .hero__img {
+    align-self: center;
+    height: 12rem;
+    margin-left: 0;
+  }
+}

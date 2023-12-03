@@ -1,21 +1,11 @@
 import { useNavigate } from 'react-router-dom';
-import { StyledButton } from '../../../StyledComponents';
-import icon from '../../../assets/icons/main-appointment-icon.png';
-import './MainAuth.css';
-import { useEffect } from 'react';
-import { useTheme } from 'styled-components';
+import { Button, Stack, Typography } from '@mui/joy';
+
+import { BsCalendarCheckFill } from 'react-icons/bs';
+
 //---------------------------------------------------
 export default function MainAuth() {
   const navigate = useNavigate();
-  const theme = useTheme();
-
-  useEffect(() => {
-    // Change the body background color
-    document.body.style.background = theme.colors.primary;
-    return () => {
-      document.body.style.background = ''; // Restore to the default or previous background color
-    };
-  }, []);
 
   function handleSignin() {
     navigate('/signin');
@@ -23,27 +13,36 @@ export default function MainAuth() {
   function handleCreateAccount() {
     navigate('/create-account');
   }
+
   return (
     <>
-      {/* <div className="bodyBox"> */}
-      <div className="mainBox">
-        <div></div>
-        <img src={icon} style={{ maxWidth: '20%' }} alt="main-icon" />
+      <div
+        style={{
+          height: '90vh',
+          margin: '3rem',
+          display: 'flex',
+          flexDirection: 'column',
+          textAlign: 'center',
+          justifyContent: 'space-between',
+          
+        }}>
+        <div style={{ height: '2rem' }}></div>
+        <BsCalendarCheckFill
+          style={{ width: '100%', fontSize: '100px' }}
+          color="#0c6bca"
+        />
 
-        <div className="secondaryBox">
-          <p className='terms'>
-            By tapping ‘Sign in’ you agree to our{' '}
-            <span className="highlighted-text">Terms</span>. Learn how we
-            process your data in our{' '}
-            <span className="highlighted-text">Privacy Policy</span>.
-          </p>
-          <StyledButton onClick={handleCreateAccount} variant="secondary">CREATE ACCOUNT</StyledButton>
-          <StyledButton onClick={handleSignin} variant="primary">
+        <Stack spacing={2}>
+          <Typography level="body-sm" style={{}}>
+            By tapping ‘Sign in’ you agree to our <span>Terms</span>. Learn how
+            we process your data in our <span>Privacy Policy</span>.
+          </Typography>
+          <Button onClick={handleCreateAccount}>CREATE ACCOUNT</Button>
+          <Button onClick={handleSignin} variant="outlined">
             SIGN IN
-          </StyledButton>
-        </div>
+          </Button>
+        </Stack>
       </div>
-      {/* </div> */}
     </>
   );
 }

@@ -1,4 +1,4 @@
-.add-services-container {
+/* .services-container {
   display: flex;
   flex-direction: column;
   text-align: center;
@@ -29,9 +29,7 @@
   padding: 20px;
   border-radius: 20%;
   border: 1px solid;
-  /* color: #fff; */
-  /* margin-left: 7vh; */
-}
+} */
 
 
 
@@ -49,6 +47,7 @@
   bottom: 0; /* Place the stripe at the bottom of the viewport */
   left: 0; /* Align the stripe to the left */
   width: 100%; /* Make the stripe span the entire width */
+  z-index: 1000;
 }
   
 
