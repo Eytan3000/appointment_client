@@ -8,7 +8,7 @@ import { FirebaseError } from 'firebase/app';
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { googleSignIn, isMobile } = useAuth() || {};
+  const { googleSignIn, isMobile, login } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -20,9 +20,13 @@ export default function SignIn() {
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
 
+    
     const email = emailRef?.current?.value;
     const password = passwordRef?.current?.value;
-
+    
+    console.log('emailRef: ', email)
+    console.log('passwordRef: ', password)
+    
     // Data validation
     if (!email || !password) {
       return setAlert('Please fill in all fields.');
@@ -38,10 +42,11 @@ export default function SignIn() {
         try {
           setLoading(true);
 
-          // if(!login){
-          //   setAlert('Login function is not available');
-          //   return;
-          // }
+          if(!login){
+            setAlert('Login function is not available');
+            return;
+          }
+          await login(email, password);
           // const { user } = await login(email, password);
 
           // const uid = user.uid;
