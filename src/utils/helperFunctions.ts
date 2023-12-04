@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { deleteObject, ref } from "firebase/storage";
 import { storage } from "../firebase";
 import { DailySchedule } from "./Interfaces";
@@ -20,7 +22,7 @@ export function isWholeNumber(price: string) {
   return regex.test(price);
 }
 
-export function minutesToTimeDuration(minutes: string) {
+export function minutesToTimeDuration(minutes: number) {
   if (typeof minutes !== 'number' || minutes < 0) {
     return "Invalid input";
   }

@@ -1,16 +1,9 @@
-import {
-  Box,
-  Button,
-  Modal,
-  ModalDialog,
-  Typography,
-} from '@mui/joy';
+import { Box, Button, Modal, ModalDialog, Typography } from '@mui/joy';
 import { Dispatch } from 'react';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
 import ServiceCard from '../../components/main/calendar/addAppointment/utils/ServiceCard';
 import { useNavigate } from 'react-router-dom';
 import { formatDate } from '../../utils/helperFunctions';
-
 
 export default function ConfirmAppointmentModal({
   open,
@@ -19,7 +12,12 @@ export default function ConfirmAppointmentModal({
   open: boolean;
   setOpen: Dispatch<React.SetStateAction<boolean>>;
 }) {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const serviceTitle = appointmentSignal.value.service?.name.toString() || '';
+  const time = Number(appointmentSignal.value.service?.duration) || 0;
+  const price = appointmentSignal.value.service?.price.toString() || '';
+  const imgUrl = appointmentSignal.value.service?.img_url.toString() || '';
 
   return (
     <Modal open={open} onClose={() => setOpen(false)}>
@@ -41,21 +39,21 @@ export default function ConfirmAppointmentModal({
           Schedule appointment
         </Typography>
         <ServiceCard
-          serviceTitle={appointmentSignal.value.service?.name}
-          time={appointmentSignal.value.service?.duration}
-          price={appointmentSignal.value.service?.price}
-          imgUrl={appointmentSignal.value.service?.img_url}
+          serviceTitle={serviceTitle}
+          time={time}
+          price={price}
+          imgUrl={imgUrl}
         />
-        {appointmentSignal.value.appointment && 
-        <div style={{ marginInline: '1rem' }}>
-          <Typography id="nested-modal-description" textColor="text.tertiary">
-            {formatDate(appointmentSignal.value.appointment.date)}
-            <br />
-            {appointmentSignal.value.appointment.start} -
-            {appointmentSignal.value.appointment.end}
-          </Typography>
-        </div>
-        }
+        {appointmentSignal.value.appointment && (
+          <div style={{ marginInline: '1rem' }}>
+            <Typography id="nested-modal-description" textColor="text.tertiary">
+              {formatDate(appointmentSignal.value.appointment.date)}
+              <br />
+              {appointmentSignal.value.appointment.start} -
+              {appointmentSignal.value.appointment.end}
+            </Typography>
+          </div>
+        )}
         <Box
           sx={{
             mt: 1,
@@ -63,10 +61,7 @@ export default function ConfirmAppointmentModal({
             gap: 1,
             flexDirection: { xs: 'column', sm: 'row-reverse' },
           }}>
-          <Button
-            variant="solid"
-            color="primary"
-            onClick={handleContinue}>
+          <Button variant="solid" color="primary" onClick={handleContinue}>
             Continue
           </Button>
           <Button
@@ -79,7 +74,7 @@ export default function ConfirmAppointmentModal({
       </ModalDialog>
     </Modal>
   );
-function handleContinue(){
+  function handleContinue() {
     setOpen(false);
     navigate('/client/auth');
   }

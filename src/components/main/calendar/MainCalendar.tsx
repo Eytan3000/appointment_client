@@ -14,10 +14,8 @@ import SideAppColumn from '../SideAppColumn';
 
 //--------------------------------------------------
 export default function MainCalendar() {
-  console.log('render');
   const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
-  console.log('uid: ', uid);
 
   if (uid) {
     return (

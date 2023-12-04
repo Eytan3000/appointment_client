@@ -1,7 +1,6 @@
 import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../../utilsComponents/BackArrow';
 import { FormEvent, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../../../context/AuthContext';
 import { createNewClient } from '../../../../utils/http';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -18,7 +17,7 @@ export default function AddClient() {
   const emailRef = useRef<HTMLInputElement | null>(null);
 
   // tanstack
-  const { mutate, isPending, isSuccess, data, isError, error } = useMutation({
+  const { mutate, isPending, isSuccess, isError, error } = useMutation({
     mutationFn: createNewClient,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['clients'], exact: true });
@@ -38,12 +37,23 @@ export default function AddClient() {
 
   let errorMessage = null;
 
-  if (isError) {
-    if (error.response.status === 404) {
-      errorMessage = `There's a problem with adding new clients at the moment`;
-    } else if (error.response.status === 400) {
-      errorMessage = error.response.data.error[0].msg;
-    }
+  // if (isError) {
+  //   if (error.response.status === 404) {
+  //     errorMessage = `There's a problem with adding new clients at the moment`;
+  //   } else if (error.response.status === 400) {
+  //     errorMessage = error.response.data.error[0].msg;
+  //   }
+  // }
+
+  // Add this type assertion to let TypeScript know that 'error' has a 'response' property
+  const axiosError = error as {
+    response?: { status: number; data?: { error: [{ msg: string }] } };
+  };
+
+  if (axiosError.response && axiosError.response.status === 404) {
+    errorMessage = `There's a problem with adding new clients at the moment`;
+  } else if (axiosError.response && axiosError.response.status === 400) {
+    errorMessage = axiosError.response.data?.error[0].msg;
   }
 
   function handleSubmit(e: FormEvent) {

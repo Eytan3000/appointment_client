@@ -4,10 +4,6 @@ import React, { useState } from 'react';
 import { useMutation } from '@tanstack/react-query';
 import { createBusiness } from '../../../utils/http';
 import { useAuth } from '../../../context/AuthContext';
-import Shape1 from '../../../assets/Images/shapes/Shape1.svg';
-import Shape2 from '../../../assets/Images/shapes/Shape2.svg';
-import NavbarDesktop from '../../../Website/navbar/NavbarDesktop';
-import NavbarMobile from '../../../Website/navbar/NavbarMobile';
 import NavbarRegistration from '../../../Website/navbar/NavbarRegistration';
 // import './addBusiness.css'
 

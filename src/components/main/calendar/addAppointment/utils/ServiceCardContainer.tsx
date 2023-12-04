@@ -2,7 +2,11 @@ import { Avatar, Button } from '@mui/joy';
 import { useState } from 'react';
 import { serviceSignal } from '../AddAppointment';
 
-export default function ServiceCardContainer({ setOpenServiceModal }) {
+interface Props{
+  setOpenServiceModal:React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+export default function ServiceCardContainer({ setOpenServiceModal }:Props) {
     const [isServiceChosen, setIsServiceChosen] = useState(false);
 
   const defaultServic = {

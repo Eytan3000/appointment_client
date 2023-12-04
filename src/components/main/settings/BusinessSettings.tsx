@@ -6,7 +6,7 @@ import {
   Input,
   Typography,
 } from '@mui/joy';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import React, { useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
@@ -37,7 +37,7 @@ export default function BusinessSettings() {
   });
 
   // mutate
-  const { mutate, isPending, isError } = useMutation({
+  const { mutate, isPending } = useMutation({
     mutationFn: updateBusiness,
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['business'] });

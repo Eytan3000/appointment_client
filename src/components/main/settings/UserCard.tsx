@@ -11,7 +11,7 @@ import { useAuth } from '../../../context/AuthContext';
 const url = 'https://plannieapp.com/?name=eytan';
 
 export default function UserCard() {
-  const { currentUser, isMobile } = useAuth() ||{};
+  const { isMobile } = useAuth() ||{};
   return (
     <>
       <Card

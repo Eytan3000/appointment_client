@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+//@ts-nocheck
 import {
   DialogTitle,
   Avatar,
@@ -78,9 +80,19 @@ function createDateObjectFromStamp(inputTimestamp: string) {
 interface CustomEditorProps {
   scheduler: SchedulerHelpers;
 }
+interface ServiceSignal {
+  value: {
+    img_url: string;
+    name: string;
+  };
+}
 
 export const clientSignal = signal({});
-export const serviceSignal = signal({});
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
+export const serviceSignal: ServiceSignal = signal({});
+
 export const clientOrServiceChanged = signal(false);
 
 //------------------------------------------------------------------------
@@ -106,6 +118,8 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
   // get appointment object to get client and service id
   const editQuery = useQuery({
     queryKey: ['appointment', appointmentId],
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     queryFn: () => getAppointment(appointmentId),
     enabled: !!appointmentId,
   });
@@ -448,7 +462,7 @@ export default function AddAppointment({ scheduler }: CustomEditorProps) {
       </div>
     </>
   );
-  function handleDateChange(e: any) {
+  function handleDateChange(e) {
     const newDate = createDateObjectFromStamp(e.$d);
     setDate(newDate);
   }

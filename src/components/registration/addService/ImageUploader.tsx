@@ -7,11 +7,16 @@ import { v4 } from 'uuid';
 import cameraIcon from '../../../assets/icons/camera.png';
 import { deleteImageFromFirebase } from '../../../utils/helperFunctions';
 
+interface Props {
+  dbImgageUrl: string;
+  uid: string;
+  setImageUrlForDb: React.Dispatch<React.SetStateAction<string>>;
+}
 export default function ImageUploader({
-  dbImgageUrl='',
+  dbImgageUrl = '',
   uid,
   setImageUrlForDb,
-}) {
+}: Props) {
   //   const [imageUpload, setImageUpload] = useState();
   const [imageUrl, setImageUrl] = useState(
     dbImgageUrl ? dbImgageUrl : cameraIcon
@@ -21,16 +26,26 @@ export default function ImageUploader({
   async function handleImageInput(e: React.FormEvent<HTMLInputElement>) {
     e.preventDefault();
 
-    if(imageUrl!==cameraIcon) deleteImageFromFirebase(imageUrl); // if there's an actual image url from firebase, delete the image before uploading a new one.
+    const inputElement = e.target as HTMLInputElement;
+    const files = inputElement.files;
+  
+    if (!files || files.length === 0) {
+      return;
+    }
 
-    const imageUpload = e.target.files[0];
+    
+    if (imageUrl !== cameraIcon) deleteImageFromFirebase(imageUrl); // if there's an actual image url from firebase, delete the image before uploading a new one.
+
+    const imageUpload = files[0];
 
     if (imageUpload === null) return;
 
     const imageRef = ref(storage, `images/${uid}_${v4()}}`);
     setLoading(true);
     const imageObj = await uploadBytes(imageRef, imageUpload);
-    const imagePathInStorage = imageObj.ref._location.path_;
+
+    const imagePathInStorage = imageObj.ref.fullPath;
+    // const imagePathInStorage = imageObj.ref._location.path_;
 
     const imageListRef = ref(storage, imagePathInStorage);
     const imageUrlStr = await getDownloadURL(imageListRef);
@@ -47,13 +62,17 @@ export default function ImageUploader({
         id="file"
         onChange={handleImageInput}
       />
-      <label 
-      // for="file"
-      htmlFor="file"
-      >
+      <label
+        // for="file"
+        htmlFor="file">
         <Card
           component="li"
-          sx={{ height: '6rem', width: '8rem', marginInline: 'auto', cursor:'pointer' }}>
+          sx={{
+            height: '6rem',
+            width: '8rem',
+            marginInline: 'auto',
+            cursor: 'pointer',
+          }}>
           <CardActions>
             <CardCover>
               {loading ? (

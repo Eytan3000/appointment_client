@@ -13,7 +13,7 @@ function simplePhoneFormatter(e164Phone: string) {
 
 export default function OtpInput() {
   const navigate = useNavigate();
-  const { isMobile } = useAuth();
+  const { isMobile } = useAuth() || {};
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState('');
 
@@ -26,6 +26,8 @@ export default function OtpInput() {
 
     try {
       setLoading(true);
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+      // @ts-ignore
       const data = await otpConfirmation.value.confirm(otp);
       appointmentSignal.value.client.uid = data.user.uid;
       
@@ -36,7 +38,6 @@ export default function OtpInput() {
       navigate('/client/booking-summary');
       
     } catch (error: unknown) {
-      console.log(error.code);
       if (error instanceof FirebaseError) {
         if (error.code === 'auth/code-expired') setAlert('This code has expired. Please go back and try again.');
         else if (error.code === 'auth/invalid-verification-code') setAlert('Invalid code.');

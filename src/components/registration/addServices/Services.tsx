@@ -1,26 +1,17 @@
 import './addServices.css';
 import { useNavigate } from 'react-router-dom';
 import { Box, Button, Divider, Stack, Typography } from '@mui/joy';
-import { useState } from 'react';
 import ServicesStack from './ServicesStack';
 import BackArrow from '../../utilsComponents/BackArrow';
-import { getAuth } from 'firebase/auth';
-//-------------------------------------------
-// interface Service {
-//   id: number;
-//   name: string;
-//   description: string;
-//   duration: string;
-//   price: string;
-// }
-//-------------------------------------------
+import { useAuth } from '../../../context/AuthContext';
+
 
 export default function Services() {
   const navigate = useNavigate();
 
   // const [areThereAnyServices, setAreThereAnyServices] = useState(false);
 
-  const { isMobile } = getAuth();
+  const { isMobile } = useAuth() || {};
 
   // check if user comes from settings or signup
   const isInSettings = window.location.href.includes('settings');

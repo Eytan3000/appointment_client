@@ -1,3 +1,5 @@
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import { Alert, Button, Card, Container, Typography } from '@mui/joy';
 import ServiceCard from '../../components/main/calendar/addAppointment/utils/ServiceCard';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';

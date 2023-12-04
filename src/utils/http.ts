@@ -67,8 +67,14 @@ interface Business {
 }
 
 
+<<<<<<< HEAD
 // const baseURL = 'http://localhost:8090';
 const baseURL = import.meta.env.VITE_URL;
+=======
+const baseURL = 'http://localhost:8090';
+// const baseURL = import.meta.env.VITE_URL;
+
+>>>>>>> Development
 
 export async function insertNewUserInDb(
     uid: string,

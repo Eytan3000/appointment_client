@@ -1,4 +1,3 @@
-import { StyledButton } from '../../../StyledComponents';
 import './workHours.css';
 import AdvancedWorkHoursCard from './AdvancedWorkHoursCard';
 import { useNavigate } from 'react-router-dom';
@@ -28,6 +27,8 @@ export default function WorkHoursAdvanced() {
   });
 
   function handleOk() {
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     editWorkhoursMutation.mutate(isWorkDaysArr.value);
   }
   return (

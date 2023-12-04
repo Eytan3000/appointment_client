@@ -1,15 +1,10 @@
 import {
-  Box,
-  Button,
-  Divider,
   Modal,
   ModalClose,
   ModalDialog,
-  Stack,
 } from '@mui/joy';
 import ServiceCard from '../utils/ServiceCard';
-import { services } from '../../../../../utils/db';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { useAuth } from '../../../../../context/AuthContext';
 import { getAllServices } from '../../../../../utils/http';
 import { Alert, CircularProgress } from '@mui/joy';
@@ -20,18 +15,22 @@ interface Service {
   id: number;
   name: string;
   description: string;
-  duration: string;
+  duration: number;
   price: string;
   img_url: string;
   owner_id: string;
 }
+interface props{
+  open:boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  startTime:string;
+  setEndTime: React.Dispatch<React.SetStateAction<string>>;
+}
 
 export default function AddServiceModal({ open, setOpen, startTime,
-  setEndTime }) {
+  setEndTime }:props) {
   const { currentUser } = useAuth() || {};
   const uid = currentUser?.uid;
-
-  const queryClient = useQueryClient();
 
   const { data, isPending, isError } = useQuery({
     queryKey: ['services'],

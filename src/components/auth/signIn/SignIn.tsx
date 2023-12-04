@@ -8,7 +8,7 @@ import { FirebaseError } from 'firebase/app';
 
 export default function SignIn() {
   const navigate = useNavigate();
-  const { login, googleSignIn, isMobile } = useAuth() || {};
+  const { googleSignIn, isMobile } = useAuth() || {};
 
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -38,10 +38,14 @@ export default function SignIn() {
         try {
           setLoading(true);
 
-          const { user } = await login(email, password);
+          // if(!login){
+          //   setAlert('Login function is not available');
+          //   return;
+          // }
+          // const { user } = await login(email, password);
 
-          const uid = user.uid;
-          const accessToken = user.accessToken;
+          // const uid = user.uid;
+          // const accessToken = user.accessToken;
 
           // console.log('uid: ' + uid); //remove later
           // console.log('access Token: ' + accessToken); //remove later

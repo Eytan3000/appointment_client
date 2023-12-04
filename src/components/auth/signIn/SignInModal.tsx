@@ -1,7 +1,7 @@
 import { Modal, Sheet } from '@mui/joy';
 import React from 'react';
 import SignIn from './SignIn';
-import ForgotPassword from '../forgotPassword/ForgotPassword';
+
 
 export default function SignInModal({
   open,

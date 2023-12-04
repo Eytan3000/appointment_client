@@ -61,6 +61,13 @@ export default function SignIn() {
               throw new Error('Email already exists');
           }
 
+          if (!signup) {
+            // Handle the case where signup is not defined, e.g., display an error message
+            setAlert('Signup function is not available');
+            setLoading(false);
+            return;
+          }
+          
           const { user } = await signup(email, password);
 
           const uid = user.uid;
@@ -87,7 +94,18 @@ export default function SignIn() {
             else if (errorCode === 'auth/weak-password')
               setAlert('Password should be at least 6 characters');
             else setAlert(errorMessage);
-          } else if (error) setAlert(error.message);
+          // } else if (error) setAlert(error.message);
+
+        } else if (error instanceof Error) {
+          setAlert(error.message);
+        } else if (error) {
+          // Handle other types of errors or log them if needed
+          console.error('Unexpected error:', error);
+          setAlert('An unexpected error occurred.');
+        }
+
+
+
           else
             setAlert(
               `Oops! Something went wrong while trying to create your account.`
