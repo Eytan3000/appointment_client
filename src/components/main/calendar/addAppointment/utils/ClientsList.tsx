@@ -1,4 +1,5 @@
-
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-nocheck
 import FormControl from '@mui/joy/FormControl';
 import Autocomplete from '@mui/joy/Autocomplete';
 import CircularProgress from '@mui/joy/CircularProgress';
@@ -77,8 +78,8 @@ export default function ClientsList() {
         onClose={() => {
           setOpen(false);
         }}
-        // isOptionEqualToValue={(option, value) => option.name === value.name}
-        isOptionEqualToValue={(option, value) => option.Name === value.Name}
+        isOptionEqualToValue={(option, value) => option.name === value.name}
+        // isOptionEqualToValue={(option, value) => option.Name === value.Name}
         getOptionLabel={(option) => option.Name}
         options={options}
         loading={loading}

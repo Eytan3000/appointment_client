@@ -8,9 +8,9 @@ import cameraIcon from '../../../assets/icons/camera.png';
 import { deleteImageFromFirebase } from '../../../utils/helperFunctions';
 
 interface Props {
-  dbImgageUrl: string;
   uid: string;
   setImageUrlForDb: React.Dispatch<React.SetStateAction<string>>;
+  dbImgageUrl: string;
 }
 export default function ImageUploader({
   dbImgageUrl = '',

@@ -9,7 +9,6 @@ import WorkHours from './components/registration/workHours/WorkHours.tsx';
 import MainCalendar from './components/main/calendar/MainCalendar.tsx';
 import ClientsList from './components/main/calendar/addAppointment/utils/ClientsList.tsx';
 import Settings from './components/main/settings/Settings.tsx';
-import WorkHoursAdvanced from './components/registration/workHours/WorkHoursAdvanced.tsx';
 import AccountSettings from './components/main/settings/AccountSettings.tsx';
 import BusinessSettings from './components/main/settings/BusinessSettings.tsx';
 import Services from './components/registration/addServices/Services.tsx';
@@ -150,11 +149,6 @@ function App() {
     {
       path: '/work-hours',
       element: <WorkHours />,
-    },
-
-    {
-      path: '/workhours-advanced-options',
-      element: <WorkHoursAdvanced />,
     },
     {
       path: '/main-calendar',
