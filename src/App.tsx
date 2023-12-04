@@ -89,23 +89,23 @@ function App() {
     path: '/client', ///:uid
     children: [
       {
-        path: '/:uid',
+        path: '/client/:uid',
         element: <ClientChooseService />,
       },
       {
-        path: '/choose-time',
+        path: '/client/choose-time',
         element: <ClientChooseTime />,
       },
       {
-        path: '/auth',
+        path: '/client/auth',
         element: <PhoneAuthInput />,
       },
       {
-        path: '/otp',
+        path: '/client/otp',
         element: <OtpInput />,
       },
       {
-        path: '/booking-summary',
+        path: '/client/booking-summary',
         element: <BookingSummary />,
       },
     ],
