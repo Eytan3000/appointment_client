@@ -23,7 +23,7 @@ const iconSx = {
   alignSelf: 'center',
 };
 
-const baseUrl = 'http://localhost:5173';
+const baseUrl = 'https://planifyapp.netlify.app';
 
 export default function ToolsDesktop() {
   const { currentUser } = useAuth() || {};
