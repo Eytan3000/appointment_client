@@ -15,6 +15,9 @@ import CreateAccountModal from '../components/auth/creactAccount/CreateAccountMo
 
 export default function HomePage() {
   const navigate = useNavigate();
+
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
   const { isMobile } = useAuth();
 
   const [openSignInModal, SetOpenSignInModal] = useState(false);
@@ -37,7 +40,7 @@ export default function HomePage() {
       )}
 
       <Container>
-        <Hero isMobile={isMobile} handleCreateAccount={handleCreateAccount} />
+        <Hero handleCreateAccount={handleCreateAccount} />
         <ClientLogos />
         <FeaturesBoxes isMobile={isMobile} />
         <CustomersQuotes isMobile={isMobile} />

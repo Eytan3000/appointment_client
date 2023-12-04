@@ -66,9 +66,9 @@ body{
   .hero__titles__div {
     text-align: center;
   }
-  .hero__button__div {
+  /* .hero__button__div {
 
-  }
+  } */
   .hero__button__div--signup--button--caption{
     margin-top: 1rem;
     text-align: center;

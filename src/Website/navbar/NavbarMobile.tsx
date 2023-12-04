@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import logoSvg from '../../assets/Images/LogoBlack.svg';
 import { Button, IconButton } from '@mui/joy';
 import MenuIcon from '@mui/icons-material/Menu';
-import MenuModalNavbarMobile from './menuModalNavbarMobile';
+import MenuModalNavbarMobile from './MenuModalNavbarMobile';
 
 export default function NavbarMobile({
   handleLogin,

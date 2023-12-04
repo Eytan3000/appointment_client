@@ -1,4 +1,4 @@
-import { Grid, Typography } from '@mui/joy';
+import { Typography } from '@mui/joy';
 import upworkLogo from '../assets/clientsLogos/upwork.svg';
 import freelancerLogo from '../assets/clientsLogos/freelancerLogo.svg';
 import fiverrLogo from '../assets/clientsLogos/fiverr.svg';

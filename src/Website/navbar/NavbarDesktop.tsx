@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import logoSvg from '../../assets/Images/LogoBlack.svg';
 import { Box, Button, Typography } from '@mui/joy';
 import { useAuth } from '../../context/AuthContext';

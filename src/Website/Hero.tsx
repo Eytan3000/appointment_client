@@ -4,10 +4,8 @@ import star from '../assets/icons/star.svg';
 import './hero.css';
 
 export default function Hero({
-  isMobile,
   handleCreateAccount,
 }: {
-  isMobile: boolean;
   handleCreateAccount: () => void;
 }) {
 
