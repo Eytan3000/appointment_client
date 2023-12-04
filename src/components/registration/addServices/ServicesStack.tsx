@@ -74,7 +74,7 @@ export default function ServicesStack() {
         <ServiceCard
           key={service.id}
           serviceTitle={service.name}
-          description={service.description}
+          // description={service.description}
           time={service.duration}
           price={service.price}
           imgUrl={service.img_url}

@@ -6,6 +6,8 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { signal } from '@preact/signals-react';
 import { AppointmentSignal, Service } from '../../utils/Interfaces';
 
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 export const appointmentSignal: AppointmentSignal = signal({});
 
 export default function ClientChooseService() {

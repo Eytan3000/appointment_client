@@ -1,6 +1,6 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
-import { Button, Input, Stack, Typography } from '@mui/joy';
+import { Button, Input, Typography } from '@mui/joy';
 import { Link, useNavigate } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { SyntheticEvent, useState } from 'react';
@@ -29,7 +29,7 @@ interface Workweek {
 export default function WorkHours() {
   const navigate = useNavigate();
   const { currentUser, isMobile } = useAuth() || {};
-  const uid = currentUser.uid;
+  const uid = currentUser?.uid;
 
   const [sunday, setSunday] = useState(true);
   const [monday, setMonday] = useState(true);
@@ -58,7 +58,7 @@ export default function WorkHours() {
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
     setLoading(true);
-    let response = await createWorkweek(uid);
+    let response = await createWorkweek(uid!);
     const workweekId = response.workweekId;
 
     const weekDays: Workweek = {
@@ -119,9 +119,9 @@ export default function WorkHours() {
     setLoading(false);
     navigate('/main-calendar');
   }
-  function handleAdvancedOptions() {
-    navigate('/workhours-advanced-options');
-  }
+  // function handleAdvancedOptions() {
+  //   navigate('/workhours-advanced-options');
+  // }
   return (
     <>
       {!isMobile && <NavbarRegistration />}

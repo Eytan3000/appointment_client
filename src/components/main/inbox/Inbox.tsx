@@ -4,7 +4,7 @@ import { useAuth } from '../../../context/AuthContext';
 import SideAppColumn from '../SideAppColumn';
 
 export default function Inbox() {
-  const { isMobile } = useAuth();
+  const { isMobile } = useAuth() || {};
 
   return (
     <>

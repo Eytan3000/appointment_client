@@ -57,7 +57,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     });
     return unsubscribed;
   }, []);
-  console.log(token);
   // isMobile
   useEffect(() => {
     const handleResize = () => {

@@ -18,7 +18,7 @@ import { useAuth } from '../../../../context/AuthContext';
 export default function ClientCard() {
   const { clientId } = useParams();
   const navigate = useNavigate();
-  const { isMobile } = useAuth();
+  const { isMobile } = useAuth() || {};
 
   const { data, isLoading, isError } = useQuery({
     queryKey: ['client'],

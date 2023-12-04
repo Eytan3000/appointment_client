@@ -20,7 +20,7 @@ export default function ClientEdit() {
   const { clientId } = useParams();
   // const navigate = useNavigate();
   const queryClient = useQueryClient();
-  const { isMobile } = useAuth();
+  const { isMobile } = useAuth() || {};
 
   const nameRef = useRef<HTMLInputElement | null>(null);
   const phoneRef = useRef<HTMLInputElement | null>(null);
@@ -178,7 +178,7 @@ export default function ClientEdit() {
     const name = nameRef?.current?.value || '';
     const phone = phoneRef?.current?.value || '';
     const email = emailRef?.current?.value || '';
-
-    mutate({ name, phone, email, clientId });
+    
+    if (clientId) mutate({ name, phone, email, clientId });
   }
 }

@@ -9,7 +9,7 @@ import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 interface Props {
   serviceTitle: string;
-  time: string | number;
+  time: number;
   price: string;
   imgUrl: string;
 }

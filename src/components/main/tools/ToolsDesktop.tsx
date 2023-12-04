@@ -1,6 +1,5 @@
-import { Button, Container, Stack, Typography } from '@mui/joy';
+import { Container, Stack, Typography } from '@mui/joy';
 import IosShareIcon from '@mui/icons-material/IosShare';
-import EditIcon from '@mui/icons-material/Edit';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import HomeRepairServiceIcon from '@mui/icons-material/HomeRepairService';
 import ToolsCard from './ToolsCard';
@@ -11,7 +10,6 @@ import { useState } from 'react';
 import ClientsTable from './Clients/ClientsTable';
 import AddClient from './Clients/AddClient';
 import Services from '../../registration/addServices/Services';
-import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useAuth } from '../../../context/AuthContext';
 import { copyToClipboard } from '../../../utils/helperFunctions';
 import tools from '../../../assets/Images/tools.png';
@@ -161,15 +159,17 @@ export default function ToolsDesktop() {
 const initialState = (
   <div
     style={{
-      marginTop:'5rem',
+      marginTop: '5rem',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
     }}>
-    <Typography level="h1" textAlign={'center'}>Tools</Typography>
+    <Typography level="h1" textAlign={'center'}>
+      Tools
+    </Typography>
     <img
       // style={{ height: '500px'}}
-      style={{ height: 'auto', maxWidth: '100%'}}
+      style={{ height: 'auto', maxWidth: '100%' }}
       src={tools}
       alt="tools image"
     />

@@ -1,6 +1,6 @@
 import { useNavigate } from 'react-router-dom';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
-import { Alert, Button, Container, Input, Stack, Typography } from '@mui/joy';
+import { Alert, Button, Input, Stack, Typography } from '@mui/joy';
 import BackArrow from '../../components/utilsComponents/BackArrow';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { RecaptchaVerifier, signInWithPhoneNumber } from 'firebase/auth';
@@ -37,7 +37,7 @@ function e164PhoneFormater(phone: string) {
 export const otpConfirmation = signal({});
 
 export default function PhoneAuthInput() {
-  const { isMobile } = useAuth();
+  const { isMobile } = useAuth() || {};
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState('');
@@ -84,14 +84,15 @@ export default function PhoneAuthInput() {
       setLoading(false);
       navigate('/client/otp');
     } catch (error: unknown) {
-      // setLoading(false);
-      if (error.message === 'Invalid Phone number')
-        setAlert('Invalid Phone number');
-      if (error.message === 'name must be at least 4 characters')
-        setAlert('Name must be at least 4 characters');
-      else {
-        console.log(error);
-        setAlert('We are expreienceing a problem. Please try again later.');
+      if (error instanceof Error) {
+        if (error.message === 'Invalid Phone number')
+          setAlert('Invalid Phone number');
+        if (error.message === 'name must be at least 4 characters')
+          setAlert('Name must be at least 4 characters');
+        else {
+          console.log(error);
+          setAlert('We are expreienceing a problem. Please try again later.');
+        }
       }
     } finally {
       setLoading(false);

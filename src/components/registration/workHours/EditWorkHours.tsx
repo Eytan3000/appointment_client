@@ -1,7 +1,7 @@
 import './workHours.css';
 import Checkbox from '@mui/joy/Checkbox';
 import { Alert, Button, CircularProgress, Input, Typography } from '@mui/joy';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import backArrow from '../../../assets/icons/Arrow - Down 2.png';
 import { ChangeEvent, SyntheticEvent, useState } from 'react';
 import { getWorkWeek, updateDailySchedule } from '../../../utils/http';
@@ -9,6 +9,17 @@ import { useAuth } from '../../../context/AuthContext';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { rearrangeByDayOfWeek } from '../../../utils/helperFunctions';
 import { signal } from '@preact/signals-react';
+
+
+// interface IsWorkDaysArr {
+//   id: number;
+//   dayName: string;
+//   start_time: string;
+//   endTime: string;
+//   timeSlotDuration: string;
+//   isWorkDay: boolean;
+//   hasChanged: boolean;
+// }
 
 export const isWorkDaysArr = signal([
   {
@@ -77,13 +88,13 @@ export const isWorkDaysArr = signal([
 ]);
 
 export default function EditWorkHours() {
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const queryClient = useQueryClient();
 
   const { currentUser, isMobile } = useAuth() || {};
   const uid = currentUser?.uid;
 
-  const [mutateError, setMutateError] = useState(false);
+  const [, setMutateError] = useState(false);
 
   console.log(isWorkDaysArr);
   // Tanstack Mutate
@@ -104,12 +115,14 @@ export default function EditWorkHours() {
 
   async function handleSubmit(e: SyntheticEvent) {
     e.preventDefault();
-    console.log(isWorkDaysArr.value);
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
     editWorkhoursMutation.mutate(isWorkDaysArr.value);
   }
-  function handleAdvancedOptions() {
-    navigate('/workhours-advanced-options');
-  }
+  // function handleAdvancedOptions() {
+  //   navigate('/workhours-advanced-options');
+  // }
   function handleCheckboxChange(day_of_week: string) {
     isWorkDaysArr.value.forEach(({ dayName }, index) => {
       console.log(isWorkDaysArr);
