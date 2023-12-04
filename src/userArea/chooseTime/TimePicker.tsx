@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
+
 // note: Forward button is dissabled when jump is higher than 14. you can change is to allow more futur view of the weeks
 import {
   Alert,
@@ -31,6 +30,7 @@ interface DailyColumn {
   is_workDay: number | boolean;
 
   futureAppointments: Appointment[];
+  setOpenModal:React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 
@@ -187,8 +187,10 @@ function areTimeRangesOverlapping(
   const durationParts = slotRange[1].split(':');
   const durationHours = parseInt(durationParts[0], 10);
   
-  const durationMinutes = parseInt(durationParts[1] || 0, 10);
-  const durationSeconds = parseInt(durationParts[2] || 0, 10);
+  // const durationMinutes = parseInt(durationParts[1] || 0, 10);
+  const durationMinutes = parseInt(durationParts[1]?.toString() || '0', 10);
+  // const durationSeconds = parseInt(durationParts[2] || 0, 10);
+  const durationSeconds = parseInt(durationParts[2]?.toString() || '0', 10);
 
   const endTime2 = new Date(
     startTime2.getTime() +
@@ -211,8 +213,8 @@ function calculateEndTime(startTime: string, duration: string) {
   const endTimeInMinutes = startTimeInMinutes + duration;
 
   // Convert the end time back to HH:mm format
-  const endHour = Math.floor(endTimeInMinutes / 60);
-  const endMinute = endTimeInMinutes % 60;
+  const endHour = Math.floor(Number(endTimeInMinutes) / 60);
+  const endMinute = Number(endTimeInMinutes) % 60;
 
   // Format the end time with leading zeros
   const formattedEndHour = endHour < 10 ? '0' + endHour : endHour.toString();
@@ -248,7 +250,7 @@ function DayColumn({
 
     const endTime = calculateEndTime(
       slotStartTime,
-      appointmentSignal.value.service?.duration || ''
+      appointmentSignal.value.service?.duration.toString() || ''
     );
 
     appointmentSignal.value.appointment = {

@@ -70,8 +70,8 @@ interface Business {
 }
 
 
-// const baseURL = 'http://localhost:8090';
-const baseURL = import.meta.env.VITE_URL;
+const baseURL = 'http://localhost:8090';
+// const baseURL = import.meta.env.VITE_URL;
 
 
 export async function insertNewUserInDb(

@@ -1,5 +1,4 @@
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-nocheck
+
 import { Alert, Button, Card, Container, Typography } from '@mui/joy';
 import ServiceCard from '../../components/main/calendar/addAppointment/utils/ServiceCard';
 import { appointmentSignal } from '../welcomePage/ClientChooseService';
@@ -16,32 +15,6 @@ import {
 } from '../../utils/http';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-// function test() {
-//   appointmentSignal.value.uid = 'nbl4kT3L2pNLEcZ1W4zQAzfcUsA3';
-//   appointmentSignal.value.client = {
-//     name: 'EYTAN KRIEF',
-//     uid: 'VXn5vUvbwHZS2m4QFqE8AsnmexE3',
-//     phone: '333333344333333',
-//   };
-//   appointmentSignal.value.service = {
-//     id: 1,
-//     name: 'Service 1',
-//     description: 'Service 1',
-//     duration: 90,
-//     price: '180.00',
-//     owner_id: 'oWYIFCBCsSYueiUuzl3VyaWJJLq2',
-//     img_url:
-//       'https://firebasestorage.googleapis.com/v0/b/appointments-770cc.appspot.com/o/images%2FoWYIFCBCsSYueiUuzl3VyaWJJLq2_e18d79fe-45fd-40c9-90c7-b67febfe06d2%7D?alt=media&token=f53024f2-e252-45d7-8013-fd3738a0a22b',
-//   };
-//   appointmentSignal.value.appointment = {
-//     start: '18:00',
-//     end: '19:30',
-//     date: '2024-11-19',
-//   };
-// }
-
-// test();
 
 export default function BookingSummary() {
   const navigate = useNavigate();
