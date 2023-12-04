@@ -107,7 +107,7 @@ export default function AddService() {
             marginTop: '3em',
           }}
           onSubmit={handleSubmit}>
-          <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} />
+          <ImageUploader uid={uid} setImageUrlForDb={setImageUrl} dbImgageUrl={''}/>
 
           <div
             style={{

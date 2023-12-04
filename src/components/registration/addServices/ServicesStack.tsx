@@ -9,7 +9,7 @@ interface Service {
   id: number;
   name: string;
   description: string;
-  duration: string;
+  duration: number;
   price: string;
   img_url: string;
 }

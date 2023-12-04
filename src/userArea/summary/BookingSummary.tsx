@@ -95,7 +95,7 @@ export default function BookingSummary() {
             start: startTime,
             end: endTime,
             date,
-            serviceId,
+            serviceId: serviceId.toString(),
             note: '',
           }).then((response) => {
             if (typeof response === 'number' && address !== '') {

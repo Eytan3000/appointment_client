@@ -600,7 +600,7 @@ export async function sendNewAppointmentMessageClient(
     Ownername: string,
     date: string,
     startTime: string,
-    duration: string,
+    duration: number,
     businessAddress: string,
     phone: string
 ) {
