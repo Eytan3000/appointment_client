@@ -70,9 +70,8 @@ interface Business {
 }
 
 
-const baseURL = 'http://localhost:8090';
-// const baseURL = import.meta.env.VITE_URL;
 
+const baseURL = import.meta.env.VITE_URL;
 
 export async function insertNewUserInDb(
     uid: string,
@@ -80,7 +79,6 @@ export async function insertNewUserInDb(
     email: string,
     password: string
 ) {
-    console.log(password);
 
     const response = await axios.post(baseURL + '/users/create-user', {
         id: uid,
