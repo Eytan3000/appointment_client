@@ -67,10 +67,9 @@ interface Business {
 }
 
 
-// axios.defaults.baseURL = 'http://192.168.1.180:8090';
-
 const baseURL = 'http://localhost:8090';
-// const baseURL = 'http://192.168.1.180:8090';
+// const baseURL = import.meta.env.VITE_URL;
+
 
 export async function insertNewUserInDb(
     uid: string,
