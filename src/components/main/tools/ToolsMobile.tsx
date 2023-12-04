@@ -10,7 +10,7 @@ import { useAuth } from '../../../context/AuthContext';
 import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import { copyToClipboard } from '../../../utils/helperFunctions';
 
-const baseUrl = 'http://localhost:5173';
+const baseUrl = 'https://planifyapp.netlify.app';
 
 const clientsSum = 59;
 const iconSx = {
@@ -33,7 +33,7 @@ export default function Tools() {
     if (navigator.share) {
       navigator
         .share({
-          text: 'eytankrr',
+          text: 'Ready to schedule an appointment? Click the link below.',
           url: url,
         })
         .then(() => console.log('Share successful'))
