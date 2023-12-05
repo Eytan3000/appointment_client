@@ -13,7 +13,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signInWithRedirect,
+  signInWithPopup,
+  // signInWithRedirect,
   signOut,
   updatePassword,
 } from 'firebase/auth';
@@ -28,7 +29,8 @@ interface AuthContextValue {
   resetPassword: (email: string) => Promise<void>;
   updatePasswordCtx: (password: string) => Promise<void> | undefined;
   logout: () => Promise<void>;
-  googleSignIn: () => Promise<void>;
+  // googleSignIn: () => Promise<void>;
+  googleSignIn: () => Promise<UserCredential>;
   isMobile: boolean;
   token: string;
 }
@@ -92,8 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function googleSignIn() {
-    return signInWithRedirect(auth, provider);
-    // return signInWithPopup(auth, provider);
+    // return signInWithRedirect(auth, provider);
+    return signInWithPopup(auth, provider);
   }
 
   const value: AuthContextValue = {
