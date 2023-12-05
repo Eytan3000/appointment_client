@@ -13,8 +13,8 @@ import {
   onAuthStateChanged,
   sendPasswordResetEmail,
   signInWithEmailAndPassword,
-  signInWithPopup,
-  // signInWithRedirect,
+  // signInWithPopup,
+  signInWithRedirect,
   signOut,
   updatePassword,
 } from 'firebase/auth';
@@ -94,8 +94,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   }
 
   function googleSignIn() {
-    // return signInWithRedirect(auth, provider);
-    return signInWithPopup(auth, provider);
+    return signInWithRedirect(auth, provider);
+    // return signInWithPopup(auth, provider);
   }
 
   const value: AuthContextValue = {
