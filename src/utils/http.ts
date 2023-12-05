@@ -70,7 +70,7 @@ interface Business {
 }
 
 
-
+// const baseURL = 'http://localhost:3000';
 const baseURL = import.meta.env.VITE_URL;
 
 export async function insertNewUserInDb(
@@ -80,6 +80,7 @@ export async function insertNewUserInDb(
     password: string
 ) {
 
+    
     const response = await axios.post(baseURL + '/users/create-user', {
         id: uid,
         fullname,
@@ -116,6 +117,13 @@ export async function insertNewGoogleUserInDb(
     fullname: string,
     email: string,
 ) {
+
+    
+
+console.log('uid', uid);
+console.log('fullname', fullname);
+console.log('email', email);
+    
     const response = await axios.post(baseURL + '/users/create-google-user', {
         id: uid,
         fullname,

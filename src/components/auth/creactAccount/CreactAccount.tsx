@@ -210,7 +210,9 @@ export default function SignIn() {
   );
 
   function handleGoogle() {
-    if (googleSignIn) googleSignIn();
+    // if (googleSignIn) googleSignIn();
+    console.log(googleSignIn);
+    googleSignIn();
 
     setLoading(true);
     navigate('/google-signin');

@@ -10,7 +10,6 @@ import NavbarRegistration from '../../../Website/navbar/NavbarRegistration';
 export default function AddBusiness() {
   const navigate = useNavigate();
   const { currentUser, isMobile } = useAuth() || {};
-  console.log(isMobile);
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [phone, setPhone] = useState('');
