@@ -204,7 +204,7 @@ function areTimeRangesOverlapping(
 
   return !doNotOverlap;
 }
-function calculateEndTime(startTime: string, duration: string) {
+function calculateEndTime(startTime: string, duration: number) {
   // Parse the start time
   const [startHour, startMinute] = startTime.split(':');
   const startTimeInMinutes = parseInt(startHour) * 60 + parseInt(startMinute);
@@ -250,7 +250,7 @@ function DayColumn({
 
     const endTime = calculateEndTime(
       slotStartTime,
-      appointmentSignal.value.service?.duration.toString() || ''
+      appointmentSignal.value.service?.duration
     );
 
     appointmentSignal.value.appointment = {

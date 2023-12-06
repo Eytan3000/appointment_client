@@ -58,7 +58,7 @@ export default function NavbarMobile({
         background: '#ffffff',
         transition: 'top 0.3s', // transition
       }}>
-      <Link to="/homepage">
+      <Link to="/">
         <img
           src={logoSvg}
           alt="logo"

@@ -57,7 +57,7 @@ export default function NavbarDesktop({
         background: '#ffffff',
         transition: 'top 0.3s', // transition
       }}>
-      <Link to="/homepage">
+      <Link to="/">
         <img
           src={logoSvg}
           alt="logo"
