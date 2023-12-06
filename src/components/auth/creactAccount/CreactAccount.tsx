@@ -191,12 +191,12 @@ export default function SignIn() {
             <Divider />
             <Typography textAlign={'center'}>OR</Typography>
 
-            <Button
+            {!isMobile && <Button
               onClick={handleGoogle}
               variant="outlined"
               startDecorator={<img className="google" src={google} alt="" />}>
               Continue with google
-            </Button>
+            </Button>}
 
             {alert && (
               <Alert variant="soft" color="danger">

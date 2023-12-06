@@ -145,12 +145,12 @@ export default function SignIn() {
             <Button loading={loading} type="submit" name="email-submitter">
               Sign In
             </Button>
-            <Button
+            {!isMobile && <Button
               onClick={handleGoogle}
               variant="outlined"
               startDecorator={<img className="google" src={google} alt="" />}>
               Continue with google
-            </Button>
+            </Button>}
             {alert && (
               <Alert variant="soft" color="danger">
                 {alert}
