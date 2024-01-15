@@ -118,7 +118,7 @@ export default function BookingSummary() {
   }, []);
 
 
-  if (serviceTitle && time && price && imgUrl) {
+  if (serviceTitle && time && price) {
     if (isOverlapping)
       return (
         <>
@@ -189,10 +189,7 @@ export default function BookingSummary() {
                   *Any cancellations within 24 hours of the appointment will
                   incur the full cost.
                 </Typography>
-                {/* <Typography level="body-sm">
-                  *Additional services such as painting, removal, and others
-                  will be subject to an extra charge.
-                </Typography> */}
+
               </Card>
             </div>
           </Container>
@@ -200,3 +197,9 @@ export default function BookingSummary() {
       );
   }
 }
+
+
+                // 192: {/* <Typography level="body-sm">
+                //   *Additional services such as painting, removal, and others
+                //   will be subject to an extra charge.
+                // </Typography> */}

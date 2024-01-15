@@ -19,16 +19,23 @@ function validateIsraeliPhoneNumber(phoneNumber: string) {
     .join('');
 
   // Define the regular expression for an Israeli mobile number
-  const israeliPhoneNumberRegex = /^(05\d{8})$/;
+  const israeliPhoneNumberRegex_with0 = /^(05\d{8})$/;
+  const israeliPhoneNumberRegex_no0 = /^(5\d{8})$/;
 
-  // Test the input phoneNumber against the regular expression
-  return israeliPhoneNumberRegex.test(phoneForValidation_NoCountryCode);
+  // Test the input phoneNumber against the regular expression (with 0 at start or without)
+  return (
+    israeliPhoneNumberRegex_with0.test(phoneForValidation_NoCountryCode) ||
+    israeliPhoneNumberRegex_no0.test(phoneForValidation_NoCountryCode)
+  );
 }
+
 function e164PhoneFormater(phone: string) {
   const phoneSplitArr = phone?.split(' ');
   return phoneSplitArr
     .map((phonePart, index) => {
-      if (index === 1) return phonePart.slice(1);
+      if (index === 1 && phonePart[0] === '0') {
+        return phonePart.slice(1);
+      }
       return phonePart;
     })
     .join('');
@@ -57,7 +64,7 @@ export default function PhoneAuthInput() {
         throw new Error('name must be at least 4 characters');
 
       const phone = phoneRef?.current?.value || '';
-
+      console.log('raw phone:', phone);
       if (!validateIsraeliPhoneNumber(phone)) {
         throw new Error('Invalid Phone number');
       }
