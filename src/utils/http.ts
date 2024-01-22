@@ -523,7 +523,11 @@ export async function fetchAppointments(ownerId: string) {
 
 
         const appointments = appointmentsResponse.data.map((appointment: Appointment) => {
-            const appointmentDate = addDay(appointment.date.split('T')[0]); // fetches one day earlier for some reason.
+            console.log('appointment.date: ',appointment.date);
+            console.log('appointment.date.split(\'T\')[0]: ', appointment.date.split('T')[0]);
+            
+            // const appointmentDate = addDay(appointment.date.split('T')[0]); // this line for, fetches one day earlier for some reason.
+            const appointmentDate = appointment.date.split('T')[0]; // this line for live
 
             const clientObj = clientsArr.filter(client => client.id === appointment.client_id)[0];
             const serviceObj = servicesArr.filter(service => service.id === appointment.service_id)[0];
