@@ -13,7 +13,7 @@ export default function CustomersQuotes({isMobile}:{isMobile:boolean}) {
         gap="2rem"
         mt={'4rem'}>
         <Typography mt={'2rem'} level="h1" textAlign={'center'}>
-          What out customers say
+          What our customers say
         </Typography>
 
         <Box sx={{ minHeight: 393 }}>

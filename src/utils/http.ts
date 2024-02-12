@@ -2,7 +2,7 @@
 // @ts-nocheck
 
 import axios from 'axios';
-import { addDay, formatIsraeliPhoneNumberToE164, formateDateToDD_MM_YYYY, timeStringToMinutes } from './helperFunctions';
+import { formatIsraeliPhoneNumberToE164, formateDateToDD_MM_YYYY, timeStringToMinutes } from './helperFunctions';
 
 interface ServiceObject {
     description: string | null;
