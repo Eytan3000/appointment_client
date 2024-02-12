@@ -13,7 +13,7 @@ import ImageUploader from './ImageUploader';
 
 export default function AddService() {
   const navigate = useNavigate();
-  const { currentUser } = useAuth() || {};
+  const { currentUser, token } = useAuth() || {};
   const uid = currentUser?.uid;
 
   // // get uid from storage in json
@@ -57,7 +57,6 @@ export default function AddService() {
       setAlert('price must be a whole number (e.g. 120).');
       return;
     }
-    // console.log(duration)
     if (uid)
       addServiceMutation.mutate({
         name,
@@ -66,6 +65,7 @@ export default function AddService() {
         price,
         uid,
         img_url: imageUrl,
+        token
       });
   }
   function changeHandler() {

@@ -158,14 +158,17 @@ export async function createService(
         duration,
         price,
         uid,
-        img_url }:
+        img_url,
+        token
+     }:
         {
-            name: string,
-            description: string,
-            duration: string,
-            price: string,
-            uid: string,
-            img_url: string
+            name: string;
+            description: string;
+            duration: string;
+            price: string;
+            uid: string;
+            img_url: string;
+            token:string;
         }
 ) {
 
@@ -178,7 +181,8 @@ export async function createService(
         duration: durationInMinutes,
         price,
         owner_id: uid,
-        img_url: img_url
+        img_url: img_url,
+        token,
     })
         .then((response) => {
             console.log(response);

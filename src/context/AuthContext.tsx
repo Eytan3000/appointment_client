@@ -54,6 +54,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setCurrentUser(user);
         const token = await user.getIdToken();
         setToken(token);
+        console.log('token: ',token);
       }
       else console.log('No signed in user');
     });
