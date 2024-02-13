@@ -468,7 +468,7 @@ export async function getAppointment(appointmentId: number) {
 
 // Update Appointment
 export async function updateAppointment({ start, end, serviceId, note, date, appointment_id }: AppointmentUpdate) {
-    console.log(start, end, serviceId, note, date, appointment_id);
+    // console.log(start, end, serviceId, note, date, appointment_id);
 
     try {
         const response = await axios.post(baseURL + '/appointments/update-appointment', {
@@ -542,8 +542,8 @@ export async function fetchAppointments(ownerId: string) {
 
 
         const appointments = appointmentsResponse.data.map((appointment: Appointment) => {
-            console.log('appointment.date: ',appointment.date);
-            console.log('appointment.date.split(\'T\')[0]: ', appointment.date.split('T')[0]);
+            // console.log('appointment.date: ',appointment.date);
+            // console.log('appointment.date.split(\'T\')[0]: ', appointment.date.split('T')[0]);
             
             // const appointmentDate = addDay(appointment.date.split('T')[0]); // this line for, fetches one day earlier for some reason.
             const appointmentDate = appointment.date.split('T')[0]; // this line for live
