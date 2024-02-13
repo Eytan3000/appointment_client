@@ -149,7 +149,14 @@ export async function getUser(ownerId: string) {
     }
 }
 
-
+/*
+        "name":"koko""
+        "description":"melon"
+        "duration":"60"
+        "price":"19"
+        "owner_id":"123"
+        "img_url":"koko.com"
+*/
 
 //  ---- services  ---- 
 export async function createService(
@@ -175,6 +182,13 @@ export async function createService(
     const durationInMinutes = timeStringToMinutes(duration);
     //incorrect decimal value
 
+    const config = {
+        headers: {
+          'Authorization': `Bearer ${token}`,
+        //   'Content-Type': 'application/json' // Assuming you're sending JSON data
+        }
+      };
+
     const response = await axios.post(baseURL + '/services/create-service', {
         name,
         description,
@@ -182,8 +196,9 @@ export async function createService(
         price,
         owner_id: uid,
         img_url: img_url,
-        token,
-    })
+    },
+    config
+    )
         .then((response) => {
             console.log(response);
             return response;
