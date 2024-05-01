@@ -29,7 +29,7 @@ export default function SignInModal({
           p: 3,
           boxShadow: 'lg',
         }}>
-        <SignIn />
+        <SignIn modal={true}/>
       </Sheet>
     </Modal>
   );

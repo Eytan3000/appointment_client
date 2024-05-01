@@ -29,7 +29,7 @@ export default function CreateAccountModal({
           p: 3,
           boxShadow: 'lg',
         }}>
-        <CreateAccount />
+        <CreateAccount modal={true} />
       </Sheet>
     </Modal>
   );

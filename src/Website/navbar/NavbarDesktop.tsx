@@ -48,11 +48,9 @@ export default function NavbarDesktop({
         justifyContent: 'space-between',
         boxShadow: '0px 2px 16px rgba(0, 0, 0, 0.1)',
         paddingBlock: '1rem',
-        paddingLeft: '2rem',
-        margin: '-1rem',
         position: 'fixed',
-        width: '98%',
-        top: visible ? '10px' : '-100px', // Toggle  top position
+        width: '100%',
+        top: visible ? '0px' : '-100px', // Toggle  top position
         zIndex: '1000',
         background: '#ffffff',
         transition: 'top 0.3s', // transition
@@ -61,7 +59,7 @@ export default function NavbarDesktop({
         <img
           src={logoSvg}
           alt="logo"
-          style={{ width: '40%', height: '100%' }}
+          style={{ width: '40%', height: '100%', marginLeft: '20px' }}
         />
       </Link>
       <div style={{ display: 'flex', gap: '1rem', marginRight: '1rem' }}>

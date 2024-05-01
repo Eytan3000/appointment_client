@@ -5,11 +5,12 @@ import { Typography, Button, Input, Stack, Alert } from '@mui/joy';
 import { SyntheticEvent, useRef, useState } from 'react';
 import { useAuth } from '../../../context/AuthContext';
 import { FirebaseError } from 'firebase/app';
+import logoSvg from '../../../assets/Images/LogoBlack.svg';
 
-export default function SignIn() {
+export default function SignIn({ modal = false }: { modal?: boolean }) {
   const navigate = useNavigate();
   const { googleSignIn, isMobile, login } = useAuth() || {};
-
+  console.log('login:'); //removeEytan
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -20,13 +21,12 @@ export default function SignIn() {
   async function handleSubmit(e: SyntheticEvent<HTMLFormElement, SubmitEvent>) {
     e.preventDefault();
 
-    
     const email = emailRef?.current?.value;
     const password = passwordRef?.current?.value;
-    
-    console.log('emailRef: ', email)
-    console.log('passwordRef: ', password)
-    
+
+    console.log('emailRef: ', email);
+    console.log('passwordRef: ', password);
+
     // Data validation
     if (!email || !password) {
       return setAlert('Please fill in all fields.');
@@ -42,7 +42,7 @@ export default function SignIn() {
         try {
           setLoading(true);
 
-          if(!login){
+          if (!login) {
             setAlert('Login function is not available');
             return;
           }
@@ -85,6 +85,15 @@ export default function SignIn() {
   }
   return (
     <>
+      {!isMobile && !modal && (
+        <Link to="/">
+          <img
+            src={logoSvg}
+            alt="logo"
+            style={{ width: '150px', margin: '20px' }}
+          />
+        </Link>
+      )}
       {isMobile && (
         <div
           style={{
@@ -105,60 +114,76 @@ export default function SignIn() {
           </Button>
         </div>
       )}
+      <div
+        style={
+          !isMobile && !modal
+            ? {
+                maxWidth: '500px',
+                margin: '10rem auto',
+                border: '1px solid #cecdcd',
+                padding: '50px 30px',
+                borderRadius: '10px',
+              }
+            : {}
+        }>
+        <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
+          Sign In
+        </Typography>
 
-      <Typography level="h2" textAlign="center" marginBottom={'2rem'}>
-        Sign In
-      </Typography>
+        <form onSubmit={handleSubmit}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-between',
+              height: isMobile ? 'calc(100dvh - 12rem)' : '30vh',
+            }}>
+            <Stack spacing={2} mx={2}>
+              <Input
+                required
+                onChange={changeHandler}
+                slotProps={{ input: { ref: emailRef } }}
+                type="email"
+                placeholder="Email"
+              />
+              <Input
+                required
+                onChange={changeHandler}
+                slotProps={{ input: { ref: passwordRef } }}
+                type="password"
+                placeholder="Password"
+              />
+            </Stack>
 
-      <form onSubmit={handleSubmit}>
-        <div
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            height: isMobile ? 'calc(100dvh - 12rem)' : '30vh',
-          }}>
-          <Stack spacing={2} mx={2}>
-            <Input
-              required
-              onChange={changeHandler}
-              slotProps={{ input: { ref: emailRef } }}
-              type="email"
-              placeholder="Email"
-            />
-            <Input
-              required
-              onChange={changeHandler}
-              slotProps={{ input: { ref: passwordRef } }}
-              type="password"
-              placeholder="Password"
-            />
-          </Stack>
-
-          <Stack spacing={2} mx={2}>
-            <Button
-              onClick={handleForgotPassword}
-              variant="plain"
-              style={{ marginTop: '1rem' }}>
-              Forgot Password?
-            </Button>
-            <Button loading={loading} type="submit" name="email-submitter">
-              Sign In
-            </Button>
-            {!isMobile && <Button
-              onClick={handleGoogle}
-              variant="outlined"
-              startDecorator={<img className="google" src={google} alt="" />}>
-              Continue with google
-            </Button>}
-            {alert && (
-              <Alert variant="soft" color="danger">
-                {alert}
-              </Alert>
-            )}
-          </Stack>
-        </div>
-      </form>
+            <Stack spacing={2} mx={2}>
+              <Button
+                onClick={handleForgotPassword}
+                variant="plain"
+                style={{ marginTop: '1rem' }}>
+                Forgot Password?
+              </Button>
+              <Button loading={loading} type="submit" name="email-submitter">
+                Sign In
+              </Button>
+              {!isMobile && (
+                <Button
+                  onClick={handleGoogle}
+                  variant="outlined"
+                  startDecorator={
+                    <img className="google" src={google} alt="" />
+                  }>
+                  Continue with google
+                </Button>
+              )}
+              {alert && (
+                <Alert variant="soft" color="danger">
+                  {alert}
+                </Alert>
+              )}
+            </Stack>
+          </div>
+        </form>
+      </div>
     </>
   );
   function handleGoogle() {

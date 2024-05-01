@@ -34,26 +34,33 @@ export default function HomePage() {
   return (
     <>
       {isMobile ? (
-        <NavbarMobile handleLogin={handleLogin}  handleCreateAccount={handleCreateAccount}/>
+        <NavbarMobile
+          handleLogin={handleLogin}
+          handleCreateAccount={handleCreateAccount}
+        />
       ) : (
-        <NavbarDesktop handleLogin={handleLogin} handleCreateAccount={handleCreateAccount}/>
+        <NavbarDesktop
+          handleLogin={handleLogin}
+          handleCreateAccount={handleCreateAccount}
+        />
       )}
-
       <Container>
         <Hero handleCreateAccount={handleCreateAccount} />
         <ClientLogos />
         <FeaturesBoxes isMobile={isMobile} />
         <CustomersQuotes isMobile={isMobile} />
-        <Footer isMobile={isMobile} handleCreateAccount={handleCreateAccount}/>
+        <Footer isMobile={isMobile} handleCreateAccount={handleCreateAccount} />
       </Container>
 
       {openSignInModal && (
         <SignInModal open={openSignInModal} setOpen={SetOpenSignInModal} />
       )}
       {openCreateAccountModal && (
-        <CreateAccountModal open={openCreateAccountModal} setOpen={SetOpenCreateAccountModal} />
+        <CreateAccountModal
+          open={openCreateAccountModal}
+          setOpen={SetOpenCreateAccountModal}
+        />
       )}
-
     </>
   );
 }
