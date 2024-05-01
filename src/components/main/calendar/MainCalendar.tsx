@@ -6,18 +6,22 @@ import { deleteAppointment, fetchAppointments } from '../../../utils/http';
 import { minutesToTimeDuration } from '../../../utils/helperFunctions';
 import { CircularProgress } from '@mui/joy';
 import SideAppColumn from '../SideAppColumn';
-// import { useNavigate } from 'react-router-dom';
-
-// export const eventsSignal = signal([]);
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 
 //--------------------------------------------------
 export default function MainCalendar() {
   const { currentUser, isMobile } = useAuth() || {};
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const uid = currentUser?.uid;
   console.log('uid: ', uid); //removeEytan
 
-  
+  useEffect(() => {
+    if (!uid) {
+      navigate('/signIn');
+    }
+  }, [uid, navigate]);
+
   if (uid) {
     return (
       <>
@@ -77,19 +81,17 @@ export default function MainCalendar() {
       </>
     );
   } else {
-    // TODO: redirect to sign in
-    // navigate('/signIn');
+    return (
+      <div
+        style={{
+          display: 'flex',
+          justifyContent: 'center',
+          height: '100vh',
+          alignItems: 'center',
+        }}>
+        <CircularProgress />
+      </div>
+    );
   }
-
-  return (
-    <div
-      style={{
-        display: 'flex',
-        justifyContent: 'center',
-        height: '100vh',
-        alignItems: 'center',
-      }}>
-      <CircularProgress />
-    </div>
-  );
 }
+
