@@ -10,7 +10,6 @@ import logoSvg from '../../../assets/Images/LogoBlack.svg';
 export default function SignIn({ modal = false }: { modal?: boolean }) {
   const navigate = useNavigate();
   const { googleSignIn, isMobile, login } = useAuth() || {};
-  console.log('login:'); //removeEytan
   const [alert, setAlert] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 

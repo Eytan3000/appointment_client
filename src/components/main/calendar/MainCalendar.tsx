@@ -14,7 +14,6 @@ export default function MainCalendar() {
   const { currentUser, isMobile } = useAuth() || {};
   const navigate = useNavigate();
   const uid = currentUser?.uid;
-  console.log('uid: ', uid); //removeEytan
 
   useEffect(() => {
     if (!uid) {
